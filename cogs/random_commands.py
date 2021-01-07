@@ -170,6 +170,17 @@ class RandomCommands(commands.Cog):
 
 
     @commands.command()
+    async def code(self, ctx):
+        if cl: print('START code ', end="")
+
+        embed = discord.Embed(colour=discord.Colour(0x0366d6))
+        embed.set_author(name='GitHub Repo', url='https://github.com/CNDRD/Bruce')
+        await ctx.send(embed=embed)
+
+        if cl: print("END")
+
+
+    @commands.command()
     async def cicina(self, ctx):
         if cl: print('START cicina ', end="")
         uid = ctx.author.id
