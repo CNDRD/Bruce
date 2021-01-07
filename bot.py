@@ -23,7 +23,7 @@ db = firebase.database()
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix=prefix, intents=intents)
 client.remove_command('help')
-token = 'NjkwMzYyMTI5MTI3MzA5MzUy.Xo-3Kw.iBWBkRnfE72qnlzlcbqX48I5xfY'
+token = 'si piš HAHA'
 cog_count = 0
 
 ################################################################# Cog Loader ##
