@@ -3,7 +3,7 @@
 
 ---  
 
-This code *may* be a little because the bot is not deployed from this.  
+This code *may* be a little behind the his deployed twin because the bot is not deployed from this.  
 The repo has been created for the sake of having transparent code, but there are some files that have to be hidden.  
 I also omitted the token because of reasons..  
 
