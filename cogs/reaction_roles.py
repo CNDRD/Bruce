@@ -1,0 +1,136 @@
+import pyrebase, discord, yaml, json
+from discord.ext import commands
+
+################################################################ Config Load ##
+config = yaml.safe_load(open("config.yml"))
+cl = config.get('console_logging')
+error_channel_id = config.get('error_channel_id')
+
+welcome_hall_channel_id = config.get('welcome_hall_channel_id')
+role_select_channel_id = config.get('role_select_channel_id')
+trashposting_channel_id = config.get('trashposting_channel_id')
+videoposting_channel_id = config.get('videoposting_channel_id')
+
+################################################################### Firebase ##
+fb = json.loads(config.get('firebase'))
+firebase = pyrebase.initialize_app(fb)
+db = firebase.database()
+
+################################################################## Variables ##
+valid_rr_channels = [welcome_hall_channel_id, role_select_channel_id]
+valid_rp_channels = [trashposting_channel_id, videoposting_channel_id]
+
+good_emotes = ['ooo','omegateef','omegalul','monkaLMAOXD','kek','AgrLove','LemonJoy']
+bad_emotes = ['WHEEZEtyKUNDO','incredi_wut','HonkHonk','_F','Gay']
+
+################################################################### Commands ##
+class ReactionRoles(commands.Cog):
+    def __init__(self, client):
+        """Reaction Role System.
+
+        Uses a on_raw_reaction_add & on_raw_reaction_remove
+        for adding & removing roles.
+        Makes Reaction Points work.
+        """
+        self.client = client
+
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload):
+        if cl: print('START on_raw_reaction_add ', end="")
+        if payload.channel_id in valid_rr_channels and not payload.member.bot:
+            err_ch = self.client.get_channel(error_channel_id)
+
+            guild = discord.utils.find(lambda g : g.id == payload.guild_id, self.client.guilds)  # Gets the right guild
+            role = discord.utils.get(guild.roles, name=payload.emoji.name)  # Role name & Emoji name HAVE to be the same.
+
+            if role is not None:
+                member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+                if member is not None:
+                    await member.add_roles(role)
+                else:
+                    await err_ch.send(f"on_raw_reaction_add: **Member** *{member}* **not found**")
+            else:
+                member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+                await err_ch.send(f"on_raw_reaction_add: **Role for** *'{payload.emoji.name}'*  **emoji not found for user** {member}")
+
+        # Reaction Points System
+        else:
+            if not payload.member.bot and payload.channel_id in valid_rp_channels:
+                emote = payload.emoji.name  # Get the emote to work with it better
+
+                ch = self.client.get_channel(payload.channel_id)
+                msg = await ch.fetch_message(payload.message_id)
+                uid = msg.author.id
+
+                if uid != payload.user_id:
+                    # Server Totals Data
+                    st = db.child('serverTotals').get().val()
+                    st_rp = st.get('reactionPoints')
+
+                    curr_points = db.child('users').child(uid).child('reacc_points').get().val()
+                    if emote in good_emotes:
+                        data = {'reacc_points':curr_points + 1}
+                        server_totals = {'reactionPoints':st_rp + 1}
+                    elif emote in bad_emotes:
+                        data = {'reacc_points':curr_points - 1}
+                        server_totals = {'reactionPoints':st_rp - 1}
+
+                    if emote in good_emotes or emote in bad_emotes:
+                        db.child('users').child(uid).update(data)
+                        db.child('serverTotals').update(server_totals)
+        if cl: print("END")
+
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_remove(self, payload):
+        if cl: print('START on_raw_reaction_remove ', end="")
+        if payload.channel_id in valid_rr_channels:
+            err_ch = self.client.get_channel(error_channel_id)
+
+            guild = discord.utils.find(lambda g : g.id == payload.guild_id, self.client.guilds)  # Gets the right guild
+            role = discord.utils.get(guild.roles, name=payload.emoji.name)  # Role name & Emoji name HAVE to be the same.
+
+            if role is not None:
+                member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+                if member is not None:
+                    await member.remove_roles(role)
+                else:
+                    await err_ch.send(f"on_raw_reaction_remove: **Member** *{member}* **not found**")
+            else:
+                member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+                await err_ch.send(f"on_raw_reaction_remove: **Role for** *'{payload.emoji.name}'*  **emoji not found for user** {member}")
+
+        # Reaction Points System
+        else:
+            # Don't wanna count shit unless it's in the correct channels
+            if payload.channel_id not in valid_rp_channels:
+                return
+
+            emote = payload.emoji.name  # Get the emote to work with it better
+
+            ch = self.client.get_channel(payload.channel_id)
+            msg = await ch.fetch_message(payload.message_id)
+            uid = msg.author.id
+
+            if uid != payload.user_id:
+                # Server Totals Data
+                st = db.child('serverTotals').get().val()
+                st_rp = st.get('reactionPoints')
+
+                curr_points = db.child('users').child(uid).child('reacc_points').get().val()
+                if emote in good_emotes:
+                    data = {'reacc_points':curr_points - 1}
+                    server_totals = {'reactionPoints':st_rp - 1}
+                elif emote in bad_emotes:
+                    data = {'reacc_points':curr_points + 1}
+                    server_totals = {'reactionPoints':st_rp + 1}
+
+                if emote in good_emotes or emote in bad_emotes:
+                    db.child('users').child(uid).update(data)
+                    db.child('serverTotals').update(server_totals)
+        if cl: print("END")
+
+
+def setup(client):
+    client.add_cog(ReactionRoles(client))

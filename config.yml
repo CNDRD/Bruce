@@ -1,0 +1,29 @@
+prefix: ','
+
+console_logging: True
+
+in_n_out_channel_id: 731024736456409159
+error_channel_id: 703303362065596546
+startup_channel_id: 731042702237368400
+
+welcome_hall_channel_id: 694161229475872808
+role_select_channel_id: 703289966842871868
+
+trashposting_channel_id: 694161968239607818
+videoposting_channel_id: 694162011960901713
+
+fudge_supreme_role_id: 402357508662099981
+lord_farquaad_role_id: 475345534723555339
+diagnostics_role_id: 553150973581721600
+r6s_role_id: 695320047022768138
+
+firebase: '{
+    "apiKey": "AIzaSyDe_xKKup4lVoPasLmAQW9Csc1zUzsxB0U",
+    "authDomain": "chuckwalla-69.firebaseapp.com",
+    "databaseURL": "https://chuckwalla-69.firebaseio.com",
+    "storageBucket": "chuckwalla-69.appspot.com",
+    "serviceAccount":"serviceAccountKey.json"
+    }'
+    
+r6_stats_loop: True
+db_auto_backup_loop: True

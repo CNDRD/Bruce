@@ -1,0 +1,4 @@
+dbAutoBackup/
+dbAutoBackup*
+__pycache__/
+serviceAccountKey.json
