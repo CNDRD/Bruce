@@ -28,9 +28,11 @@ class VoiceMove(commands.Cog):
     async def on_voice_state_update(self, member, before, after):
         if cl: print('START on_voice_state_update ', end="")
 
+        # We ain't counting time for bots
         if member.bot:
             return
 
+        # Basic-ass variables
         now = int(time.time())          # NOW INT
         uid = member.id                 # DISCORD USER ID
         today = getTodayTZ()            # TODAY'S DATE STRING
@@ -85,6 +87,7 @@ class VoiceMove(commands.Cog):
         #############
         ## XP part ##
         #############
+            # hardcore calculations
             xpToAdd = int(stayed/7)
             newXP = currentXP + xpToAdd
 
@@ -150,9 +153,14 @@ class VoiceMove(commands.Cog):
     @tasks.loop(hours=5)
     async def setVoiceDayStatus(self):
         if cl: print('START setVoiceDayStatus loop ', end="")
+        # This exists so there is the current day in the database regardless of any voice time being recorded
+        # Basically so just the graphs on the web make sense
+        # Could be done on the actual website but this was easier
         today = getTodayTZ()            # TODAY'S DATE STRING
         currYear = getCurrYearTZ()      # CURRENT YEAR
 
+        # Check if todays entry exists
+        # If it doesn't create it, else fuck off
         today_data = db.child('voice').child(currYear).child('day').child(today).get().val()
         if today_data is None:
             db.child('voice').child(currYear).child('day').child(today).set(0)
@@ -212,9 +220,11 @@ def getUserTotal(atvs, stayed):
     return atvs + stayed
 
 def getTodayTZ():
+    # Timezone-aware date string
     return datetime.datetime.now(timezone('Europe/Prague')).strftime('%Y-%m-%d')
 
 def getCurrYearTZ():
+    # Timezone-aware date year
     return datetime.datetime.now(timezone('Europe/Prague')).year
 
 def getYearlyUserData(currYear, uid):

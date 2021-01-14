@@ -38,6 +38,7 @@ class R6Stats(commands.Cog):
         # Get all user Ubi IDs and set them into a variable
         usrs = db.child('users').get()
 
+        # Get Siege stats from every Ubi ID stored in 'usrs' variable and store it in the database
         for u in usrs.each():
             if (ubi_id := u.val().get('ubi_id')) is not None:
                 inServer = u.val().get('in_server')
@@ -52,7 +53,10 @@ class R6Stats(commands.Cog):
     @commands.has_role(diagnostics_role_id)
     async def stats_update(self, ctx):
         if cl: print('START stats_update ', end="")
+        # Since the 'dbr6' loop runs only every hour if there is a need to manually update the stats this is the only way
+        # Well the only way other than restarting the bot..
         self.dbr6.cancel()
+        # This 0.5s delay needs to be here because who the fuck knows why
         await asyncio.sleep(0.5)
         self.dbr6.start()
         await ctx.message.add_reaction('✅')
@@ -64,15 +68,18 @@ class R6Stats(commands.Cog):
     async def r6set(self, ctx, link:str):
         if cl: print('START r6set ', end="")
         try:
+            # Remove the hyperlink part of the message if neccesarry
             if link.startswith("https://r6.tracker.network/profile/id/"):
                 link = link.replace('https://r6.tracker.network/profile/id/','')
             user_id = ctx.author.id
 
+            # Set up the Ubi ID under the users database entry
             data = {'ubi_id':link}
             db.child('users').child(user_id).update(data)
 
             # Update the stats with the new person in now
             self.dbr6.cancel()
+            # This 0.5s delay needs to be here because who the fuck knows why
             await asyncio.sleep(0.5)
             self.dbr6.start()
 
@@ -91,6 +98,7 @@ def setup(client):
 
 ################################################################## Functions ##
 def get_rank(rank):
+    # A really obscene way to do this, BUT it was easier than to use the Firebase Storage calls every time
     rank_dict = {
         "not ranked yet.": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FUnranked.png?alt=media&token=295b2528-9813-4add-a46f-9e5c7e2a13c8",
         "copper v": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FCopper_05.png?alt=media&token=34112e43-01cd-496a-83ca-a6d2008b1c70",
@@ -126,6 +134,9 @@ def get_rank(rank):
 
 
 def Rainbow6Stats(UbisoftID, inServer, discordUsername):
+    # I know it's long as fuck and probably also dumb but until
+    # there is a public API i don't see any other way..
+    # I also patched it a few times so it probably makes zero sense
     stats = {}
     ranked = True
 

@@ -38,6 +38,9 @@ class ReactionRoles(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         if cl: print('START on_raw_reaction_add ', end="")
+        # Oh boy
+        # Works only in selected channels (see 'valid_rr_channels' variable for their IDs)
+        # Also doesn't work when a bot adds an emoii
         if payload.channel_id in valid_rr_channels and not payload.member.bot:
             err_ch = self.client.get_channel(error_channel_id)
 
@@ -85,6 +88,7 @@ class ReactionRoles(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
         if cl: print('START on_raw_reaction_remove ', end="")
+        # Works only in selected channels (see 'valid_rr_channels' variable for their IDs)
         if payload.channel_id in valid_rr_channels:
             err_ch = self.client.get_channel(error_channel_id)
 

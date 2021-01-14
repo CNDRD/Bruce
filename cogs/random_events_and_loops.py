@@ -10,9 +10,6 @@ fb = json.loads(config.get('firebase'))
 firebase = pyrebase.initialize_app(fb)
 db = firebase.database()
 
-################################################################## Variables ##
-################################################################## Functions ##
-
 ################################################################### Commands ##
 class RandomEvents(commands.Cog):
     def __init__(self, client):
@@ -23,6 +20,8 @@ class RandomEvents(commands.Cog):
     @commands.Cog.listener()
     async def on_user_update(self, before, after):
         if cl: print('START on_user_update ', end="")
+        # When a user changes their Discord username or profile picture
+        # this updates that data in the database
         data = {
         "username": str(after),
         "avatar_url":str(after.avatar_url_as(size=4096))
