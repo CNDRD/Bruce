@@ -1,8 +1,8 @@
 git+https://github.com/thisbejim/Pyrebase
-discord.py==1.5.0
-bs4==0.0.1
-requests==2.20.0
-humanfriendly==8.2
+discord.py==1.6.0
+beautifulsoup4==4.9.3
+requests==2.11.1
+humanfriendly==9.1
 numpy==1.19.0
 numerize==0.12
 PyYAML==5.3.1
