@@ -9,6 +9,14 @@ lord_farquaad_role_id = config.get('lord_farquaad_role_id')
 diagnostics_role_id = config.get('diagnostics_role_id')
 r6s_role_id = config.get('r6s_role_id')
 
+################################################################## Functions ##
+def role(ctx, role_check):
+    roles = ctx.author.roles
+    for role in roles:
+        if role.id == role_check:
+            return True
+    return False
+
 ################################################################### Commands ##
 class HelpCommand(commands.Cog):
     def __init__(self, client):
@@ -17,7 +25,7 @@ class HelpCommand(commands.Cog):
 
     @commands.command(aliases=['h'])
     async def help(self, ctx):
-        print('START help ', end="")
+        if cl: print('START help ', end="")
         prfx = ctx.prefix
 
         embed = discord.Embed(colour=discord.Colour(0xff6d10))
@@ -70,15 +78,7 @@ class HelpCommand(commands.Cog):
 
         embed.set_footer(text="[arg] - required | <arg> - optional | A - Alias(es) | * - Role specific")
         await ctx.send(embed=embed)
-        print("END")
+        if cl: print("END")
 
 def setup(client):
     client.add_cog(HelpCommand(client))
-
-################################################################## Functions ##
-def role(ctx, role_check):
-    roles = ctx.author.roles
-    for role in roles:
-        if role.id == role_check:
-            return True
-    return False
