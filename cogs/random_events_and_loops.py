@@ -57,7 +57,8 @@ class RandomEvents(commands.Cog):
         "prefix":ctx.prefix,
         "subcommandPassed":ctx.subcommand_passed,
         "valid":ctx.valid,
-        "voiceClient":ctx.voice_client
+        "voiceClient":ctx.voice_client,
+        "timestamp":now
         }
 
         # Individual command usage count
