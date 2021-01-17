@@ -71,7 +71,7 @@ class RandomEvents(commands.Cog):
         serverTotalsData = {"commandUses":totalCommandUsesCount+1}
 
         # Update the shit in Database
-        db.child('dashboard').child('lastCommand').update(dash_data)
+        db.child('dashboard').child('lastCommand').set(dash_data)
         db.child('commandsUsage').update(command_data)
         db.child('serverTotals').update(serverTotalsData)
 
