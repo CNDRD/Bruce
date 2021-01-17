@@ -40,6 +40,24 @@ class Levels(commands.Cog):
         uid = message.author.id
         level_up = False
 
+        # Dashboard data
+        attachments = []
+        for att in message.attachments:
+            attachments.append(att.proxy_url)
+        dash_data = {
+            "timestamp":now,
+            "authorID":uid,
+            "authorName":str(message.author),
+            "messageID":message.id,
+            "attachments":attachments if len(attachments) > 0 else "",
+            "content":message.content,
+        }
+        db.child('dashboard').child('lastMessage').set(dash_data)
+
+        # Don't work for DM's
+        if message.channel.id == message.author.dm_channel.id:
+            return
+
         # Server Totals Data
         st = db.child('serverTotals').get().val()
         st_levels = st.get('levels')
