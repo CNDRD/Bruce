@@ -14,32 +14,6 @@ fb = json.loads(config.get('firebase'))
 firebase = pyrebase.initialize_app(fb)
 db = firebase.database()
 
-################################################################## Functions ##
-def get_sheriff(e):
-    msg =   '\u200b        🤠\n'
-    msg += f'\u200b  {e}{e}{e}\n'
-    msg += f'\u200b{e}  {e}   {e}\n'
-    msg += f'\u200b👇  {e}    👇\n'
-    msg += f'\u200b     {e}  {e}\n'
-    msg += f'\u200b    {e}   {e}\n'
-    msg +=  '\u200b     👢    👢'
-    return msg
-
-def get_square(e, size):
-    msg=''
-    for _ in range(0,size):
-        for _ in range(0, size):
-            msg+=f"{e}"
-        msg+="\n"
-    return msg
-
-def get_cicina():
-    rng = random.SystemRandom()
-    c1 = rng.randint(0,45)
-    c2 = rng.randint(0,45)
-    l = (c1,c2)
-    return l[l.index(min(l))]
-
 ################################################################### Commands ##
 class RandomCommands(commands.Cog):
     def __init__(self, client):
@@ -285,3 +259,29 @@ class RandomCommands(commands.Cog):
 
 def setup(client):
     client.add_cog(RandomCommands(client))
+
+################################################################## Functions ##
+def get_sheriff(e):
+    msg =   '\u200b        🤠\n'
+    msg += f'\u200b  {e}{e}{e}\n'
+    msg += f'\u200b{e}  {e}   {e}\n'
+    msg += f'\u200b👇  {e}    👇\n'
+    msg += f'\u200b     {e}  {e}\n'
+    msg += f'\u200b    {e}   {e}\n'
+    msg +=  '\u200b     👢    👢'
+    return msg
+
+def get_square(e, size):
+    msg=''
+    for _ in range(0,size):
+        for _ in range(0, size):
+            msg+=f"{e}"
+        msg+="\n"
+    return msg
+
+def get_cicina():
+    rng = random.SystemRandom()
+    c1 = rng.randint(0,45)
+    c2 = rng.randint(0,45)
+    l = (c1,c2)
+    return l[l.index(min(l))]
