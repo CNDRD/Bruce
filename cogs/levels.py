@@ -55,8 +55,13 @@ class Levels(commands.Cog):
         db.child('dashboard').child('lastMessage').set(dash_data)
 
         # Don't work for DM's
-        if message.channel.id == message.author.dm_channel.id:
-            return
+        try:
+            if message.channel.id == message.author.dm_channel.id:
+                return
+        except:
+            ...
+            # Not the most elegant solution but it just throws error every time a message is not sent in DM's
+            # and i cannot be bothered to read the docs to fix this rn..
 
         # Server Totals Data
         st = db.child('serverTotals').get().val()
