@@ -62,7 +62,7 @@ class RandomEvents(commands.Cog):
         }
 
         # Individual command usage count
-        command_data_db = db.child('commandsUsage').child(str(ctx.command)).get().val()
+        command_data_db = db.child('dashboard').child('commandsUsage').child(str(ctx.command)).get().val()
         if command_data_db is None: command_data = {str(ctx.command): 1}
         else: command_data = {str(ctx.command): command_data_db+1}
 
