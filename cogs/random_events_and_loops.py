@@ -72,7 +72,7 @@ class RandomEvents(commands.Cog):
 
         # Update the shit in Database
         db.child('dashboard').child('lastCommand').set(dash_data)
-        db.child('commandsUsage').update(command_data)
+        db.child('dashboard').child('commandsUsage').update(command_data)
         db.child('serverTotals').update(serverTotalsData)
 
         if cl: print("END")
