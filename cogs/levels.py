@@ -35,33 +35,19 @@ class Levels(commands.Cog):
             await message.delete()
             return
 
-        # Basic-ass variables
-        now = int(time.time())
-        uid = message.author.id
-        level_up = False
-
-        # Dashboard data
-        attachments = []
-        for att in message.attachments:
-            attachments.append(att.proxy_url)
-        dash_data = {
-            "timestamp":now,
-            "authorID":uid,
-            "authorName":str(message.author),
-            "messageID":message.id,
-            "attachments":attachments if len(attachments) > 0 else "",
-            "content":message.content,
-        }
-        db.child('dashboard').child('lastMessage').set(dash_data)
-
-        # Don't work for DM's
+        # Don't work in DM's
         try:
             if message.channel.id == message.author.dm_channel.id:
                 return
         except:
             ...
             # Not the most elegant solution but it just throws error every time a message is not sent in DM's
-            # and i cannot be bothered to read the docs to fix this rn..
+            # and i cannot be bothered to read the docs to fix this..
+
+        # Basic-ass variables
+        now = int(time.time())
+        uid = message.author.id
+        level_up = False
 
         # Server Totals Data
         st = db.child('serverTotals').get().val()
