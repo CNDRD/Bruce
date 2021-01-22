@@ -5,6 +5,7 @@ console_logging: True
 in_n_out_channel_id: 731024736456409159
 error_channel_id: 703303362065596546
 startup_channel_id: 731042702237368400
+voicelog_channel_id: 802111450021232640
 
 welcome_hall_channel_id: 694161229475872808
 role_select_channel_id: 703289966842871868

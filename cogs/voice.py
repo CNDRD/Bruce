@@ -7,6 +7,7 @@ from pytz import timezone
 ################################################################ Config Load ##
 config = yaml.safe_load(open("config.yml"))
 cl = config.get('console_logging')
+voicelog_channel_id = config.get('voicelog_channel_id')
 
 ################################################################### Firebase ##
 fb = json.loads(config.get('firebase'))
@@ -35,18 +36,40 @@ class VoiceMove(commands.Cog):
         # Basic-ass variables
         now = int(time.time())          # NOW INT
         uid = member.id                 # DISCORD USER ID
+        username = str(member)          # DISCORD USER NAME
         today = getTodayTZ()            # TODAY'S DATE STRING
         currYear = getCurrYearTZ()      # CURRENT YEAR
         levelUp = False                 # LEVEL UP BOOL
 
-###############################################################################
+        #voice-log channel logging
+        #######################################################################
+
+        # Switched channels
+        if before.channel is not None and after.channel is not None and before.channel != after.channel:
+            msg = f"{username} switched from **{str(before.channel)}** to **{str(after.channel)}**"
+
+        # Joined voice
+        elif before.channel is None:
+            msg = f"{username} joined **{str(after.channel)}**"
+
+        # Left voice
+        elif after.channel is None:
+            msg = f"{username} left **{str(before.channel)}**"
+
+        ch = self.client.get_channel(voicelog_channel_id)
+        await ch.send(msg)
+
+
+        #######################################################################
+
+        #######################################################################
 
         # Joined voice
         if before.channel is None:
             # Set the channel session timestamp
             db.child('voice').child(currYear).child('in').child(uid).set(now)
 
-###############################################################################
+        #######################################################################
 
         # Left voice
         elif after.channel is None:
