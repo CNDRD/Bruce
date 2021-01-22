@@ -45,13 +45,8 @@ class VoiceMove(commands.Cog):
         #######################################################################
 
         # Switched channels
-<<<<<<< HEAD
         if before.channel is not None and after.channel is not None and before.channel != after.channel:
             msg = f"{username} switched from **{str(before.channel)}** to **{str(after.channel)}**"
-=======
-        if before.channel is not None and after.channel is not None:
-            msg = f"{username} switched from {str(before.channel)} to {str(after.channel)}"
->>>>>>> 1823c3d4754923b53de91408a2511d9ccd538ec2
 
         # Joined voice
         elif before.channel is None:
