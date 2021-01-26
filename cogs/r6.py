@@ -41,7 +41,6 @@ class R6Stats(commands.Cog):
             if (ubi_id := u.val().get('ubiID')) is not None:
                 discordUsername = u.val().get('discordUsername')
                 data = Rainbow6StatsV2(ubi_id, discordUsername)
-                print(ubi_id)
                 db.child('R6S').child('stats').child(ubi_id).update(data)
 
         if cl: print("END")
@@ -94,10 +93,10 @@ def setup(client):
     client.add_cog(R6Stats(client))
 
 ################################################################## Functions ##
-def Rainbow6StatsV2(ubiID, discordUsername = "CNDRD#2233"):
+def Rainbow6StatsV2(ubiID, discordUsername):
     genericStats, seasonalStats = fetchAPIdata(ubiID)
 
-    # Get the current season (hopefully)
+    # (Hopefully) get the current season
     # Should always be the first so this should work
     cs = list(seasonalStats['seasons'].keys())[0]
 
@@ -178,7 +177,7 @@ def getRankV2(rank):
         "diamond": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FDiamond_01.png?alt=media&token=b64afb2e-4739-4d07-b0d5-41fb74a22b21",
         "champion": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FChampions_01.png?alt=media&token=aefcce88-98cf-48e3-ac76-7acfa2af30c4"
     }
-    return rank_dict.get(rank)
+    return rank_dict.get(rank.lower())
 
 
 def ubiIDtoUbiName(ID):
