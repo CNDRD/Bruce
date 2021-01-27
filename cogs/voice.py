@@ -34,12 +34,13 @@ class VoiceMove(commands.Cog):
             return
 
         # Basic-ass variables
-        now = int(time.time())          # NOW INT
-        uid = member.id                 # DISCORD USER ID
-        username = str(member)          # DISCORD USER NAME
-        today = getTodayTZ()            # TODAY'S DATE STRING
-        currYear = getCurrYearTZ()      # CURRENT YEAR
-        levelUp = False                 # LEVEL UP BOOL
+        now = int(time.time())                              # NOW INT
+        uid = member.id                                     # DISCORD USER ID
+        username = str(member)                              # DISCORD USER NAME
+        today = getTodayTZ()                                # TODAY'S DATE STRING
+        currYear = getCurrYearTZ()                          # CURRENT YEAR
+        levelUp = False                                     # LEVEL UP BOOL
+        ch = self.client.get_channel(voicelog_channel_id)   # VOICE LOGGING CHANNEL
 
         #voice-log channel logging
         #######################################################################
@@ -47,17 +48,17 @@ class VoiceMove(commands.Cog):
         # Switched channels
         if before.channel is not None and after.channel is not None and before.channel != after.channel:
             msg = f"{username} switched from **{str(before.channel)}** to **{str(after.channel)}**"
+            await ch.send(msg)
 
         # Joined voice
         elif before.channel is None:
             msg = f"{username} joined **{str(after.channel)}**"
+            await ch.send(msg)
 
         # Left voice
         elif after.channel is None:
             msg = f"{username} left **{str(before.channel)}**"
-
-        ch = self.client.get_channel(voicelog_channel_id)
-        await ch.send(msg)
+            await ch.send(msg)
 
 
         #######################################################################
