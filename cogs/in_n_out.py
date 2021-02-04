@@ -1,22 +1,22 @@
-import pyrebase, yaml, json, discord, time
+import pyrebase, yaml, json, time
 from humanfriendly import format_timespan
 from discord.ext import commands
 from discord.utils import get
 from datetime import datetime
 
-################################################################ Config Load ##
+# Config Load #
 config = yaml.safe_load(open("config.yml"))
 cl = config.get('console_logging')
 emote_server_id = config.get('emote_server_id')
 in_n_out_channel_id = config.get('in_n_out_channel_id')
 #in_n_out_channel_id = 694165272155783248 # yeet
 
-################################################################### Firebase ##
+# Firebase #
 fb = json.loads(config.get('firebase'))
 firebase = pyrebase.initialize_app(fb)
 db = firebase.database()
 
-################################################################### Commands ##
+# Commands #
 class InNOut(commands.Cog):
     def __init__(self, client):
         """Simple join/leave."""
@@ -64,8 +64,8 @@ class InNOut(commands.Cog):
             await member.add_roles(role)
 
             # Get timestamps to when the user joined Discord and the server, and a link to their avatar
-            joinedServer = int((member.joined_at).timestamp())
-            joinedDiscord = int((member.created_at).timestamp())
+            joinedServer = int(member.joined_at.timestamp())
+            joinedDiscord = int(member.created_at.timestamp())
             avatarURL = str(member.avatar_url_as(size=4096))
 
             # Create users individial stats
@@ -137,8 +137,8 @@ def setup(client):
     client.add_cog(InNOut(client))
 
 ################################################################## Functions ##
-def leave_counts(uID):
-    leaves = db.child('users').child(uID).child('leaves_count').get().val()
+def leave_counts(user_id):
+    leaves = db.child('users').child(user_id).child('leaves_count').get().val()
     if leaves is None:
         return 0
     return leaves

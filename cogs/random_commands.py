@@ -1,5 +1,4 @@
 import pyrebase, random, discord, json, yaml, datetime, time
-from humanfriendly import format_timespan
 from discord.ext import commands, tasks
 from pytz import timezone
 
@@ -65,8 +64,8 @@ class RandomCommands(commands.Cog):
             return
 
         member = discord.utils.get(ctx.guild.members, id=uid)
-        joinedServer = int((member.joined_at).timestamp())
-        joinedDiscord = int((member.created_at).timestamp())
+        joinedServer = int(member.joined_at.timestamp())
+        joinedDiscord = int(member.created_at.timestamp())
         avatarURL = str(member.avatar_url_as(size=4096))
 
         d = {'reacc_points':0,

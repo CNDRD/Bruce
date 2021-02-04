@@ -1,8 +1,8 @@
-import requests, pyrebase, asyncio, discord, yaml, json
+import requests, pyrebase, asyncio, yaml, json
 from discord.ext import commands, tasks
 from bs4 import BeautifulSoup
 
-################################################################ Config Load ##
+# Config Load
 config = yaml.safe_load(open("config.yml"))
 cl = config.get('console_logging')
 error_channel_id = config.get('error_channel_id')
@@ -11,12 +11,13 @@ diagnostics_role_id = config.get('diagnostics_role_id')
 r6_stats_loop = config.get('r6_stats_loop')
 R6STATS_API_KEY = config.get('R6STATS_API_KEY')
 
-################################################################### Firebase ##
+# Firebase #
 fb = json.loads(config.get('firebase'))
 firebase = pyrebase.initialize_app(fb)
 db = firebase.database()
 
-################################################################### Commands ##
+
+# Commands #
 class R6Stats(commands.Cog):
     def __init__(self, client):
         """Rainbow Six Siege stats commands.
@@ -26,58 +27,59 @@ class R6Stats(commands.Cog):
         & stores them in the Firebase Database
         """
         self.client = client
-        if r6_stats_loop: self.dbr6V2.start()
-
+        if r6_stats_loop: self.dbr6_v2.start()
 
     @tasks.loop(hours=3)
-    async def dbr6V2(self):
+    async def dbr6_v2(self):
         if cl: print('START dbr6V2 loop ', end="")
 
         # Get all user Ubi IDs & Discord usernames
-        usrs = db.child('R6S').child('IDs').get()
+        users = db.child('R6S').child('IDs').get()
 
-        # Get Siege stats from every Ubi ID stored in 'usrs' variable and store it in the database
-        for u in usrs.each():
+        # Get Siege stats from every Ubi ID stored in 'users' variable and store it in the database
+        for u in users.each():
             if (ubi_id := u.val().get('ubiID')) is not None:
-                discordUsername = u.val().get('discordUsername')
-                data = Rainbow6StatsV2(ubi_id, discordUsername)
+                print(ubi_id)
+                discord_username = u.val().get('discordUsername')
+                data = rainbow6stats_v2(ubi_id, discord_username)
                 db.child('R6S').child('stats').child(ubi_id).update(data)
+                print(ubi_id)
 
         if cl: print("END")
-
 
     @commands.command(aliases=['su'])
     @commands.has_role(diagnostics_role_id)
     async def stats_update(self, ctx):
         if cl: print('START stats_update ', end="")
-        # Since the 'dbr6V2' loop runs only every hour if there is a need to manually update the stats this is the only way
+        # Since the 'dbr6V2' loop runs only every hour if there is a need
+        # to manually update the stats this is the only way
         # Well the only way other than restarting the bot..
-        self.dbr6V2.cancel()
+        self.dbr6_v2.cancel()
         # This 0.5s delay needs to be here because who the fuck knows why
         await asyncio.sleep(0.5)
-        self.dbr6V2.start()
+        self.dbr6_v2.start()
         await ctx.message.add_reaction('✅')
         if cl: print("END")
 
-
     @commands.command()
     @commands.has_role(r6s_role_id)
-    async def r6set(self, ctx, link:str):
+    async def r6set(self, ctx, link: str):
         if cl: print('START r6set ', end="")
+        user_id = ctx.author.id
         try:
-            # Remove the hyperlink part of the message if neccesarry
+            # Remove the hyperlink part of the message if necessary
             if link.startswith("https://r6.tracker.network/profile/id/"):
-                link = link.replace('https://r6.tracker.network/profile/id/','')
+                link = link.replace('https://r6.tracker.network/profile/id/', '')
 
             # Set up the Ubi ID under the users database entry
-            data = {'ubiID':link, 'discordUsername':str(ctx.author)}
+            data = {'ubiID': link, 'discordUsername': str(ctx.author)}
             db.child('R6S').child('IDs').child(user_id).update(data)
 
             # Update the stats with the new person in now
-            self.dbr6.cancel()
+            self.dbr6_v2.cancel()
             # This 0.5s delay needs to be here because who the fuck knows why
             await asyncio.sleep(0.5)
-            self.dbr6.start()
+            self.dbr6_v2.start()
 
             await ctx.message.add_reaction('✅')
 
@@ -92,63 +94,53 @@ class R6Stats(commands.Cog):
 def setup(client):
     client.add_cog(R6Stats(client))
 
-################################################################## Functions ##
-def Rainbow6StatsV2(ubiID, discordUsername):
-    genericStats, seasonalStats = fetchAPIdata(ubiID)
+
+# Functions #
+def rainbow6stats_v2(ubi_id, discord_username):
+    genericStats, seasonalStats = fetch_api_data(ubi_id)
 
     # (Hopefully) get the current season
     # Should always be the first so this should work
     cs = list(seasonalStats['seasons'].keys())[0]
 
-    stats = {}
-    stats['discordUsername'] = discordUsername
-
-    stats['level'] = genericStats['progression']['level']
-    stats['xp'] = genericStats['progression']['total_xp']
-    stats['totalMatches'] = genericStats['stats']['general']['games_played']
-    stats['totalPlaytime'] = genericStats['stats']['general']['playtime']
-    stats['totalSuicides'] = genericStats['stats']['general']['suicides']
-    stats['totalMeleeKills'] = genericStats['stats']['general']['melee_kills']
-    stats['hs'] = (genericStats['stats']['general']['headshots'] / genericStats['stats']['general']['kills']) * 100
-
-    stats['rankedGames'] = genericStats['stats']['queue']['ranked']['games_played']
-    stats['rankedPlaytime'] = genericStats['stats']['queue']['ranked']['playtime']
-    stats['rankedKills'] = genericStats['stats']['queue']['ranked']['kills']
-    stats['rankedDeaths'] = genericStats['stats']['queue']['ranked']['deaths']
-    stats['rankedWins'] = genericStats['stats']['queue']['ranked']['wins']
-    stats['rankedLosses'] = genericStats['stats']['queue']['ranked']['losses']
-
-    stats['casualGames'] = genericStats['stats']['queue']['casual']['games_played']
-    stats['casualPlaytime'] = genericStats['stats']['queue']['casual']['playtime']
-    stats['casualKills'] = genericStats['stats']['queue']['casual']['kills']
-    stats['casualDeaths'] = genericStats['stats']['queue']['casual']['deaths']
-    stats['casualWins'] = genericStats['stats']['queue']['casual']['wins']
-    stats['casualLosses'] = genericStats['stats']['queue']['casual']['losses']
-
-    stats['ubisoftID'] = seasonalStats['ubisoft_id']
-    stats['ubisoftUsername'] = seasonalStats['username']
-    stats['platform'] = seasonalStats['platform']
-
-    stats['seasonName'] = seasonalStats['seasons'][cs]['name']
-    stats['currentRank'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['rank_text']
-    stats['currentMMR'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['mmr']
-    stats['currentRankImage'] = getRankV2(seasonalStats['seasons'][cs]['regions']['emea'][0]['rank_text'])
-    stats['maxRank'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['max_rank_text']
-    stats['maxMMR'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['max_mmr']
-    stats['maxRankImage'] = getRankV2(seasonalStats['seasons'][cs]['regions']['emea'][0]['max_rank_text'])
-
-    stats['lastMMRChange'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['last_match_mmr_change']
-
-    stats['sAbandons'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['abandons']
-    stats['sKills'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['kills']
-    stats['sDeaths'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['deaths']
-    stats['sWins'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['wins']
-    stats['sLosses'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['losses']
+    stats = {'discordUsername': discord_username, 'level': genericStats['progression']['level'],
+             'xp': genericStats['progression']['total_xp'],
+             'totalMatches': genericStats['stats']['general']['games_played'],
+             'totalPlaytime': genericStats['stats']['general']['playtime'],
+             'totalSuicides': genericStats['stats']['general']['suicides'],
+             'totalMeleeKills': genericStats['stats']['general']['melee_kills'],
+             'hs': (genericStats['stats']['general']['headshots'] / genericStats['stats']['general']['kills']) * 100,
+             'rankedGames': genericStats['stats']['queue']['ranked']['games_played'],
+             'rankedPlaytime': genericStats['stats']['queue']['ranked']['playtime'],
+             'rankedKills': genericStats['stats']['queue']['ranked']['kills'],
+             'rankedDeaths': genericStats['stats']['queue']['ranked']['deaths'],
+             'rankedWins': genericStats['stats']['queue']['ranked']['wins'],
+             'rankedLosses': genericStats['stats']['queue']['ranked']['losses'],
+             'casualGames': genericStats['stats']['queue']['casual']['games_played'],
+             'casualPlaytime': genericStats['stats']['queue']['casual']['playtime'],
+             'casualKills': genericStats['stats']['queue']['casual']['kills'],
+             'casualDeaths': genericStats['stats']['queue']['casual']['deaths'],
+             'casualWins': genericStats['stats']['queue']['casual']['wins'],
+             'casualLosses': genericStats['stats']['queue']['casual']['losses'],
+             'ubisoftID': seasonalStats['ubisoft_id'], 'ubisoftUsername': seasonalStats['username'],
+             'platform': seasonalStats['platform'], 'seasonName': seasonalStats['seasons'][cs]['name'],
+             'currentRank': seasonalStats['seasons'][cs]['regions']['emea'][0]['rank_text'],
+             'currentMMR': seasonalStats['seasons'][cs]['regions']['emea'][0]['mmr'],
+             'currentRankImage': get_rank_v2(seasonalStats['seasons'][cs]['regions']['emea'][0]['rank_text']),
+             'maxRank': seasonalStats['seasons'][cs]['regions']['emea'][0]['max_rank_text'],
+             'maxMMR': seasonalStats['seasons'][cs]['regions']['emea'][0]['max_mmr'],
+             'maxRankImage': get_rank_v2(seasonalStats['seasons'][cs]['regions']['emea'][0]['max_rank_text']),
+             'lastMMRChange': seasonalStats['seasons'][cs]['regions']['emea'][0]['last_match_mmr_change'],
+             'sAbandons': seasonalStats['seasons'][cs]['regions']['emea'][0]['abandons'],
+             'sKills': seasonalStats['seasons'][cs]['regions']['emea'][0]['kills'],
+             'sDeaths': seasonalStats['seasons'][cs]['regions']['emea'][0]['deaths'],
+             'sWins': seasonalStats['seasons'][cs]['regions']['emea'][0]['wins'],
+             'sLosses': seasonalStats['seasons'][cs]['regions']['emea'][0]['losses']}
 
     return stats
 
 
-def getRankV2(rank):
+def get_rank_v2(rank):
     # A really obscene way to do this, BUT it was easier than to use the Firebase Storage calls every time
     rank_dict = {
         "unranked": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FUnranked.png?alt=media&token=295b2528-9813-4add-a46f-9e5c7e2a13c8",
@@ -180,19 +172,19 @@ def getRankV2(rank):
     return rank_dict.get(rank.lower())
 
 
-def ubiIDtoUbiName(ID):
-    response = requests.get(f"https://r6.tracker.network/profile/id/{ID}")
-    soup = BeautifulSoup(response.content,'html.parser')
-    name = soup.find("h1", {"class","trn-profile-header__name"})
+def ubi_id_to_name(ubi_id):
+    response = requests.get(f"https://r6.tracker.network/profile/id/{ubi_id}")
+    soup = BeautifulSoup(response.content, 'html.parser')
+    name = soup.find("h1", {"class", "trn-profile-header__name"})
     return name.find("span").get_text()
 
 
-def fetchAPIdata(ubiID):
+def fetch_api_data(ubi_id):
     """
     auth header: 'Authorization: Bearer API_KEY_HERE'
 
     stats endpoint: https://api2.r6stats.com/public-api/stats/<username>/<platform>/<type>
-    <username> = bruh
+    <username> = username
     <platform> = pc / xbox? / psn?
     <type> = generic / seasonal / operators / weapon-categories / weapons
 
@@ -200,14 +192,14 @@ def fetchAPIdata(ubiID):
     <platform> = pc / xbox? / psn?
     <region> = ncsa / emea / apac / all (defaults to 'all')
     """
-    ubiUsername = ubiIDtoUbiName(ubiID)
-    headers = {"Authorization":f"Bearer {R6STATS_API_KEY}"}
+    ubi_username = ubi_id_to_name(ubi_id)
+    headers = {"Authorization": f"Bearer {R6STATS_API_KEY}"}
 
-    genericEnd = f"https://api2.r6stats.com/public-api/stats/{ubiUsername}/pc/generic"
-    genericREQ = requests.get(genericEnd, headers=headers)
-    genericStats = genericREQ.json()
-    seasonalEnd = f"https://api2.r6stats.com/public-api/stats/{ubiUsername}/pc/seasonal"
+    generic_end = f"https://api2.r6stats.com/public-api/stats/{ubi_username}/pc/generic"
+    generic_req = requests.get(generic_end, headers=headers)
+    generic_stats = generic_req.json()
+    seasonalEnd = f"https://api2.r6stats.com/public-api/stats/{ubi_username}/pc/seasonal"
     seasonalREQ = requests.get(seasonalEnd, headers=headers)
     seasonalStats = seasonalREQ.json()
 
-    return genericStats, seasonalStats
+    return generic_stats, seasonalStats

@@ -1,7 +1,7 @@
 from discord.ext import commands
 import discord, yaml
 
-################################################################ Config Load ##
+# Config Load #
 config = yaml.safe_load(open("config.yml"))
 cl = config.get('console_logging')
 fudge_supreme_role_id = config.get('fudge_supreme_role_id')
@@ -9,15 +9,15 @@ lord_farquaad_role_id = config.get('lord_farquaad_role_id')
 diagnostics_role_id = config.get('diagnostics_role_id')
 r6s_role_id = config.get('r6s_role_id')
 
-################################################################## Functions ##
+# Functions #
 def role(ctx, role_check):
     roles = ctx.author.roles
-    for role in roles:
-        if role.id == role_check:
+    for a in roles:
+        if a.id == role_check:
             return True
     return False
 
-################################################################### Commands ##
+# Commands #
 class HelpCommand(commands.Cog):
     def __init__(self, client):
         """Help."""
@@ -31,19 +31,16 @@ class HelpCommand(commands.Cog):
         embed = discord.Embed(colour=discord.Colour(0xff6d10))
         embed.set_author(name=f'Help command for {ctx.author.name}')
 
-        #######################################################################
         # r6.py
         msg = ''
-        msg += f'\n`{prfx}r6set [ubi id]` - Ubi ID or r6.tracker.netrwork permanent link'
+        msg += f'\n`{prfx}r6set [ubi id]` - Ubi ID or r6.tracker.network permanent link'
 
         if role(ctx, diagnostics_role_id):
             msg += f'\n`{prfx}stats_update`* - Manually update R6S stats'
 
         embed.add_field(name='→ **Rainbow Six: Siege**', value=msg, inline=False)
         # r6.py
-        #######################################################################
 
-        #######################################################################
         # random_stuff.py
         msg = ''
         msg += f'`{prfx}vanish` - You\'ll disappear. Magic.'
@@ -63,9 +60,7 @@ class HelpCommand(commands.Cog):
 
         embed.add_field(name='→ **Random commands**', value=msg, inline=False)
         # random_stuff.py
-        #######################################################################
 
-        #######################################################################
         # status.py
         if role(ctx, diagnostics_role_id):
             msg = ''
@@ -73,8 +68,6 @@ class HelpCommand(commands.Cog):
 
             embed.add_field(name='→ **Status**', value=msg, inline=False)
         # status.py
-        #######################################################################
-        # msg += f'\n`{prfx}` - '
 
         embed.set_footer(text="[arg] - required | <arg> - optional | A - Alias(es) | * - Role specific")
         await ctx.send(embed=embed)

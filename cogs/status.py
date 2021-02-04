@@ -1,12 +1,12 @@
 from discord.ext import commands
 import discord, yaml
 
-################################################################ Config Load ##
+# Config Load #
 config = yaml.safe_load(open("config.yml"))
 cl = config.get('console_logging')
 diagnostics_role_id = config.get('diagnostics_role_id')
 
-################################################################### Commands ##
+# Commands #
 class Status(commands.Cog):
     def __init__(self, client):
         """Status command.

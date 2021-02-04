@@ -5,16 +5,16 @@ from numpy.random import seed
 from discord.utils import get
 from numerize import numerize
 
-################################################################ Config Load ##
+# Config Load #
 config = yaml.safe_load(open("config.yml"))
 valid_post_channels = config.get('valid_post_channels')
 
-################################################################### Firebase ##
+# Firebase #
 fb = json.loads(config.get('firebase'))
 firebase = pyrebase.initialize_app(fb)
 db = firebase.database()
 
-################################################################### Commands ##
+# Commands #
 class Levels(commands.Cog):
     def __init__(self, client):
         """
@@ -112,7 +112,7 @@ class Levels(commands.Cog):
             data = {'messages_count':messages_count+1}
             server_totals = {'messages':st_messages+1}
 
-        # Update users individial stats & server total stats
+        # Update users individual stats & server total stats
         db.child('users').child(uid).update(data)
         db.child('serverTotals').update(server_totals)
 
@@ -140,7 +140,7 @@ class Levels(commands.Cog):
 def setup(client):
     client.add_cog(Levels(client))
 
-################################################################## Functions ##
+# Functions #
 def next_level(level):
     return int(5 / 6 * level * (2 * level * level + 27 * level + 91))
     # Should be the same as mee6 has

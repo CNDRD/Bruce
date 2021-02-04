@@ -1,17 +1,16 @@
-import pyrebase, yaml, json, time, datetime
-from discord.ext import commands, tasks
-from pytz import timezone
+from discord.ext import commands
+import pyrebase, yaml, json
 
-################################################################ Config Load ##
+# Config Load #
 config = yaml.safe_load(open("config.yml"))
 cl = config.get('console_logging')
 
-################################################################### Firebase ##
+# Firebase #
 fb = json.loads(config.get('firebase'))
 firebase = pyrebase.initialize_app(fb)
 db = firebase.database()
 
-################################################################### Commands ##
+# Commands #
 class RandomEvents(commands.Cog):
     def __init__(self, client):
         """Random events."""

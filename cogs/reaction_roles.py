@@ -1,7 +1,7 @@
 import pyrebase, discord, yaml, json
 from discord.ext import commands
 
-################################################################ Config Load ##
+# Config Load #
 config = yaml.safe_load(open("config.yml"))
 cl = config.get('console_logging')
 error_channel_id = config.get('error_channel_id')
@@ -11,19 +11,19 @@ role_select_channel_id = config.get('role_select_channel_id')
 trashposting_channel_id = config.get('trashposting_channel_id')
 videoposting_channel_id = config.get('videoposting_channel_id')
 
-################################################################### Firebase ##
+# Firebase #
 fb = json.loads(config.get('firebase'))
 firebase = pyrebase.initialize_app(fb)
 db = firebase.database()
 
-################################################################## Variables ##
+# Variables #
 valid_rr_channels = [welcome_hall_channel_id, role_select_channel_id]
 valid_rp_channels = [trashposting_channel_id, videoposting_channel_id]
 
 good_emotes = ['ooo','omegateef','omegalul','monkaLMAOXD','kek','AgrLove','LemonJoy']
 bad_emotes = ['WHEEZEtyKUNDO','incredi_wut','HonkHonk','_F','Gay']
 
-################################################################### Commands ##
+# Commands #
 class ReactionRoles(commands.Cog):
     def __init__(self, client):
         """Reaction Role System.
@@ -40,7 +40,7 @@ class ReactionRoles(commands.Cog):
         if cl: print('START on_raw_reaction_add ', end="")
         # Oh boy
         # Works only in selected channels (see 'valid_rr_channels' variable for their IDs)
-        # Also doesn't work when a bot adds an emoii
+        # Also doesn't work when a bot adds an emoji
         if payload.channel_id in valid_rr_channels and not payload.member.bot:
             err_ch = self.client.get_channel(error_channel_id)
 
