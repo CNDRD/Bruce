@@ -41,7 +41,7 @@ class HelpCommand(commands.Cog):
         embed.add_field(name='→ **Rainbow Six: Siege**', value=msg, inline=False)
         # r6.py
 
-        # random_stuff.py
+        # random_commands.py
         msg = ''
         msg += f'`{prfx}vanish` - You\'ll disappear. Magic.'
         msg += f'\n`{prfx}ping` - Show bots ping.'
@@ -50,6 +50,7 @@ class HelpCommand(commands.Cog):
         msg += f'\n`{prfx}flipflop` - Pro debílky'
         msg += f'\n`{prfx}emoji_square <emoji> <size>` - Square of emojis. A: `{prfx}es`'
         msg += f'\n`{prfx}cicina` - Can be used once per day.'
+        msg += f'\n`{prfx}r34` - Sends a r34 picture.'
 
         if role(ctx, diagnostics_role_id):
             msg += f'\n`{prfx}clear <amount=1>`* - Clears `amount` of messages.'
