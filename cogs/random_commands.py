@@ -1,6 +1,7 @@
-import pyrebase, random, discord, json, yaml, datetime, time
+import pyrebase, random, discord, json, yaml, datetime, time, os
 from discord.ext import commands, tasks
 from pytz import timezone
+import numpy as np
 
 ################################################################ Config Load ##
 config = yaml.safe_load(open("config.yml"))
@@ -256,6 +257,16 @@ class RandomCommands(commands.Cog):
 
         if cl: print("END")
 
+
+    @commands.command()
+    async def r34(self, ctx):
+        if cl: print('START r34 ', end="")
+
+        await ctx.send(file=discord.File(f"./r34_images/{random.choice(os.listdir('./r34_images'))}"))
+
+        if cl: print("END")
+
+
 def setup(client):
     client.add_cog(RandomCommands(client))
 
@@ -279,8 +290,4 @@ def get_square(e, size):
     return msg
 
 def get_cicina():
-    rng = random.SystemRandom()
-    c1 = rng.randint(0,45)
-    c2 = rng.randint(0,45)
-    l = (c1,c2)
-    return l[l.index(min(l))]
+    return np.random.randint(0,51)
