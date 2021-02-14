@@ -103,39 +103,59 @@ def rainbow6stats_v2(ubi_id, discord_username):
     # Should always be the first so this should work
     cs = list(seasonalStats['seasons'].keys())[0]
 
-    stats = {'discordUsername': discord_username, 'level': genericStats['progression']['level'],
-             'xp': genericStats['progression']['total_xp'],
-             'totalMatches': genericStats['stats']['general']['games_played'],
-             'totalPlaytime': genericStats['stats']['general']['playtime'],
-             'totalSuicides': genericStats['stats']['general']['suicides'],
-             'totalMeleeKills': genericStats['stats']['general']['melee_kills'],
-             'hs': (genericStats['stats']['general']['headshots'] / genericStats['stats']['general']['kills']) * 100,
-             'rankedGames': genericStats['stats']['queue']['ranked']['games_played'],
-             'rankedPlaytime': genericStats['stats']['queue']['ranked']['playtime'],
-             'rankedKills': genericStats['stats']['queue']['ranked']['kills'],
-             'rankedDeaths': genericStats['stats']['queue']['ranked']['deaths'],
-             'rankedWins': genericStats['stats']['queue']['ranked']['wins'],
-             'rankedLosses': genericStats['stats']['queue']['ranked']['losses'],
-             'casualGames': genericStats['stats']['queue']['casual']['games_played'],
-             'casualPlaytime': genericStats['stats']['queue']['casual']['playtime'],
-             'casualKills': genericStats['stats']['queue']['casual']['kills'],
-             'casualDeaths': genericStats['stats']['queue']['casual']['deaths'],
-             'casualWins': genericStats['stats']['queue']['casual']['wins'],
-             'casualLosses': genericStats['stats']['queue']['casual']['losses'],
-             'ubisoftID': seasonalStats['ubisoft_id'], 'ubisoftUsername': seasonalStats['username'],
-             'platform': seasonalStats['platform'], 'seasonName': seasonalStats['seasons'][cs]['name'],
-             'currentRank': seasonalStats['seasons'][cs]['regions']['emea'][0]['rank_text'],
-             'currentMMR': seasonalStats['seasons'][cs]['regions']['emea'][0]['mmr'],
-             'currentRankImage': get_rank_v2(seasonalStats['seasons'][cs]['regions']['emea'][0]['rank_text']),
-             'maxRank': seasonalStats['seasons'][cs]['regions']['emea'][0]['max_rank_text'],
-             'maxMMR': seasonalStats['seasons'][cs]['regions']['emea'][0]['max_mmr'],
-             'maxRankImage': get_rank_v2(seasonalStats['seasons'][cs]['regions']['emea'][0]['max_rank_text']),
-             'lastMMRChange': seasonalStats['seasons'][cs]['regions']['emea'][0]['last_match_mmr_change'],
-             'sAbandons': seasonalStats['seasons'][cs]['regions']['emea'][0]['abandons'],
-             'sKills': seasonalStats['seasons'][cs]['regions']['emea'][0]['kills'],
-             'sDeaths': seasonalStats['seasons'][cs]['regions']['emea'][0]['deaths'],
-             'sWins': seasonalStats['seasons'][cs]['regions']['emea'][0]['wins'],
-             'sLosses': seasonalStats['seasons'][cs]['regions']['emea'][0]['losses']}
+    stats = {}
+    stats['discordUsername'] = discordUsername
+
+    stats['level'] = genericStats['progression']['level']
+    stats['xp'] = genericStats['progression']['total_xp']
+    stats['totalMatches'] = genericStats['stats']['general']['games_played']
+    stats['totalPlaytime'] = genericStats['stats']['general']['playtime']
+    stats['totalSuicides'] = genericStats['stats']['general']['suicides']
+    stats['totalMeleeKills'] = genericStats['stats']['general']['melee_kills']
+    stats['totalKills'] = genericStats['stats']['general']['kills']
+    stats['totalDeaths'] = genericStats['stats']['general']['deaths']
+    stats['totalAssists'] = genericStats['stats']['general']['assists']
+    stats['totalDBNOs'] = genericStats['stats']['general']['dbnos']
+    stats['totalHeadshots'] = genericStats['stats']['general']['headshots']
+    stats['totalPenetrationKills'] = genericStats['stats']['general']['penetration_kills']
+    stats['totalReinforcements'] = genericStats['stats']['general']['reinforcements_deployed']
+    stats['totalGadgetsDestroyed'] = genericStats['stats']['general']['gadgets_destroyed']
+    stats['hs'] = (genericStats['stats']['general']['headshots'] / genericStats['stats']['general']['kills']) * 100
+
+    stats['rankedGames'] = genericStats['stats']['queue']['ranked']['games_played']
+    stats['rankedPlaytime'] = genericStats['stats']['queue']['ranked']['playtime']
+    stats['rankedKills'] = genericStats['stats']['queue']['ranked']['kills']
+    stats['rankedDeaths'] = genericStats['stats']['queue']['ranked']['deaths']
+    stats['rankedWins'] = genericStats['stats']['queue']['ranked']['wins']
+    stats['rankedLosses'] = genericStats['stats']['queue']['ranked']['losses']
+
+    stats['casualGames'] = genericStats['stats']['queue']['casual']['games_played']
+    stats['casualPlaytime'] = genericStats['stats']['queue']['casual']['playtime']
+    stats['casualKills'] = genericStats['stats']['queue']['casual']['kills']
+    stats['casualDeaths'] = genericStats['stats']['queue']['casual']['deaths']
+    stats['casualWins'] = genericStats['stats']['queue']['casual']['wins']
+    stats['casualLosses'] = genericStats['stats']['queue']['casual']['losses']
+
+    stats['ubisoftID'] = seasonalStats['ubisoft_id']
+    stats['ubisoftUsername'] = seasonalStats['username']
+    stats['platform'] = seasonalStats['platform']
+
+    stats['seasonName'] = seasonalStats['seasons'][cs]['name']
+    stats['currentRank'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['rank_text']
+    stats['currentMMR'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['mmr']
+    stats['currentRankImage'] = getRankV2(seasonalStats['seasons'][cs]['regions']['emea'][0]['rank_text'])
+    stats['maxRank'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['max_rank_text']
+    stats['maxMMR'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['max_mmr']
+    stats['maxRankImage'] = getRankV2(seasonalStats['seasons'][cs]['regions']['emea'][0]['max_rank_text'])
+
+    stats['nextRankMMR'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['next_rank_mmr']
+    stats['prevRankMMR'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['prev_rank_mmr']
+
+    stats['sAbandons'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['abandons']
+    stats['sKills'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['kills']
+    stats['sDeaths'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['deaths']
+    stats['sWins'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['wins']
+    stats['sLosses'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['losses']
 
     return stats
 
