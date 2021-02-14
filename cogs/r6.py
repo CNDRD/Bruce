@@ -39,11 +39,11 @@ class R6Stats(commands.Cog):
         # Get Siege stats from every Ubi ID stored in 'users' variable and store it in the database
         for u in users.each():
             if (ubi_id := u.val().get('ubiID')) is not None:
-                print(ubi_id)
+                #print(ubi_id)
                 discord_username = u.val().get('discordUsername')
                 data = rainbow6stats_v2(ubi_id, discord_username)
                 db.child('R6S').child('stats').child(ubi_id).update(data)
-                print(ubi_id)
+                #print(ubi_id)
 
         if cl: print("END")
 
@@ -104,7 +104,7 @@ def rainbow6stats_v2(ubi_id, discord_username):
     cs = list(seasonalStats['seasons'].keys())[0]
 
     stats = {}
-    stats['discordUsername'] = discordUsername
+    stats['discordUsername'] = discord_username
 
     stats['level'] = genericStats['progression']['level']
     stats['xp'] = genericStats['progression']['total_xp']
@@ -143,10 +143,10 @@ def rainbow6stats_v2(ubi_id, discord_username):
     stats['seasonName'] = seasonalStats['seasons'][cs]['name']
     stats['currentRank'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['rank_text']
     stats['currentMMR'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['mmr']
-    stats['currentRankImage'] = getRankV2(seasonalStats['seasons'][cs]['regions']['emea'][0]['rank_text'])
+    stats['currentRankImage'] = get_rank_v2(seasonalStats['seasons'][cs]['regions']['emea'][0]['rank_text'])
     stats['maxRank'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['max_rank_text']
     stats['maxMMR'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['max_mmr']
-    stats['maxRankImage'] = getRankV2(seasonalStats['seasons'][cs]['regions']['emea'][0]['max_rank_text'])
+    stats['maxRankImage'] = get_rank_v2(seasonalStats['seasons'][cs]['regions']['emea'][0]['max_rank_text'])
 
     stats['nextRankMMR'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['next_rank_mmr']
     stats['prevRankMMR'] = seasonalStats['seasons'][cs]['regions']['emea'][0]['prev_rank_mmr']
