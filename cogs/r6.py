@@ -29,7 +29,7 @@ class R6Stats(commands.Cog):
         self.client = client
         if r6_stats_loop: self.dbr6_v2.start()
 
-    @tasks.loop(hours=3)
+    @tasks.loop(minutes=30.0)
     async def dbr6_v2(self):
         if cl: print('START dbr6V2 loop ', end="")
 
