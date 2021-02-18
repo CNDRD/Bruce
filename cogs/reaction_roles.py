@@ -5,11 +5,7 @@ from discord.ext import commands
 config = yaml.safe_load(open("config.yml"))
 cl = config.get('console_logging')
 error_channel_id = config.get('error_channel_id')
-
-welcome_hall_channel_id = config.get('welcome_hall_channel_id')
-role_select_channel_id = config.get('role_select_channel_id')
-trashposting_channel_id = config.get('trashposting_channel_id')
-videoposting_channel_id = config.get('videoposting_channel_id')
+diskito_id = config.get('diskito_id')
 
 # Firebase #
 fb = json.loads(config.get('firebase'))
@@ -17,8 +13,8 @@ firebase = pyrebase.initialize_app(fb)
 db = firebase.database()
 
 # Variables #
-valid_rr_channels = [welcome_hall_channel_id, role_select_channel_id]
-valid_rp_channels = [trashposting_channel_id, videoposting_channel_id]
+valid_rr_channels = [config.get('welcome_hall_channel_id'), config.get('role_select_channel_id')]
+valid_rp_channels = [config.get('trashposting_channel_id'), config.get('videoposting_channel_id')]
 
 good_emotes = ['ooo','omegateef','omegalul','monkaLMAOXD','kek','AgrLove','LemonJoy']
 bad_emotes = ['WHEEZEtyKUNDO','incredi_wut','HonkHonk','_F','Gay']
@@ -58,30 +54,45 @@ class ReactionRoles(commands.Cog):
                 await err_ch.send(f"on_raw_reaction_add: **Role for** *'{payload.emoji.name}'*  **emoji not found for user** {member}")
 
         # Reaction Points System
-        else:
-            if not payload.member.bot and payload.channel_id in valid_rp_channels:
-                emote = payload.emoji.name  # Get the emote to work with it better
+        if not payload.member.bot and payload.channel_id in valid_rp_channels:
+            emote = payload.emoji.name  # Get the emote to work with it better
 
-                ch = self.client.get_channel(payload.channel_id)
-                msg = await ch.fetch_message(payload.message_id)
-                uid = msg.author.id
+            ch = self.client.get_channel(payload.channel_id)
+            msg = await ch.fetch_message(payload.message_id)
+            uid = msg.author.id
 
-                if uid != payload.user_id:
-                    # Server Totals Data
-                    st = db.child('serverTotals').get().val()
-                    st_rp = st.get('reactionPoints')
+            if uid != payload.user_id:
+                # Server Totals Data
+                st = db.child('serverTotals').get().val()
+                st_rp = st.get('reactionPoints')
 
-                    curr_points = db.child('users').child(uid).child('reacc_points').get().val()
-                    if emote in good_emotes:
-                        data = {'reacc_points':curr_points + 1}
-                        server_totals = {'reactionPoints':st_rp + 1}
-                    elif emote in bad_emotes:
-                        data = {'reacc_points':curr_points - 1}
-                        server_totals = {'reactionPoints':st_rp - 1}
+                curr_points = db.child('users').child(uid).child('reacc_points').get().val()
+                if emote in good_emotes:
+                    data = {'reacc_points':curr_points + 1}
+                    server_totals = {'reactionPoints':st_rp + 1}
+                elif emote in bad_emotes:
+                    data = {'reacc_points':curr_points - 1}
+                    server_totals = {'reactionPoints':st_rp - 1}
 
-                    if emote in good_emotes or emote in bad_emotes:
-                        db.child('users').child(uid).update(data)
-                        db.child('serverTotals').update(server_totals)
+                if emote in good_emotes or emote in bad_emotes:
+                    db.child('users').child(uid).update(data)
+                    db.child('serverTotals').update(server_totals)
+
+
+        # Emoji usage counter
+        if (hah := self.client.get_emoji(payload.emoji.id)) is not None:
+            if hah.guild_id != diskito_id: return
+            # Otherwise it'll spit out errors when working with non-diskíto emotes
+
+            emoji_id = payload.emoji.id
+            emoji_url = str(payload.emoji.url)
+
+            count = db.child('emojiCounts').child(emoji_id).child('count').get().val()
+            if count is None: count = 0
+
+            count_data = {'count':count+1, 'url':emoji_url}
+            db.child('emojiCounts').child(emoji_id).update(count_data)
+
         if cl: print("END")
 
 
@@ -105,34 +116,50 @@ class ReactionRoles(commands.Cog):
                 member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                 await err_ch.send(f"on_raw_reaction_remove: **Role for** *'{payload.emoji.name}'*  **emoji not found for user** {member}")
 
+
+        # Emoji usage counter
+        if (hah := self.client.get_emoji(payload.emoji.id)) is not None:
+            if hah.guild_id != diskito_id: return
+            # Otherwise it'll spit out errors when working with non-diskíto emotes
+
+            emoji_id = payload.emoji.id
+            emoji_url = str(payload.emoji.url)
+
+            count = db.child('emojiCounts').child(emoji_id).child('count').get().val()
+            if count is None: count = 1
+
+            count_data = {'count':count-1, 'url':emoji_url}
+            db.child('emojiCounts').child(emoji_id).update(count_data)
+
+
         # Reaction Points System
-        else:
-            # Don't wanna count shit unless it's in the correct channels
-            if payload.channel_id not in valid_rp_channels:
-                return
+        # Don't wanna count shit unless it's in the correct channels
+        if payload.channel_id not in valid_rp_channels:
+            return
 
-            emote = payload.emoji.name  # Get the emote to work with it better
+        emote = payload.emoji.name  # Get the emote to work with it better
 
-            ch = self.client.get_channel(payload.channel_id)
-            msg = await ch.fetch_message(payload.message_id)
-            uid = msg.author.id
+        ch = self.client.get_channel(payload.channel_id)
+        msg = await ch.fetch_message(payload.message_id)
+        uid = msg.author.id
 
-            if uid != payload.user_id:
-                # Server Totals Data
-                st = db.child('serverTotals').get().val()
-                st_rp = st.get('reactionPoints')
+        if uid != payload.user_id:
+            # Server Totals Data
+            st = db.child('serverTotals').get().val()
+            st_rp = st.get('reactionPoints')
 
-                curr_points = db.child('users').child(uid).child('reacc_points').get().val()
-                if emote in good_emotes:
-                    data = {'reacc_points':curr_points - 1}
-                    server_totals = {'reactionPoints':st_rp - 1}
-                elif emote in bad_emotes:
-                    data = {'reacc_points':curr_points + 1}
-                    server_totals = {'reactionPoints':st_rp + 1}
+            curr_points = db.child('users').child(uid).child('reacc_points').get().val()
+            if emote in good_emotes:
+                data = {'reacc_points':curr_points - 1}
+                server_totals = {'reactionPoints':st_rp - 1}
+            elif emote in bad_emotes:
+                data = {'reacc_points':curr_points + 1}
+                server_totals = {'reactionPoints':st_rp + 1}
 
-                if emote in good_emotes or emote in bad_emotes:
-                    db.child('users').child(uid).update(data)
-                    db.child('serverTotals').update(server_totals)
+            if emote in good_emotes or emote in bad_emotes:
+                db.child('users').child(uid).update(data)
+                db.child('serverTotals').update(server_totals)
+
         if cl: print("END")
 
 
