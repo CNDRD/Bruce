@@ -126,7 +126,7 @@ class OnMessage(commands.Cog):
             dm_ch = await message.author.create_dm()
             approx_messages = add_spaces(int(((xp_from_level(data['level']+1)-xp_from_level(data['level']-1))/20)))
 
-            embed = discord.Embed(colour=discord.Colour(0x0be881))
+            embed = discord.Embed(colour=discord.Colour.random())
             embed.set_author(name=message.author.name, url='https://diskito.eu/leader.html')
             embed.set_thumbnail(url=message.author.avatar_url)
             embed.set_footer(text=f"That's about {approx_messages} more messages")
