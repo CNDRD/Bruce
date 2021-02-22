@@ -1,43 +1,42 @@
-import pyrebase, discord, yaml, json
-from discord.ext import commands
+from func.console_logging import cl
 
-# Config Load #
-config = yaml.safe_load(open("config.yml"))
-cl = config.get('console_logging')
+from discord.ext import commands
+import pyrebase, discord, yaml, json
+
+## Config Load ##
+config = yaml.safe_load(open('config.yml'))
+valid_rp_channels = config.get('valid_rp_channels')
+valid_rr_channels = config.get('valid_rr_channels')
 error_channel_id = config.get('error_channel_id')
 diskito_id = config.get('diskito_id')
+good_emotes = config.get('good_emotes')
+bad_emotes = config.get('bad_emotes')
 
-# Firebase #
-fb = json.loads(config.get('firebase'))
-firebase = pyrebase.initialize_app(fb)
-db = firebase.database()
+## Firebase Database ##
+db = pyrebase.initialize_app( json.loads(config.get('firebase')) ).database()
 
-# Variables #
-valid_rr_channels = [config.get('welcome_hall_channel_id'), config.get('role_select_channel_id')]
-valid_rp_channels = [config.get('trashposting_channel_id'), config.get('videoposting_channel_id')]
 
-good_emotes = ['ooo','omegateef','omegalul','monkaLMAOXD','kek','AgrLove','LemonJoy']
-bad_emotes = ['WHEEZEtyKUNDO','incredi_wut','HonkHonk','_F','Gay']
-
-# Commands #
-class ReactionRoles(commands.Cog):
+class RrRpEc(commands.Cog):
     def __init__(self, client):
-        """Reaction Role System.
-
-        Uses a on_raw_reaction_add & on_raw_reaction_remove
-        for adding & removing roles.
-        Makes Reaction Points work.
+        """
+        Reaction Roles
+        Reaction Points
+        Emotes Count
         """
         self.client = client
 
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
-        if cl: print('START on_raw_reaction_add ', end="")
+        cl('', 'RrRpEc', 'on_raw_reaction_add')
         # Oh boy
         # Works only in selected channels (see 'valid_rr_channels' variable for their IDs)
+
         # Also doesn't work when a bot adds an emoji
-        if payload.channel_id in valid_rr_channels and not payload.member.bot:
+        if payload.member.bot:
+            return
+
+        if payload.channel_id in valid_rr_channels:
             err_ch = self.client.get_channel(error_channel_id)
 
             guild = discord.utils.find(lambda g : g.id == payload.guild_id, self.client.guilds)  # Gets the right guild
@@ -54,7 +53,7 @@ class ReactionRoles(commands.Cog):
                 await err_ch.send(f"on_raw_reaction_add: **Role for** *'{payload.emoji.name}'*  **emoji not found for user** {member}")
 
         # Reaction Points System
-        if not payload.member.bot and payload.channel_id in valid_rp_channels:
+        if payload.channel_id in valid_rp_channels:
             emote = payload.emoji.name  # Get the emote to work with it better
 
             ch = self.client.get_channel(payload.channel_id)
@@ -93,12 +92,10 @@ class ReactionRoles(commands.Cog):
             count_data = {'count':count+1, 'url':emoji_url}
             db.child('emojiCounts').child(emoji_id).update(count_data)
 
-        if cl: print("END")
-
 
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
-        if cl: print('START on_raw_reaction_remove ', end="")
+        cl('', 'RrRpEc', 'on_raw_reaction_remove')
         # Works only in selected channels (see 'valid_rr_channels' variable for their IDs)
         if payload.channel_id in valid_rr_channels:
             err_ch = self.client.get_channel(error_channel_id)
@@ -160,8 +157,6 @@ class ReactionRoles(commands.Cog):
                 db.child('users').child(uid).update(data)
                 db.child('serverTotals').update(server_totals)
 
-        if cl: print("END")
-
 
 def setup(client):
-    client.add_cog(ReactionRoles(client))
+    client.add_cog(RrRpEc(client))

@@ -1,0 +1,72 @@
+prefix: ','
+
+bruce_token: 'Njk........................................................'
+bruce_too_token: 'Njk........................................................'
+
+R6STATS_API_KEY: "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"
+
+# Console Logging
+console_logging: True
+
+# Loops
+r6_stats_loop: True
+db_auto_backup_loop: True
+
+# Loop times
+dbr6_loop_time: float # minutes
+db_backup_loop_time: float # hours
+
+# Server ID's
+diskito_id: 'ID'
+
+# Role ID's
+owner_role_id: 402357508662099981
+mod_role_id: 'ID'
+bot_mod_role_id: 'ID'
+r6s_role_id: 'ID'
+
+# Channel ID's
+startup_channel_id: 'ID'
+error_channel_id: 'ID'
+in_n_out_channel_id: 'ID'
+voice_log_channel_id: 'ID'
+valid_post_channels:
+  - 'ID'
+  - 'ID'
+  - 'ID'
+valid_rr_channels:
+  - 'ID'
+  - 'ID'
+valid_rp_channels:
+  - 'ID'
+  - 'ID'
+
+# User ID's
+cndrd_account_id: 'ID'
+test_account_uid: 'ID'
+
+# Firebase
+firebase: '{}'
+
+
+# Emote ID's
+honkhonk_emoji: 'ID'
+garrow_emoji: 'ID' # Green arrow
+yarrow_emoji: 'ID' # Yellow arrow
+rarrow_emoji: 'ID' # Red arrow
+
+# Reaction Point Emotes
+good_emotes:
+  - 'E1'
+  - 'E2'
+  - 'E3'
+  - '.'
+  - '.'
+  - '.'
+  - '.'
+bad_emotes:
+  - 'E1'
+  - 'E2'
+  - 'E3'
+  - '.'
+  - '.'

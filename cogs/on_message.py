@@ -1,3 +1,7 @@
+from func.console_logging import cl
+from func.stuff import add_spaces
+from func.levels import *
+
 import pyrebase, discord, time, yaml, json
 from discord.ext import commands
 from numpy.random import randint
@@ -5,20 +9,18 @@ from numpy.random import seed
 from discord.utils import get
 from numerize import numerize
 
-# Config Load #
-config = yaml.safe_load(open("config.yml"))
+## Config Load ##
+config = yaml.safe_load(open('config.yml'))
 valid_post_channels = config.get('valid_post_channels')
 
-# Firebase #
-fb = json.loads(config.get('firebase'))
-firebase = pyrebase.initialize_app(fb)
-db = firebase.database()
+## Firebase Database ##
+db = pyrebase.initialize_app( json.loads(config.get('firebase')) ).database()
 
-# Commands #
-class Levels(commands.Cog):
+
+class OnMessage(commands.Cog):
     def __init__(self, client):
         """
-        Levelling system.
+        Leveling system.
         Auto-deleting `User xyz pinned a message` messages.
         """
         self.client = client
@@ -26,6 +28,7 @@ class Levels(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        # cl('', 'OnMessage', 'on_message')
         # We don't want the bot giving XP to itself now do we
         if message.author.bot:
             return
@@ -41,7 +44,8 @@ class Levels(commands.Cog):
                 return
         except:
             ...
-            # Not the most elegant solution but it just throws error every time a message is not sent in DM's
+            # Not the most elegant solution but it just throws error
+            # every time a message is not sent in DM's
             # and i cannot be bothered to read the docs to fix this..
 
         # Basic-ass variables
@@ -84,7 +88,7 @@ class Levels(commands.Cog):
             if since_last_mess > 86400:
                 new_xp += 100
 
-            if new_xp >= next_level(current_lvl+1):
+            if new_xp >= xp_from_level(current_lvl+1):
                 # Level-Up
                 level_up = True
                 data = {'level':current_lvl+1, 'last_xp_get':now, 'xp':new_xp, 'messages_count':messages_count+1}
@@ -120,10 +124,10 @@ class Levels(commands.Cog):
         # could be done above, but this way it's prettier i think
         if level_up:
             dm_ch = await message.author.create_dm()
-            approx_messages = add_spaces(int(((next_level(data['level']+1)-next_level(data['level']-1))/20)))
+            approx_messages = add_spaces(int(((xp_from_level(data['level']+1)-xp_from_level(data['level']-1))/20)))
 
             embed = discord.Embed(colour=discord.Colour(0x0be881))
-            embed.set_author(name=message.author.name, url='https://chuckwalla-69.web.app/leader.html')
+            embed.set_author(name=message.author.name, url='https://diskito.eu/leader.html')
             embed.set_thumbnail(url=message.author.avatar_url)
             embed.set_footer(text=f"That's about {approx_messages} more messages")
 
@@ -138,25 +142,4 @@ class Levels(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(Levels(client))
-
-# Functions #
-def next_level(level):
-    return int(5 / 6 * level * (2 * level * level + 27 * level + 91))
-    # Should be the same as mee6 has
-    # https://github.com/PsKramer/mee6calc/blob/master/calc.js
-
-def rank_name(num):
-    a = (num - (num%5))
-    if num == 0:
-        return '[0]'
-    return f"[{a}-{a+5}]"
-    # https://stackoverflow.com/a/13082705
-
-def add_spaces(numero):
-    numero = ''.join(reversed(str(numero)))
-    a = [numero[i:i+3] for i in range(0, len(numero), 3)]
-    a = ' '.join([numero[i:i+3] for i in range(0, len(numero), 3)])
-    a = ''.join(reversed(str(a)))
-    return a
-    # https://stackoverflow.com/a/15254225/13186339
+    client.add_cog(OnMessage(client))

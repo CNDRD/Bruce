@@ -1,34 +1,29 @@
+from func.stuff import user_has_role as role
+from func.console_logging import cl
+
 from discord.ext import commands
 import discord, yaml
 
-# Config Load #
-config = yaml.safe_load(open("config.yml"))
-cl = config.get('console_logging')
-fudge_supreme_role_id = config.get('fudge_supreme_role_id')
-lord_farquaad_role_id = config.get('lord_farquaad_role_id')
-diagnostics_role_id = config.get('diagnostics_role_id')
+## Config Load ##
+config = yaml.safe_load(open('config.yml'))
+fudge_supreme_role_id = config.get('owner_role_id')
+lord_farquaad_role_id = config.get('mod_role_id')
+diagnostics_role_id = config.get('bot_mod_role_id')
 r6s_role_id = config.get('r6s_role_id')
 
-# Functions #
-def role(ctx, role_check):
-    roles = ctx.author.roles
-    for a in roles:
-        if a.id == role_check:
-            return True
-    return False
 
-# Commands #
-class HelpCommand(commands.Cog):
+class Help(commands.Cog):
     def __init__(self, client):
-        """Help."""
+        """Halp."""
         self.client = client
+
 
     @commands.command(aliases=['h'])
     async def help(self, ctx):
-        if cl: print('START help ', end="")
+        cl(ctx)
         prfx = ctx.prefix
 
-        embed = discord.Embed(colour=discord.Colour(0xff6d10))
+        embed = discord.Embed(colour=discord.Colour.random())
         embed.set_author(name=f'Help command for {ctx.author.name}')
 
         # r6.py
@@ -45,12 +40,9 @@ class HelpCommand(commands.Cog):
         msg = ''
         msg += f'`{prfx}vanish` - You\'ll disappear. Magic.'
         msg += f'\n`{prfx}ping` - Show bots ping.'
-        msg += f'\n`{prfx}sheriff <emote>` - Sends emote sheriff. <emote> can be emote or emote name'
         msg += f'\n`{prfx}coinflip <A> <B>` - Flips a coin. A: `{prfx}coin` / `{prfx}flip`'
         msg += f'\n`{prfx}flipflop` - Pro debílky'
-        msg += f'\n`{prfx}emoji_square <emoji> <size>` - Square of emojis. A: `{prfx}es`'
         msg += f'\n`{prfx}cicina` - Can be used once per day.'
-        msg += f'\n`{prfx}r34` - Sends a r34 picture.'
 
         if role(ctx, diagnostics_role_id):
             msg += f'\n`{prfx}clear <amount=1>`* - Clears `amount` of messages.'
@@ -72,7 +64,7 @@ class HelpCommand(commands.Cog):
 
         embed.set_footer(text="[arg] - required | <arg> - optional | A - Alias(es) | * - Role specific")
         await ctx.send(embed=embed)
-        if cl: print("END")
+
 
 def setup(client):
-    client.add_cog(HelpCommand(client))
+    client.add_cog(Help(client))

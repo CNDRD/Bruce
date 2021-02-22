@@ -1,102 +1,10 @@
-import requests, pyrebase, asyncio, yaml, json
-from discord.ext import commands, tasks
 from bs4 import BeautifulSoup
+import json, requests, yaml
 
-# Config Load
-config = yaml.safe_load(open("config.yml"))
-cl = config.get('console_logging')
-error_channel_id = config.get('error_channel_id')
-r6s_role_id = config.get('r6s_role_id')
-diagnostics_role_id = config.get('diagnostics_role_id')
-r6_stats_loop = config.get('r6_stats_loop')
+config = yaml.safe_load(open('config.yml'))
 R6STATS_API_KEY = config.get('R6STATS_API_KEY')
 
-# Firebase #
-fb = json.loads(config.get('firebase'))
-firebase = pyrebase.initialize_app(fb)
-db = firebase.database()
-
-
-# Commands #
-class R6Stats(commands.Cog):
-    def __init__(self, client):
-        """Rainbow Six Siege stats commands.
-
-        Goes to r6.tracker.network where it converts UBI ID to UBI Username;
-        Using r6stats.com API gathers all the useful data
-        & stores them in the Firebase Database
-        """
-        self.client = client
-        if r6_stats_loop: self.dbr6_v2.start()
-
-    @tasks.loop(minutes=30.0)
-    async def dbr6_v2(self):
-        if cl: print('START dbr6V2 loop ', end="")
-
-        # Get all user Ubi IDs & Discord usernames
-        users = db.child('R6S').child('IDs').get()
-
-        # Get Siege stats from every Ubi ID stored in 'users' variable and store it in the database
-        for u in users.each():
-            if (ubi_id := u.val().get('ubiID')) is not None:
-                #print(ubi_id)
-                discord_username = u.val().get('discordUsername')
-                data = rainbow6stats_v2(ubi_id, discord_username)
-                db.child('R6S').child('stats').child(ubi_id).update(data)
-                #print(ubi_id)
-
-        if cl: print("END")
-
-    @commands.command(aliases=['su'])
-    @commands.has_role(diagnostics_role_id)
-    async def stats_update(self, ctx):
-        if cl: print('START stats_update ', end="")
-        # Since the 'dbr6V2' loop runs only every hour if there is a need
-        # to manually update the stats this is the only way
-        # Well the only way other than restarting the bot..
-        self.dbr6_v2.cancel()
-        # This 0.5s delay needs to be here because who the fuck knows why
-        await asyncio.sleep(0.5)
-        self.dbr6_v2.start()
-        await ctx.message.add_reaction('✅')
-        if cl: print("END")
-
-    @commands.command()
-    @commands.has_role(r6s_role_id)
-    async def r6set(self, ctx, link: str):
-        if cl: print('START r6set ', end="")
-        user_id = ctx.author.id
-        try:
-            # Remove the hyperlink part of the message if necessary
-            if link.startswith("https://r6.tracker.network/profile/id/"):
-                link = link.replace('https://r6.tracker.network/profile/id/', '')
-
-            # Set up the Ubi ID under the users database entry
-            data = {'ubiID': link, 'discordUsername': str(ctx.author)}
-            db.child('R6S').child('IDs').child(user_id).update(data)
-
-            # Update the stats with the new person in now
-            self.dbr6_v2.cancel()
-            # This 0.5s delay needs to be here because who the fuck knows why
-            await asyncio.sleep(0.5)
-            self.dbr6_v2.start()
-
-            await ctx.message.add_reaction('✅')
-
-        except Exception as e:
-            await ctx.message.add_reaction('❌')
-            await ctx.send("Something went wrong")
-            err_ch = self.client.get_channel(error_channel_id)
-            await err_ch.send(f'**r6set:**\nlink: {link}\nuid: {user_id}\ncould not set link\n`{e}`')
-        if cl: print("END")
-
-
-def setup(client):
-    client.add_cog(R6Stats(client))
-
-
-# Functions #
-def rainbow6stats_v2(ubi_id, discord_username):
+def rainbow6stats(ubi_id, discord_username):
     genericStats, seasonalStats = fetch_api_data(ubi_id)
 
     # (Hopefully) get the current season

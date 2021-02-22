@@ -1,33 +1,34 @@
-import pyrebase, discord, time, yaml, json, datetime
+from func.console_logging import cl
+from func.stuff import add_spaces
+from func.levels import *
+from func.voice import *
+
+import pyrebase, yaml, json, discord, time
 from discord.ext import commands, tasks
 from discord.utils import get
 from numerize import numerize
-from pytz import timezone
 
-################################################################ Config Load ##
-config = yaml.safe_load(open("config.yml"))
-cl = config.get('console_logging')
-voice_log_channel_id = config.get('voicelog_channel_id')
+## Config Load ##
+config = yaml.safe_load(open('config.yml'))
+voice_log_channel_id = config.get('voice_log_channel_id')
 
-################################################################### Firebase ##
-fb = json.loads(config.get('firebase'))
-firebase = pyrebase.initialize_app(fb)
-db = firebase.database()
+## Firebase Database ##
+db = pyrebase.initialize_app( json.loads(config.get('firebase')) ).database()
 
-################################################################### Commands ##
-class VoiceMove(commands.Cog):
+
+class OnVoiceStateUpdate(commands.Cog):
     def __init__(self, client):
-        """Generate and store voice usage statistics.
-
-        Is connected to Firebase to store the data.
+        """
+        Generate and store voice usage statistics.
+        Connected to Firebase to store the data.
         Stores the data in seconds.
         """
         self.client = client
-        self.set_voice_day_status.start()
+
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        if cl: print('START on_voice_state_update ', end="")
+        cl('', 'OnVoiceStateUpdate', 'on_voice_state_update')
 
         # We ain't counting time for bots
         if member.bot:
@@ -164,100 +165,14 @@ class VoiceMove(commands.Cog):
             if levelUp:
                 dm_ch = await member.create_dm()
                 embed = discord.Embed(colour=discord.Colour(0x0be881))
-                embed.set_author(name=member, url='https://chuckwalla-69.web.app/leader.html')
+                embed.set_author(name=member, url='https://diskito.eu/leader.html')
 
                 embed.add_field(name=f'You have just levelled up to {new_level}! Congrats!',
                                 value=f'You now have **{numerize.numerize(newXP)}** xp',
                                 inline=False)
                 await dm_ch.send(embed=embed)
 
-        if cl: print("END")
 
-
-    @tasks.loop(hours=5)
-    async def set_voice_day_status(self):
-        if cl: print('START setVoiceDayStatus loop ', end="")
-        # This exists so there is the current day in the database regardless of any voice time being recorded
-        # Basically so just the graphs on the web make sense
-        # Could be done on the actual website but this was easier
-        today = get_today_tz()            # TODAY'S DATE STRING
-        currYear = get_curr_year_tz()      # CURRENT YEAR
-
-        # Check if today's entry exists
-        # If it doesn't create it, else fuck off
-        today_data = db.child('voice').child(currYear).child('day').child(today).get().val()
-        if today_data is None:
-            db.child('voice').child(currYear).child('day').child(today).set(0)
-        if cl: print("END")
 
 def setup(client):
-    client.add_cog(VoiceMove(client))
-
-
-################################################################## Functions ##
-def level_from_xp(xp):
-    for i in range(0,100):
-        if xp_from_level(i) <= xp < xp_from_level(i + 1):
-            return i
-
-def xp_from_level(level):
-    return int(5 / 6 * level * (2 * level * level + 27 * level + 91))
-    # https://github.com/PsKramer/mee6calc/blob/master/calc.js
-
-def rank_name(num):
-    a = (num - (num%5))
-    if num == 0:
-        return '[0]'
-    return f"[{a}-{a+5}]"
-    # https://stackoverflow.com/a/13082705
-
-def add_spaces(numero):
-    numero = ''.join(reversed(str(numero)))
-    a = [numero[i:i+3] for i in range(0, len(numero), 3)]
-    a = ' '.join([numero[i:i+3] for i in range(0, len(numero), 3)])
-    a = ''.join(reversed(str(a)))
-    return a
-    # https://stackoverflow.com/a/15254225/13186339
-
-def get_stay_time(curr_year, uid, now):
-    # Get the time user joined at, delete it, calculate how long they stayed for
-    joinedAt = db.child('voice').child(curr_year).child('in').child(uid).get().val()
-    db.child('voice').child(curr_year).child('in').child(uid).remove()
-    return now - joinedAt
-
-def get_yearly_total(stayed, tv):
-    if tv is None: tv = 0
-    return stayed + tv
-
-def get_yearly_lvs(stayed, current_lvs):
-    if current_lvs is None: current_lvs = 0
-    if stayed > current_lvs: return stayed
-    return current_lvs
-
-def get_current_day_time(curr_year, today, stayed):
-    cdt = db.child('voice').child(curr_year).child('day').child(today).get().val()
-    if cdt is None: cdt = 0
-    return cdt + stayed
-
-def get_user_total(atvs, stayed):
-    if atvs is None: atvs = 0
-    return atvs + stayed
-
-def get_today_tz():
-    # Timezone-aware date string
-    return datetime.datetime.now(timezone('Europe/Prague')).strftime('%Y-%m-%d')
-
-def get_curr_year_tz():
-    # Timezone-aware date year
-    return datetime.datetime.now(timezone('Europe/Prague')).year
-
-def get_yearly_user_data(curr_year, uid):
-    yud = db.child('voice').child(curr_year).child('total').child(uid).get().val()
-    if yud is None:
-        yearVoice = 0
-        yearLVS = 0
-    else:
-        yearVoice = yud.get('voice')
-        yearLVS = yud.get('lvs')
-
-    return yearVoice, yearLVS
+    client.add_cog(OnVoiceStateUpdate(client))

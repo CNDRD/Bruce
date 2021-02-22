@@ -1,19 +1,24 @@
+from func.console_logging import cl
+
+import pyrebase, yaml, json, discord
 from discord.ext import commands
-import discord, yaml
 
-# Config Load #
-config = yaml.safe_load(open("config.yml"))
-cl = config.get('console_logging')
-diagnostics_role_id = config.get('diagnostics_role_id')
+## Config Load ##
+config = yaml.safe_load(open('config.yml'))
+bot_mod_role_id = config.get('bot_mod_role_id')
 
-# Commands #
+## Firebase Database ##
+db = pyrebase.initialize_app( json.loads(config.get('firebase')) ).database()
+
+
 class Status(commands.Cog):
     def __init__(self, client):
-        """Status command.
+        """
+        Status command.
 
         Can be used to set custom statuses
 
-        Example commands:
+        Example usage:
         (,)status watching you all -> Watching you all
         (,)status listening everything -> Listening to everything
         (,)status playing games -> Playing games
@@ -22,10 +27,11 @@ class Status(commands.Cog):
         """
         self.client = client
 
+
     @commands.command()
-    @commands.has_role(diagnostics_role_id)  # Diagnostics
+    @commands.has_role(bot_mod_role_id)  # Diagnostics
     async def status(self, ctx, *args):
-        if cl: print('START status ', end="")
+        cl(ctx)
 
         # For when a clown comes along and types a blank command without arguments
         if args == ():
@@ -59,7 +65,7 @@ class Status(commands.Cog):
             a = discord.Activity(type=activity, name=msg)
             await self.client.change_presence(activity=a)
             await ctx.message.add_reaction('✅')
-        if cl: print("END")
+
 
 def setup(client):
     client.add_cog(Status(client))

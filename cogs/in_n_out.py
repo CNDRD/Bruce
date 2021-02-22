@@ -1,43 +1,52 @@
-import pyrebase, yaml, json, time
-from humanfriendly import format_timespan
+from func.console_logging import cl
+from func.levels import rank_name
+from func.stuff import ordinal
+
 from discord.ext import commands
-from discord.utils import get
-from datetime import datetime
+import pyrebase, yaml, json
 
-# Config Load #
-config = yaml.safe_load(open("config.yml"))
-cl = config.get('console_logging')
-emote_server_id = config.get('emote_server_id')
+## Config Load ##
+config = yaml.safe_load(open('config.yml'))
+
 in_n_out_channel_id = config.get('in_n_out_channel_id')
-#in_n_out_channel_id = 694165272155783248 # yeet
 
-# Firebase #
-fb = json.loads(config.get('firebase'))
-firebase = pyrebase.initialize_app(fb)
-db = firebase.database()
+test_account_uid = config.get('test_account_uid')
 
-# Commands #
+honkhonk_emoji = config.get('honkhonk_emoji')
+garrow_emoji = config.get('garrow_emoji')
+yarrow_emoji = config.get('yarrow_emoji')
+rarrow_emoji = config.get('rarrow_emoji')
+
+## Firebase Database ##
+db = pyrebase.initialize_app( json.loads(config.get('firebase')) ).database()
+
+
 class InNOut(commands.Cog):
     def __init__(self, client):
-        """Simple join/leave."""
+        """
+        Not so simple 'in & out' events.
+
+        - Sets up users in database
+        - Shames users who leave too soon
+        """
         self.client = client
+
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        if cl: print('START on_member_join ', end="")
+        cl('', 'InNOut', 'on_member_join')
 
         # No welcome messages for bots and my test account
-        if member.bot == True or member.id == 552570700171313187:
+        if member.bot == True or member.id == test_account_uid:
             return
 
         # Basic-ass variables
         ino = self.client.get_channel(in_n_out_channel_id)
         leaves = leave_counts(member.id)
-        now = int(time.time())
 
         # Get arrows emoji
-        garrow = self.client.get_emoji(784822110723112974)
-        yarrow = self.client.get_emoji(784822110622974014)
+        garrow = self.client.get_emoji(garrow_emoji)
+        yarrow = self.client.get_emoji(yarrow_emoji)
 
         if leaves > 0:
             # The user has joined the server before at least once
@@ -73,7 +82,7 @@ class InNOut(commands.Cog):
                  'username':str(member),
                  'xp':0,
                  'level':0,
-                 'last_xp_get':now,
+                 'last_xp_get':joinedServer,
                  'messages_count':0,
                  'joined_server':joinedServer,
                  'joined_discord':joinedDiscord,
@@ -83,19 +92,18 @@ class InNOut(commands.Cog):
             db.child('users').child(member.id).set(d)
 
         await ino.send(msg)
-        if cl: print("END")
 
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-        if cl: print('START on_member_remove ', end="")
+        cl('', 'InNOut', 'on_member_remove')
 
         # No welcome messages for bots and my test account
-        if member.bot == True or member.id == 552570700171313187:
+        if member.bot == True or member.id == test_account_uid:
             return
 
         # Get arrow emoji
-        rarrow = self.client.get_emoji(784822110836097094)
+        rarrow = self.client.get_emoji(rarrow_emoji)
 
         leaves = leave_counts(member.id)
         if leaves >= 1:
@@ -127,28 +135,9 @@ class InNOut(commands.Cog):
         # if they left within 15 minutes of joining it also adds another clown emoji
         await clown.add_reaction('🤡')
         if int(diff.total_seconds()) < 900:
-            e = self.client.get_emoji(570667900529147914) # :HonkHonk:
+            e = self.client.get_emoji(honkhonk_emoji) # :HonkHonk:
             await clown.add_reaction(e)
-
-        if cl: print("END")
 
 
 def setup(client):
     client.add_cog(InNOut(client))
-
-################################################################## Functions ##
-def leave_counts(user_id):
-    leaves = db.child('users').child(user_id).child('leaves_count').get().val()
-    if leaves is None:
-        return 0
-    return leaves
-
-ordinal = lambda n: "%d%s" % (n,"tsnrhtdd"[(n/10%10!=1)*(n%10<4)*n%10::4])
-# https://stackoverflow.com/a/20007730
-
-def rank_name(num):
-    a = (num - (num%5))
-    if num == 0:
-        return '[0]'
-    return f"[{a}-{a+5}]"
-# https://stackoverflow.com/a/13082705
