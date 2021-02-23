@@ -141,3 +141,10 @@ class InNOut(commands.Cog):
 
 def setup(client):
     client.add_cog(InNOut(client))
+
+
+def leave_counts(user_id):
+    leaves = db.child('users').child(user_id).child('leaves_count').get().val()
+    if leaves is None:
+        return 0
+    return leaves
