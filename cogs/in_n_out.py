@@ -3,6 +3,7 @@ from func.levels import rank_name
 from func.stuff import ordinal
 
 from discord.ext import commands
+from discord.utils import get
 import pyrebase, yaml, json
 
 ## Config Load ##
