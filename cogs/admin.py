@@ -5,6 +5,8 @@ from discord.ext import commands
 
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
+bot_mod_role_id = config.get('bot_mod_role_id')
+mod_role_id = config.get('mod_role_id')
 
 ## Firebase Database ##
 db = pyrebase.initialize_app( json.loads(config.get('firebase')) ).database()
@@ -17,6 +19,7 @@ class Admin(commands.Cog):
 
         - backup_db
         - clear
+        - add_reaction
         """
         self.client = client
 
@@ -33,9 +36,19 @@ class Admin(commands.Cog):
 
 
     @commands.command()
+    @commands.has_any_role(bot_mod_role_id, mod_role_id)
     async def clear(self, ctx, amount: int = 1):
         cl(ctx)
         await ctx.channel.purge(limit=(amount+1))
+
+
+    @commands.command(aliases=['add'])
+    @commands.has_any_role(bot_mod_role_id, mod_role_id)
+    async def add_reaction(self, ctx, e):
+        ref_ch = self.client.get_channel(ctx.message.reference.channel_id)
+        ref_msg = await ref_ch.fetch_message(ctx.message.reference.message_id)
+        await ref_msg.add_reaction(e)
+        await ctx.message.delete()
 
 
 def setup(client):
