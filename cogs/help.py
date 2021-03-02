@@ -6,9 +6,9 @@ import discord, yaml
 
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
-fudge_supreme_role_id = config.get('owner_role_id')
-lord_farquaad_role_id = config.get('mod_role_id')
-diagnostics_role_id = config.get('bot_mod_role_id')
+owner_role_id = config.get('owner_role_id')
+mod_role_id = config.get('mod_role_id')
+bot_mod_role_id = config.get('bot_mod_role_id')
 r6s_role_id = config.get('r6s_role_id')
 
 
@@ -26,36 +26,44 @@ class Help(commands.Cog):
         embed = discord.Embed(colour=discord.Colour.random())
         embed.set_author(name=f'Help command for {ctx.author.name}')
 
-        # r6.py
+        # siege.py
         msg = ''
         msg += f'\n`{prfx}r6set [ubi id]` - Ubi ID or r6.tracker.network permanent link'
 
-        if role(ctx, diagnostics_role_id):
+        if role(ctx, bot_mod_role_id):
             msg += f'\n`{prfx}stats_update`* - Manually update R6S stats'
 
         embed.add_field(name='→ **Rainbow Six: Siege**', value=msg, inline=False)
-        # r6.py
+        # siege.py
 
-        # random_commands.py
+        # user.py
         msg = ''
         msg += f'`{prfx}vanish` - You\'ll disappear. Magic.'
         msg += f'\n`{prfx}ping` - Show bots ping.'
         msg += f'\n`{prfx}coinflip <A> <B>` - Flips a coin. A: `{prfx}coin` / `{prfx}flip`'
         msg += f'\n`{prfx}flipflop` - Pro debílky'
         msg += f'\n`{prfx}cicina` - Can be used once per day.'
+        msg += f'\n`{prfx}quote` - Create a quote on https://diskito.eu/quotes'
 
-        if role(ctx, diagnostics_role_id):
+        embed.add_field(name='→ **User**', value=msg, inline=False)
+        # user.py
+
+        # admin.py
+        if role(ctx, bot_mod_role_id) or role(ctx, mod_role_id):
+            msg = ''
+            if role(ctx, owner_role_id):
+                msg += f'\n`{prfx}backup_db`* - Backs up the DB into DMs. A: `{prfx}bdb`'
+
             msg += f'\n`{prfx}clear <amount=1>`* - Clears `amount` of messages.'
+            msg += f'\n`{prfx}add_reaction [emoji]`* - Adds `emoji` to the message this replies to'
+            msg += f'\n`{prfx}say [content]`* - The bot will send `content`'
+            msg += f'\n`{prfx}edit [content]`* - Edits the message this replies to with `content`'
 
-        if role(ctx, fudge_supreme_role_id):
-            msg += f'\n`{prfx}backup_db`* - Backs up the DB into DMs. A: `{prfx}bdb`'
-            msg += f'\n`{prfx}manually_add_to_db`* - Backs up the DB into DMs'
-
-        embed.add_field(name='→ **Random commands**', value=msg, inline=False)
-        # random_stuff.py
+            embed.add_field(name='→ **Admin**', value=msg, inline=False)
+        # admin.py
 
         # status.py
-        if role(ctx, diagnostics_role_id):
+        if role(ctx, bot_mod_role_id):
             msg = ''
             msg += f'\n`{prfx}status <activity> [message]` - `<activity>` as "clear" to clear status'
 

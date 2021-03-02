@@ -51,5 +51,21 @@ class Admin(commands.Cog):
         await ctx.message.delete()
 
 
+    @commands.command()
+    @commands.has_any_role(bot_mod_role_id, mod_role_id)
+    async def say(self, ctx, *, a):
+        await ctx.send(a)
+        await ctx.message.delete()
+
+
+    @commands.command()
+    @commands.has_any_role(bot_mod_role_id, mod_role_id)
+    async def edit(self, ctx, *, a):
+        ref_ch = self.client.get_channel(ctx.message.reference.channel_id)
+        ref_msg = await ref_ch.fetch_message(ctx.message.reference.message_id)
+        await ref_msg.edit(content=a)
+        await ctx.message.delete()
+
+
 def setup(client):
     client.add_cog(Admin(client))
