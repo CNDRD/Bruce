@@ -39,18 +39,24 @@ class RrRpEc(commands.Cog):
         if payload.channel_id in valid_rr_channels:
             err_ch = self.client.get_channel(error_channel_id)
 
-            guild = discord.utils.find(lambda g : g.id == payload.guild_id, self.client.guilds)  # Gets the right guild
-            role = discord.utils.get(guild.roles, name=payload.emoji.name)  # Role name & Emoji name HAVE to be the same.
+            guild = self.client.get_guild(payload.guild_id)
+            member = guild.get_member(payload.user_id)
+            role = discord.utils.get(guild.roles, name = payload.emoji.name)  # Role name & Emoji name HAVE to be the same.
 
-            if role is not None:
-                member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
-                if member is not None:
+            if role is not None and member is not None:
+
+                rr_ch = self.client.get_channel(payload.channel_id)
+                rr_msg = await rr_ch.fetch_message(payload.message_id)
+
+                # Add Role
+                if role not in member.roles:
                     await member.add_roles(role)
-                else:
-                    await err_ch.send(f"on_raw_reaction_add: **Member** *{member}* **not found**")
-            else:
-                member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
-                await err_ch.send(f"on_raw_reaction_add: **Role for** *'{payload.emoji.name}'*  **emoji not found for user** {member}")
+                # Remove Role
+                elif role in member.roles:
+                    await member.remove_roles(role)
+
+                await rr_msg.remove_reaction(payload.emoji, member)
+
 
         # Reaction Points System
         if payload.channel_id in valid_rp_channels:
@@ -96,24 +102,6 @@ class RrRpEc(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
         cl('', 'RrRpEc', 'on_raw_reaction_remove')
-        # Works only in selected channels (see 'valid_rr_channels' variable for their IDs)
-        if payload.channel_id in valid_rr_channels:
-            err_ch = self.client.get_channel(error_channel_id)
-
-            guild = discord.utils.find(lambda g : g.id == payload.guild_id, self.client.guilds)  # Gets the right guild
-            role = discord.utils.get(guild.roles, name=payload.emoji.name)  # Role name & Emoji name HAVE to be the same.
-
-            if role is not None:
-                member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
-                if member is not None:
-                    await member.remove_roles(role)
-                else:
-                    await err_ch.send(f"on_raw_reaction_remove: **Member** *{member}* **not found**")
-            else:
-                member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
-                await err_ch.send(f"on_raw_reaction_remove: **Role for** *'{payload.emoji.name}'*  **emoji not found for user** {member}")
-
-
         # Emoji usage counter
         if (hah := self.client.get_emoji(payload.emoji.id)) is not None:
             if hah.guild_id != diskito_id: return
