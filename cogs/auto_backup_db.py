@@ -2,7 +2,7 @@ from func.console_logging import cl
 
 from discord.ext import commands, tasks
 from datetime import datetime
-import pyrebase, yaml, json
+import discord, pyrebase, yaml, json
 
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
