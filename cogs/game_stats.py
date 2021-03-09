@@ -51,7 +51,7 @@ class GameStats(commands.Cog):
         users = db.child('GameStats').child('IDs').get()
         for u in users.each():
             if (ubi_id := u.val().get('ubiID')) is not None:
-                data = Rainbow6StatsV2(ubi_id, u.val().get('discordUsername'))
+                data = rainbow6stats(ubi_id, u.val().get('discordUsername'))
                 db.child('GameStats').child('R6S').child(ubi_id).update(data)
 
 

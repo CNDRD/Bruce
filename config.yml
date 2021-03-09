@@ -3,17 +3,20 @@ prefix: ','
 bruce_token: 'Njk........................................................'
 bruce_too_token: 'Njk........................................................'
 
-R6STATS_API_KEY: "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"
+R6STATS_API_KEY: 'AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE'
+TRN_API_KEY: 'AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE'
 
 # Console Logging
 console_logging: True
 
 # Loops
-r6_stats_loop: True
-db_auto_backup_loop: True
+dbr6_loop: False
+dbcsgo_loop: True
+db_auto_backup_loop: False
 
 # Loop times
 dbr6_loop_time: float # minutes
+dbcsgo_loop_time: float # minutes
 db_backup_loop_time: float # hours
 
 # Server ID's
