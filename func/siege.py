@@ -4,7 +4,7 @@ import json, requests, yaml
 config = yaml.safe_load(open('config.yml'))
 R6STATS_API_KEY = config.get('R6STATS_API_KEY')
 
-def rainbow6stats(ubi_id, discord_username):
+def rainbow6stats(ubi_id, discordUsername):
     genericStats, seasonalStats = fetch_api_data(ubi_id)
 
     # (Hopefully) get the current season
@@ -12,7 +12,7 @@ def rainbow6stats(ubi_id, discord_username):
     cs = list(seasonalStats['seasons'].keys())[0]
 
     stats = {}
-    stats['discordUsername'] = discord_username
+    stats['discordUsername'] = discordUsername
 
     stats['level'] = genericStats['progression']['level']
     stats['xp'] = genericStats['progression']['total_xp']

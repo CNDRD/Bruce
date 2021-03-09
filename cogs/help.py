@@ -26,15 +26,12 @@ class Help(commands.Cog):
         embed = discord.Embed(colour=discord.Colour.random())
         embed.set_author(name=f'Help command for {ctx.author.name}')
 
-        # siege.py
-        msg = ''
-        msg += f'\n`{prfx}r6set [ubi id]` - Ubi ID or r6.tracker.network permanent link'
-
+        # game_stats.py
         if role(ctx, bot_mod_role_id):
-            msg += f'\n`{prfx}stats_update`* - Manually update R6S stats'
-
-        embed.add_field(name='→ **Rainbow Six: Siege**', value=msg, inline=False)
-        # siege.py
+            msg = ''
+            msg += f'\n`{prfx}stats_update`* - Restarts all stats loops'
+            embed.add_field(name='→ **Game Stats**', value=msg, inline=False)
+        # game_stats.py
 
         # user.py
         msg = ''
