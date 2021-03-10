@@ -13,11 +13,12 @@ def csgostats(sid, discordUsername):
         stats['pfpLink'] = raw_api_data['data']['platformInfo']['avatarUrl']
         stats['steamID64'] = str(sid)
         stats['discordUsername'] = discordUsername
+        stats['steamUsername'] = name
         for x in data:
             stats[x] = data[x]['value']
         return stats
     except:
-        return {'private':True, 'discordUsername':discordUsername, 'steamUsername':name}
+        return {'private':True, 'discordUsername':discordUsername, 'steamUsername':name, 'steamID64': str(sid)}
 
 
 def getSteamUsernameFromID64(SID):
