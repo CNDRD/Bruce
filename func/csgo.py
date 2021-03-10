@@ -11,7 +11,7 @@ def csgostats(sid, discordUsername):
         data = raw_api_data['data']['segments'][0]['stats']
         stats = {}
         stats['pfpLink'] = raw_api_data['data']['platformInfo']['avatarUrl']
-        stats['steam64ID'] = sid
+        stats['steamID64'] = str(sid)
         stats['discordUsername'] = discordUsername
         for x in data:
             stats[x] = data[x]['value']
