@@ -40,9 +40,10 @@ class GameStats(commands.Cog):
         cl('', 'GameStats', 'dbcsgo')
         users = db.child('GameStats').child('IDs').get()
         for u in users.each():
-            if (steam_id := u.val().get('steamID32')) is not None:
-                stats = csgostats(int(steam_id), u.val().get('discordUsername'))
-                db.child('GameStats').child('CSGO').child(steam_id).update(stats)
+            if (steam_id_32 := u.val().get('steamID32')) is not None:
+                steam_id_64 = u.val().get('steamID64')
+                stats = csgostats(int(steam_id_64), u.val().get('discordUsername'))
+                db.child('GameStats').child('CSGO').child(steam_id_32).update(stats)
 
 
     @tasks.loop(minutes=dbr6_loop_time)
