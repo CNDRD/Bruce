@@ -40,7 +40,7 @@ class GameStats(commands.Cog):
         cl('', 'GameStats', 'dbcsgo')
         users = db.child('GameStats').child('IDs').get()
         for u in users.each():
-            if (steam_id := u.val().get('steamID64')) is not None:
+            if (steam_id := u.val().get('steamID32')) is not None:
                 stats = csgostats(int(steam_id), u.val().get('discordUsername'))
                 db.child('GameStats').child('CSGO').child(steam_id).update(stats)
 
