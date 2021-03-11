@@ -11,7 +11,7 @@ console_logging: True
 
 # Loops
 dbr6_loop: False
-dbcsgo_loop: True
+dbcsgo_loop: False
 db_auto_backup_loop: False
 
 # Loop times
