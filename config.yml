@@ -11,7 +11,7 @@ console_logging: True
 
 # Loops
 dbr6_loop: False
-dbcsgo_loop: True
+dbcsgo_loop: False
 db_auto_backup_loop: False
 
 # Loop times
@@ -23,7 +23,7 @@ db_backup_loop_time: float # hours
 diskito_id: 'ID'
 
 # Role ID's
-owner_role_id: 402357508662099981
+owner_role_id: 'ID'
 mod_role_id: 'ID'
 bot_mod_role_id: 'ID'
 r6s_role_id: 'ID'
