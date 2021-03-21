@@ -3,10 +3,11 @@ from func.stuff import add_spaces
 from func.levels import *
 from func.voice import *
 
-import pyrebase, yaml, json, discord, time
+import pyrebase, yaml, json, discord, time, datetime
 from discord.ext import commands, tasks
 from discord.utils import get
 from numerize import numerize
+from pytz import timezone
 
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
@@ -35,14 +36,14 @@ class OnVoiceStateUpdate(commands.Cog):
             return
 
         # Basic-ass variables
-        now = int(time.time()  )                            # NOW INT
-        nowR = time.strftime("%x %X", time.gmtime(now))     # NOW READABLE STRING
-        uid = member.id                                     # DISCORD USER ID
-        username = str(member)                              # DISCORD USER NAME
-        today = get_today_tz()                              # TODAY'S DATE STRING
-        currYear = get_curr_year_tz()                       # CURRENT YEAR
-        levelUp = False                                     # LEVEL UP BOOL
-        ch = self.client.get_channel(voice_log_channel_id)  # VOICE LOGGING CHANNEL
+        now = int(time.time()  )                                                        # NOW INT
+        nowR = datetime.datetime.now(timezone('Europe/Prague')).strftime('%H:%M:%S')    # NOW READABLE STRING
+        uid = member.id                                                                 # DISCORD USER ID
+        username = str(member)                                                          # DISCORD USER NAME
+        today = get_today_tz()                                                          # TODAY'S DATE STRING
+        currYear = get_curr_year_tz()                                                   # CURRENT YEAR
+        levelUp = False                                                                 # LEVEL UP BOOL
+        ch = self.client.get_channel(voice_log_channel_id)                              # VOICE LOGGING CHANNEL
 
         #voice-log channel logging
 
