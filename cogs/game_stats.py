@@ -2,8 +2,8 @@ from func.console_logging import cl
 from func.siege import rainbow6stats
 from func.csgo import csgostats
 
+import pyrebase, yaml, json, asyncio, time
 from discord.ext import commands, tasks
-import pyrebase, yaml, json, asyncio
 
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
@@ -44,6 +44,7 @@ class GameStats(commands.Cog):
                 steam_id_64 = u.val().get('steamID64')
                 stats = csgostats(int(steam_id_64), u.val().get('discordUsername'))
                 db.child('GameStats').child('CSGO').child(steam_id_32).update(stats)
+        db.child('GameStats').child('lastUpdate').update({'CSGO':int(time.time())})
 
 
     @tasks.loop(minutes=dbr6_loop_time)
@@ -54,6 +55,7 @@ class GameStats(commands.Cog):
             if (ubi_id := u.val().get('ubiID')) is not None:
                 data = rainbow6stats(ubi_id, u.val().get('discordUsername'))
                 db.child('GameStats').child('R6S').child(ubi_id).update(data)
+        db.child('GameStats').child('lastUpdate').update({'R6S':int(time.time())})
 
 
     @commands.command(aliases=['su'])
