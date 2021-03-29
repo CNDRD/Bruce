@@ -39,14 +39,8 @@ class OnMessage(commands.Cog):
             return
 
         # Don't work in DM's
-        try:
-            if message.channel.id == message.author.dm_channel.id:
-                return
-        except:
-            ...
-            # Not the most elegant solution but it just throws error
-            # every time a message is not sent in DM's
-            # and i cannot be bothered to read the docs to fix this..
+        if isinstance(message.channel, discord.channel.DMChannel):
+            return await message.author.send('No')
 
         # Basic-ass variables
         now = int(time.time())
