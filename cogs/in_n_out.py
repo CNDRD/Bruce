@@ -2,6 +2,7 @@ from func.console_logging import cl
 from func.levels import rank_name
 from func.stuff import ordinal
 
+from humanfriendly import format_timespan
 from discord.ext import commands
 from discord.utils import get
 from datetime import datetime
@@ -83,6 +84,7 @@ class InNOut(commands.Cog):
             d = {'reacc_points':0,
                  'username':str(member),
                  'xp':0,
+                 'money':0,
                  'level':0,
                  'last_xp_get':joinedServer,
                  'messages_count':0,
