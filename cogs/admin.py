@@ -20,6 +20,8 @@ class Admin(commands.Cog):
         - backup_db
         - clear
         - add_reaction
+        - say
+        - edit
         """
         self.client = client
 
@@ -35,6 +37,33 @@ class Admin(commands.Cog):
             await dm_ch.send(file=discord.File(f, "db_backup.json"))
 
 
+    @commands.command(aliases=['mdb'])
+    @commands.is_owner()
+    async def manually_add_to_db(self, ctx, user: discord.User = None):
+        if user is None:
+            return await ctx.send('Need a user chief..')
+
+        member = ctx.guild.get_member(user.id)
+
+        joinedServer = int(member.joined_at.timestamp())
+        joinedDiscord = int(member.created_at.timestamp())
+        avatarURL = str(member.avatar_url_as(size=4096))
+
+        # Create users individial stats
+        d = {'reacc_points':0,
+             'username':str(member),
+             'xp':0,
+             'level':0,
+             'last_xp_get':joinedServer,
+             'messages_count':0,
+             'joined_server':joinedServer,
+             'joined_discord':joinedDiscord,
+             'avatar_url':avatarURL,
+             'in_server':True
+             }
+        db.child('users').child(member.id).set(d)
+
+
     @commands.command()
     @commands.has_any_role(bot_mod_role_id, mod_role_id)
     async def clear(self, ctx, amount: int = 1):
@@ -45,6 +74,7 @@ class Admin(commands.Cog):
     @commands.command(aliases=['add'])
     @commands.has_any_role(bot_mod_role_id, mod_role_id)
     async def add_reaction(self, ctx, e):
+        cl(ctx)
         ref_ch = self.client.get_channel(ctx.message.reference.channel_id)
         ref_msg = await ref_ch.fetch_message(ctx.message.reference.message_id)
         await ref_msg.add_reaction(e)
@@ -54,6 +84,7 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.has_any_role(bot_mod_role_id, mod_role_id)
     async def say(self, ctx, *, a):
+        cl(ctx)
         await ctx.send(a)
         await ctx.message.delete()
 
@@ -61,6 +92,7 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.has_any_role(bot_mod_role_id, mod_role_id)
     async def edit(self, ctx, *, a):
+        cl(ctx)
         ref_ch = self.client.get_channel(ctx.message.reference.channel_id)
         ref_msg = await ref_ch.fetch_message(ctx.message.reference.message_id)
         await ref_msg.edit(content=a)
