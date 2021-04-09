@@ -86,22 +86,4 @@ async def dbAutoBackup():
     if cl: print("END")
 
 
-@tasks.loop(minutes=15.0)
-async def snowmenRoleGiving():
-    mess = "```fix\n snowmen \n"
-    snowmenDB = db.child('snowmen').get()
-    if snowmenDB.val() is not None:
-        for s in snowmenDB.each():
-            un = s.val()['username']
-            mess += f"{un}\n"
-            db.child('snowmen').child(s.key()).remove()
-
-            for guild in client.guilds:
-                for member in guild.members:
-                    if member.id == 210471447649320970:
-                        dm_ch = await member.create_dm()
-        mess += '```'
-        await dm_ch.send(mess)
-
-
 client.run(token)
