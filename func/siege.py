@@ -7,14 +7,14 @@ R6STATS_API_KEY = config.get('R6STATS_API_KEY')
 def rainbow6stats(ubi_id, discordUsername):
     genericStats, seasonalStats = fetch_api_data(ubi_id)
 
-    # (Hopefully) get the current season
-    # Should always be the first so this should work
-    cs = list(seasonalStats['seasons'].keys())[0]
-
     stats = {}
     stats['discordUsername'] = discordUsername
 
     try:
+        # (Hopefully) get the current season
+        # Should always be the first so this should work
+        cs = list(seasonalStats['seasons'].keys())[0]
+
         stats['level'] = genericStats['progression']['level']
         stats['xp'] = genericStats['progression']['total_xp']
         stats['totalMatches'] = genericStats['stats']['general']['games_played']
