@@ -40,7 +40,7 @@ class OnVoiceStateUpdate(commands.Cog):
             return
 
         # Basic-ass variables
-        now = int(time.time())                                                        # NOW INT
+        now = int(time.time())                                                          # NOW INT
         nowR = datetime.datetime.now(timezone('Europe/Prague')).strftime('%H:%M:%S')    # NOW READABLE STRING
         uid = member.id                                                                 # DISCORD USER ID
         username = str(member)                                                          # DISCORD USER NAME
