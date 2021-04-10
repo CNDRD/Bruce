@@ -1,4 +1,5 @@
-import pyrebase, datetime, yaml, json
+from datetime import datetime, timedelta
+import pyrebase, yaml, json
 from pytz import timezone
 
 config = yaml.safe_load(open('config.yml'))
@@ -20,10 +21,17 @@ def get_yearly_lvs(stayed, current_lvs):
     if stayed > current_lvs: return stayed
     return current_lvs
 
-def get_current_day_time(curr_year, today, stayed):
+def get_day_time(curr_year, today, yesterday, stayed, left):
     cdt = db.child('voice').child(curr_year).child('day').child(today).get().val()
+    ydt = db.child('voice').child(curr_year).child('day').child(yesterday).get().val()
     if cdt is None: cdt = 0
-    return cdt + stayed
+    if ydt is None: ydt = 0
+    since_mid = get_seconds_since_midnight_from_timestamp(left)
+    if stayed > since_mid:
+        stayed -= since_mid
+    else:
+        since_mid = 0
+    return (cdt + since_mid), (ydt + stayed)
 
 def get_user_total(atvs, stayed):
     if atvs is None: atvs = 0
@@ -31,11 +39,15 @@ def get_user_total(atvs, stayed):
 
 def get_today_tz():
     # Timezone-aware date string
-    return datetime.datetime.now(timezone('Europe/Prague')).strftime('%Y-%m-%d')
+    return datetime.now(timezone('Europe/Prague')).strftime('%Y-%m-%d')
+
+def get_yesterday_tz():
+    # Timezone-aware date string
+    return (datetime.now(timezone('Europe/Prague')) - timedelta(days=1)).strftime('%Y-%m-%d')
 
 def get_curr_year_tz():
     # Timezone-aware date year
-    return datetime.datetime.now(timezone('Europe/Prague')).year
+    return datetime.now(timezone('Europe/Prague')).year
 
 def get_yearly_user_data(curr_year, uid):
     yud = db.child('voice').child(curr_year).child('total').child(uid).get().val()
@@ -45,5 +57,9 @@ def get_yearly_user_data(curr_year, uid):
     else:
         yearVoice = yud.get('voice')
         yearLVS = yud.get('lvs')
-
     return yearVoice, yearLVS
+
+def get_seconds_since_midnight_from_timestamp(leave_time):
+    # name -_-
+    leave_time = datetime.fromtimestamp(leave_time)
+    return int((leave_time - leave_time.replace(hour=0, minute=0, second=0, microsecond=0)).total_seconds())
