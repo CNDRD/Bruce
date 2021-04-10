@@ -40,11 +40,12 @@ class OnVoiceStateUpdate(commands.Cog):
             return
 
         # Basic-ass variables
-        now = int(time.time()  )                                                        # NOW INT
+        now = int(time.time())                                                        # NOW INT
         nowR = datetime.datetime.now(timezone('Europe/Prague')).strftime('%H:%M:%S')    # NOW READABLE STRING
         uid = member.id                                                                 # DISCORD USER ID
         username = str(member)                                                          # DISCORD USER NAME
         today = get_today_tz()                                                          # TODAY'S DATE STRING
+        yesterday = get_yesterday_tz()                                                  # YESTERDAY'S DATE STRING
         currYear = get_curr_year_tz()                                                   # CURRENT YEAR
         levelUp = False                                                                 # LEVEL UP BOOL
         ch = self.client.get_channel(voice_log_channel_id)                              # VOICE LOGGING CHANNEL
@@ -98,11 +99,11 @@ class OnVoiceStateUpdate(commands.Cog):
             stVoice = st.get('voice')
             stXP = st.get('xp')
 
-            # hardcore calculations
+            # Hardcore calculations
             stayed = get_stay_time(currYear, uid, now)  # how long did the user stay
             newYearlyUserTotal = get_yearly_total(stayed, yearVoice)  # their yearly new total time
             newYearlyLVS = get_yearly_lvs(stayed, yearLVS)  # Longest Voice Session
-            newCurrentDayTotalTime = get_current_day_time(currYear, today, stayed)  # current day total time
+            newCurrentDayTotalTime, newYesterdayTotalTime = get_day_time(currYear, yesterday, today, stayed, now)  # current day and yesterday total time
             newUserTotal = get_user_total(currentATTT, stayed) # users all time total voice time
 
             userYearTotalData = {
@@ -110,8 +111,9 @@ class OnVoiceStateUpdate(commands.Cog):
                 'voice': newYearlyUserTotal,
                 'lvs': newYearlyLVS
             }
-            newDayData = {
-                today: newCurrentDayTotalTime
+            todayDayData = {
+                today: newCurrentDayTotalTime,
+                yesterday: newYesterdayTotalTime
             }
 
         #############
@@ -160,7 +162,7 @@ class OnVoiceStateUpdate(commands.Cog):
         ## Data update part ##
         ######################
             db.child('voice').child(currYear).child('total').child(uid).update(userYearTotalData)
-            db.child('voice').child(currYear).child('day').update(newDayData)
+            db.child('voice').child(currYear).child('day').update(todayDayData)
             db.child('users').child(uid).update(userData)
             db.child('serverTotals').update(serverTotalsData)
 
