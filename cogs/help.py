@@ -35,10 +35,12 @@ class Help(commands.Cog):
 
         # user.py
         msg = ''
-        msg += f'`{prfx}vanish` - You\'ll disappear. Magic.'
+        msg += f'`{prfx}code` - Link to the GitHub repo'
         msg += f'\n`{prfx}ping` - Show bots ping.'
+        msg += f'\n`{prfx}vanish` - You\'ll disappear. Magic.'
         msg += f'\n`{prfx}coinflip <A> <B>` - Flips a coin. A: `{prfx}coin` / `{prfx}flip`'
         msg += f'\n`{prfx}flipflop` - Pro debílky'
+        ## technically not from 'user.py'
         msg += f'\n`{prfx}cicina` - Can be used once per day.'
         msg += f'\n`{prfx}quote` - Create a quote on https://diskito.eu/quotes'
 
@@ -50,9 +52,10 @@ class Help(commands.Cog):
             msg = ''
             if role(ctx, owner_role_id):
                 msg += f'\n`{prfx}backup_db`* - Backs up the DB into DMs. A: `{prfx}bdb`'
+                msg += f'\n`{prfx}manually_add_to_db [@user]`* - Manually add [@user] to DB. A: `{prfx}mdb`'
 
             msg += f'\n`{prfx}clear <amount=1>`* - Clears `amount` of messages.'
-            msg += f'\n`{prfx}add_reaction [emoji]`* - Adds `emoji` to the message this replies to'
+            msg += f'\n`{prfx}add_reaction [emoji]`* - Adds `emoji` to the message this replies to. A: `{prfx}add`'
             msg += f'\n`{prfx}say [content]`* - The bot will send `content`'
             msg += f'\n`{prfx}edit [content]`* - Edits the message this replies to with `content`'
 
