@@ -27,11 +27,13 @@ def get_day_time(curr_year, today, yesterday, stayed, left):
     if cdt is None: cdt = 0
     if ydt is None: ydt = 0
     since_mid = get_seconds_since_midnight_from_timestamp(left)
+    print(f"since_mid:{since_mid} | stayed:{stayed} | left:{left} | curr_year:{curr_year} | today:{today} | yesterday:{yesterday}")
+
     if stayed > since_mid:
         stayed -= since_mid
+        return (cdt + since_mid), (ydt + stayed)
     else:
-        since_mid = 0
-    return (cdt + since_mid), (ydt + stayed)
+        return (cdt + stayed), ydt
 
 def get_user_total(atvs, stayed):
     if atvs is None: atvs = 0

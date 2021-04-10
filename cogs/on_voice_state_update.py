@@ -103,8 +103,8 @@ class OnVoiceStateUpdate(commands.Cog):
             stayed = get_stay_time(currYear, uid, now)  # how long did the user stay
             newYearlyUserTotal = get_yearly_total(stayed, yearVoice)  # their yearly new total time
             newYearlyLVS = get_yearly_lvs(stayed, yearLVS)  # Longest Voice Session
-            newCurrentDayTotalTime, newYesterdayTotalTime = get_day_time(currYear, today, yesterday, stayed, now)  # current day and yesterday total time
             newUserTotal = get_user_total(currentATTT, stayed) # users all time total voice time
+            newCurrentDayTotalTime, newYesterdayTotalTime = get_day_time(currYear, today, yesterday, stayed, now)  # current day and yesterday total time
 
             userYearTotalData = {
                 'name': str(member),
