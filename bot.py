@@ -67,23 +67,4 @@ async def on_command_error(ctx, error):
         await ctx.send('Some unforseen error occured. Someone has been notified about this.')
         await ctx.message.add_reaction('❌')
 
-
-@tasks.loop(hours=12.0)
-async def dbAutoBackup():
-    if cl: print('START dbAutoBackup loop ', end="")
-    stamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
-    filename = f"dbAutoBackup_{stamp}.json"
-
-    with open(filename,"w") as f:
-        f.write(json.dumps(db.get().val(), indent=2))
-
-    for guild in client.guilds:
-        if guild.id == 703307518230790274:
-            for channel in guild.channels:
-                if channel.id == 764488011911004210:
-                    with open(filename, "rb") as f:
-                        await channel.send(file=discord.File(f, filename))
-    if cl: print("END")
-
-
 client.run(token)
