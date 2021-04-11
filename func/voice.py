@@ -62,5 +62,5 @@ def get_yearly_user_data(curr_year, uid):
 
 def get_seconds_since_midnight_from_timestamp(leave_time):
     # name -_-
-    leave_time = datetime.fromtimestamp(leave_time)
+    leave_time = datetime.fromtimestamp(leave_time, tz=timezone('Europe/Prague'))
     return int((leave_time - leave_time.replace(hour=0, minute=0, second=0, microsecond=0)).total_seconds())
