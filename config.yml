@@ -1,7 +1,6 @@
 prefix: ','
 
 bruce_token: 'Njk........................................................'
-bruce_too_token: 'Njk........................................................'
 
 R6STATS_API_KEY: 'AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE'
 TRN_API_KEY: 'AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE'
@@ -36,7 +35,6 @@ voice_log_channel_id: 'ID'
 valid_post_channels:
   - 'ID'
   - 'ID'
-  - 'ID'
 valid_rr_channels:
   - 'ID'
   - 'ID'
@@ -63,13 +61,7 @@ good_emotes:
   - 'E1'
   - 'E2'
   - 'E3'
-  - '.'
-  - '.'
-  - '.'
-  - '.'
 bad_emotes:
   - 'E1'
   - 'E2'
   - 'E3'
-  - '.'
-  - '.'
