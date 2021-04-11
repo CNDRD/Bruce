@@ -6,53 +6,45 @@ from datetime import datetime
 print('Starting to load..')
 start_time = time.time()
 
-################################################################ Config Load ##
+## Config Load ##
 config = yaml.safe_load(open("config.yml"))
-cl = config.get('console_logging')
 prefix = str(config.get('prefix'))
 error_channel_id = config.get('error_channel_id')
 startup_channel_id = config.get('startup_channel_id')
 db_auto_backup_loop = config.get('db_auto_backup_loop')
+token = config.get('bruce_token')
 
-################################################################### Firebase ##
-fb = json.loads(config.get('firebase'))
-firebase = pyrebase.initialize_app(fb)
-db = firebase.database()
+## Firebase ##
+db = pyrebase.initialize_app( json.loads(config.get('firebase')) ).database()
 
-############################################################ Basic Bot Setup ##
+## Basic Bot Setup ##
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix=prefix, intents=intents)
 client.remove_command('help')
-token = 'si piš HAHA'
 cog_count = 0
 
-################################################################# Cog Loader ##
+## Cog Loader ##
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
         cog_count += 1
 
-################################################################### Commands ##
+## Commands ##
 @client.event
 async def on_ready():
-    if cl: print('START on_ready() ', end="")
-    if db_auto_backup_loop: dbAutoBackup.start()
-    snowmenRoleGiving.start()
-
-    tn = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    tn = datetime.now(timezone('Europe/Prague')).strftime("%d/%m/%Y %H:%M:%S")
     load_time = format_timespan(time.time() - start_time)
     msg = f"\nHere comes Bruce!\n[With {cog_count} cogs]\n[{tn}]\n[{load_time}]\n"
     startup = client.get_channel(startup_channel_id)
 
-    if cl: print("END")
     print(msg)
     await startup.send(msg)
 
-############################################################# Error Handlers ##
+## Error Handlers ##
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        await ctx.message.add_reaction('❌')
+        await ctx.message.add_reaction('❓')
     elif isinstance(error, commands.MissingRole):
         await ctx.message.add_reaction('❌')
         await ctx.send('This command requires a role you don\'t have.')
@@ -66,5 +58,6 @@ async def on_command_error(ctx, error):
 
         await ctx.send('Some unforseen error occured. Someone has been notified about this.')
         await ctx.message.add_reaction('❌')
+
 
 client.run(token)
