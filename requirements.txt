@@ -1,5 +1,5 @@
 git+https://github.com/thisbejim/Pyrebase
-discord.py==1.6.0
+discord.py==1.7.1
 beautifulsoup4==4.9.3
 requests==2.11.1
 humanfriendly==9.1

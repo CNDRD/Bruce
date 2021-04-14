@@ -35,10 +35,6 @@ class OnVoiceStateUpdate(commands.Cog):
         if member.bot:
             return
 
-        # Stages Workaround (thanks Obama)
-        if before.channel is None and after.channel is None:
-            return
-
         # Basic-ass variables
         now = int(time.time())                                                          # NOW INT
         nowR = datetime.datetime.now(timezone('Europe/Prague')).strftime('%H:%M:%S')    # NOW READABLE STRING
