@@ -17,8 +17,6 @@ r6s_role_id = config.get('r6s_role_id')
 
 error_channel_id = config.get('error_channel_id')
 
-dbr6_loop = config.get('dbr6_loop')
-dbr6_loop_time = config.get('dbr6_loop_time')
 dbr6v7_loop = config.get('dbr6v7_loop')
 dbr6v7_loop_time = config.get('dbr6v7_loop_time')
 dbcsgo_loop = config.get('dbcsgo_loop')
@@ -33,13 +31,11 @@ class GameStats(commands.Cog):
         """
         Various Game Stats gathering loops.
 
-        - dbr6 (loop)
         - dbr6v7 (loop)
         - dbcsgo (loop)
         - stats_update
         """
         self.client = client
-        if dbr6_loop: self.dbr6.start()
         if dbcsgo_loop: self.dbcsgo.start()
         if dbr6v7_loop: self.dbr6v7.start()
 
@@ -71,30 +67,17 @@ class GameStats(commands.Cog):
         db.child('GameStats').child('lastUpdate').update({'CSGO':int(time.time())})
 
 
-    @tasks.loop(minutes=dbr6_loop_time)
-    async def dbr6(self):
-        cl('', 'GameStats', 'dbr6 loop')
-        users = db.child('GameStats').child('IDs').get()
-        for u in users.each():
-            if (ubi_id := u.val().get('ubiID')) is not None:
-                data = rainbow6stats(ubi_id, u.val().get('discordUsername'))
-                db.child('GameStats').child('R6S').child(ubi_id).update(data)
-        db.child('GameStats').child('lastUpdate').update({'R6S':int(time.time())})
-
-
     @commands.command(aliases=['su'])
     @commands.has_role(bot_mod_role_id)
     async def stats_update(self, ctx):
         cl(ctx)
         # Stops and then prompltly starts all stats loops
         if dbcsgo_loop: self.dbcsgo.cancel()
-        if dbr6_loop: self.dbr6.cancel()
         if dbr6v7_loop: self.dbr6v7.cancel()
         # This 0.5s delay needs to be here because who the fuck knows why
         await asyncio.sleep(0.5)
 
         if dbcsgo_loop: self.dbcsgo.start()
-        if dbr6_loop: self.dbr6.start()
         if dbr6v7_loop: self.dbr6v7.start()
 
         await ctx.message.add_reaction('✅')

@@ -31,7 +31,15 @@ async def rainbow6statsv7(id_username_dict):
         r = ranks[p.id]
         pr = p.ranked
         pc = p.casual
+
+        ops = await p.load_all_operators()
+        operator_data = {}
+        for o in ops:
+            operator_data[o] = ops[o].get_array()
+
         data = {
+            'operators':operator_data,
+
             'discordUsername': id_username_dict[p.id],
             'seasonName': 'Crimson Heist',
 
