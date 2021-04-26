@@ -7,6 +7,130 @@ config = yaml.safe_load(open('config.yml'))
 UBISOFT_EMAIL = config.get('UBISOFT_EMAIL')
 UBISOFT_PASSW = config.get('UBISOFT_PASSW')
 
+RANKS = [
+    {
+        "name": "Copper 5",
+        "min_mmr": 1,
+        "max_mmr": 1199
+    },
+    {
+        "name": "Copper 4",
+        "min_mmr": 1200,
+        "max_mmr": 1299
+    },
+    {
+        "name": "Copper 3",
+        "min_mmr": 1300,
+        "max_mmr": 1399
+    },
+    {
+        "name": "Copper 2",
+        "min_mmr": 1400,
+        "max_mmr": 1499
+    },
+    {
+        "name": "Copper 1",
+        "min_mmr": 1500,
+        "max_mmr": 1599
+    },
+    {
+        "name": "Bronze 5",
+        "min_mmr": 1600,
+        "max_mmr": 1699
+    },
+    {
+        "name": "Bronze 4",
+        "min_mmr": 1700,
+        "max_mmr": 1799
+    },
+    {
+        "name": "Bronze 3",
+        "min_mmr": 1800,
+        "max_mmr": 1899
+    },
+    {
+        "name": "Bronze 2",
+        "min_mmr": 1900,
+        "max_mmr": 1999
+    },
+    {
+        "name": "Bronze 1",
+        "min_mmr": 2000,
+        "max_mmr": 2099
+    },
+    {
+        "name": "Silver 5",
+        "min_mmr": 2100,
+        "max_mmr": 2199
+    },
+    {
+        "name": "Silver 4",
+        "min_mmr": 2200,
+        "max_mmr": 2299
+    },
+    {
+        "name": "Silver 3",
+        "min_mmr": 2300,
+        "max_mmr": 2399
+    },
+    {
+        "name": "Silver 2",
+        "min_mmr": 2400,
+        "max_mmr": 2499
+    },
+    {
+        "name": "Silver 1",
+        "min_mmr": 2500,
+        "max_mmr": 2599
+    },
+    {
+        "name": "Gold 3",
+        "min_mmr": 2600,
+        "max_mmr": 2799
+    },
+    {
+        "name": "Gold 2",
+        "min_mmr": 2800,
+        "max_mmr": 2999
+    },
+    {
+        "name": "Gold 1",
+        "min_mmr": 3000,
+        "max_mmr": 3199
+    },
+    {
+        "name": "Platinum 3",
+        "min_mmr": 3200,
+        "max_mmr": 3599
+    },
+    {
+        "name": "Platinum 2",
+        "min_mmr": 3600,
+        "max_mmr": 3999
+    },
+    {
+        "name": "Platinum 1",
+        "min_mmr": 4000,
+        "max_mmr": 4399
+    },
+    {
+        "name": "Diamond",
+        "min_mmr": 4400,
+        "max_mmr": 4999
+    },
+    {
+        "name": "Champion",
+        "min_mmr": 5000,
+        "max_mmr": 15000
+    }
+]
+
+
+def _get_rank_from_MMR(mmr):
+    for r in RANKS:
+        if r['min_mmr'] <= int(mmr) <= r['max_mmr']:
+            return r['name'], r['min_mmr'], r['max_mmr']
+    return 'Unranked', 0, 0
 
 def _get_uids(a):
     x = []
@@ -14,6 +138,15 @@ def _get_uids(a):
         x.append(i)
     return x
 
+def _sort_atk_def(ops):
+    atk,defn = {},{}
+    for op in ops:
+        op = ops[op]
+        if op['atkdef'] == 'attacker':
+            atk[op['name']] = op
+        elif op['atkdef'] == 'defender':
+            defn[op['name']] = op
+    return {'atk':atk,'def':defn}
 
 async def rainbow6statsv7(id_username_dict):
     xd = {}
@@ -22,13 +155,16 @@ async def rainbow6statsv7(id_username_dict):
     auth = Auth(UBISOFT_EMAIL, UBISOFT_PASSW)
 
     players = await auth.get_player_batch(uids=UIDS, platform=Platforms.UPLAY)
-    ranks = await players.get_rank(RankedRegions.EU)
+    ranks = await players.get_rank()
+    casuals = await players.get_casual()
 
     for p in players:
         await p.check_general()
         await p.load_level()
         await p.load_queues()
         r = ranks[p.id]
+        c = casuals[p.id]
+
         pr = p.ranked
         pc = p.casual
 
@@ -36,12 +172,16 @@ async def rainbow6statsv7(id_username_dict):
         operator_data = {}
         for o in ops:
             operator_data[o] = ops[o].get_array()
+        operator_data = _sort_atk_def(operator_data)
+
+        casualRankName, casualRankPrev, casualRankNext = _get_rank_from_MMR(c.mmr)
 
         data = {
-            'operators':operator_data,
+            'operators': operator_data,
 
             'discordUsername': id_username_dict[p.id],
             'seasonName': 'Crimson Heist',
+            'season': r.season,
 
             'currentRankImage': get_rank(r.get_rank_name()),
             'maxRankImage': get_rank(r.get_max_rank_name()),
@@ -58,6 +198,18 @@ async def rainbow6statsv7(id_username_dict):
             'sKills': r.kills,
             'sDeaths': r.deaths,
             'sAbandons': r.abandons,
+
+            'currentRankImageCasual': get_rank(casualRankName),
+            'currentRankCasual': casualRankName,
+            'currentMMRcasual': c.mmr,
+            'prevRankMMRcasual': casualRankPrev,
+            'nextRankMMRcasual': casualRankNext,
+            'lastMMRchangeCasual': c.last_mmr_change,
+            'sWinsCasual': c.wins,
+            'sLossesCasual': c.losses,
+            'sKillsCasual': c.kills,
+            'sDeathsCasual': c.deaths,
+            'sAbandonsCasual': c.abandons,
 
             'hs': round((p.headshots/p.kills)*100, 2),
             'xp': p.xp,
