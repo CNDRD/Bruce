@@ -8,121 +8,29 @@ UBISOFT_EMAIL = config.get('UBISOFT_EMAIL')
 UBISOFT_PASSW = config.get('UBISOFT_PASSW')
 
 RANKS = [
-    {
-        "name": "Copper 5",
-        "min_mmr": 1,
-        "max_mmr": 1199
-    },
-    {
-        "name": "Copper 4",
-        "min_mmr": 1200,
-        "max_mmr": 1299
-    },
-    {
-        "name": "Copper 3",
-        "min_mmr": 1300,
-        "max_mmr": 1399
-    },
-    {
-        "name": "Copper 2",
-        "min_mmr": 1400,
-        "max_mmr": 1499
-    },
-    {
-        "name": "Copper 1",
-        "min_mmr": 1500,
-        "max_mmr": 1599
-    },
-    {
-        "name": "Bronze 5",
-        "min_mmr": 1600,
-        "max_mmr": 1699
-    },
-    {
-        "name": "Bronze 4",
-        "min_mmr": 1700,
-        "max_mmr": 1799
-    },
-    {
-        "name": "Bronze 3",
-        "min_mmr": 1800,
-        "max_mmr": 1899
-    },
-    {
-        "name": "Bronze 2",
-        "min_mmr": 1900,
-        "max_mmr": 1999
-    },
-    {
-        "name": "Bronze 1",
-        "min_mmr": 2000,
-        "max_mmr": 2099
-    },
-    {
-        "name": "Silver 5",
-        "min_mmr": 2100,
-        "max_mmr": 2199
-    },
-    {
-        "name": "Silver 4",
-        "min_mmr": 2200,
-        "max_mmr": 2299
-    },
-    {
-        "name": "Silver 3",
-        "min_mmr": 2300,
-        "max_mmr": 2399
-    },
-    {
-        "name": "Silver 2",
-        "min_mmr": 2400,
-        "max_mmr": 2499
-    },
-    {
-        "name": "Silver 1",
-        "min_mmr": 2500,
-        "max_mmr": 2599
-    },
-    {
-        "name": "Gold 3",
-        "min_mmr": 2600,
-        "max_mmr": 2799
-    },
-    {
-        "name": "Gold 2",
-        "min_mmr": 2800,
-        "max_mmr": 2999
-    },
-    {
-        "name": "Gold 1",
-        "min_mmr": 3000,
-        "max_mmr": 3199
-    },
-    {
-        "name": "Platinum 3",
-        "min_mmr": 3200,
-        "max_mmr": 3599
-    },
-    {
-        "name": "Platinum 2",
-        "min_mmr": 3600,
-        "max_mmr": 3999
-    },
-    {
-        "name": "Platinum 1",
-        "min_mmr": 4000,
-        "max_mmr": 4399
-    },
-    {
-        "name": "Diamond",
-        "min_mmr": 4400,
-        "max_mmr": 4999
-    },
-    {
-        "name": "Champion",
-        "min_mmr": 5000,
-        "max_mmr": 15000
-    }
+    { "name": "Copper 5",   "min_mmr": 1,    "max_mmr": 1199 },
+    { "name": "Copper 4",   "min_mmr": 1200, "max_mmr": 1299 },
+    { "name": "Copper 3",   "min_mmr": 1300, "max_mmr": 1399 },
+    { "name": "Copper 2",   "min_mmr": 1400, "max_mmr": 1499 },
+    { "name": "Copper 1",   "min_mmr": 1500, "max_mmr": 1599 },
+    { "name": "Bronze 5",   "min_mmr": 1600, "max_mmr": 1699 },
+    { "name": "Bronze 4",   "min_mmr": 1700, "max_mmr": 1799 },
+    { "name": "Bronze 3",   "min_mmr": 1800, "max_mmr": 1899 },
+    { "name": "Bronze 2",   "min_mmr": 1900, "max_mmr": 1999 },
+    { "name": "Bronze 1",   "min_mmr": 2000, "max_mmr": 2099 },
+    { "name": "Silver 5",   "min_mmr": 2100, "max_mmr": 2199 },
+    { "name": "Silver 4",   "min_mmr": 2200, "max_mmr": 2299 },
+    { "name": "Silver 3",   "min_mmr": 2300, "max_mmr": 2399 },
+    { "name": "Silver 2",   "min_mmr": 2400, "max_mmr": 2499 },
+    { "name": "Silver 1",   "min_mmr": 2500, "max_mmr": 2599 },
+    { "name": "Gold 3",     "min_mmr": 2600, "max_mmr": 2799 },
+    { "name": "Gold 2",     "min_mmr": 2800, "max_mmr": 2999 },
+    { "name": "Gold 1",     "min_mmr": 3000, "max_mmr": 3199 },
+    { "name": "Platinum 3", "min_mmr": 3200, "max_mmr": 3599 },
+    { "name": "Platinum 2", "min_mmr": 3600, "max_mmr": 3999 },
+    { "name": "Platinum 1", "min_mmr": 4000, "max_mmr": 4399 },
+    { "name": "Diamond",    "min_mmr": 4400, "max_mmr": 4999 },
+    { "name": "Champion",   "min_mmr": 5000, "max_mmr": 15000 }
 ]
 
 
