@@ -1,6 +1,6 @@
 import json, yaml
 import asyncio
-from r6s_api import *
+from r6sapi import *
 
 
 config = yaml.safe_load(open('config.yml'))
@@ -57,7 +57,10 @@ def _sort_atk_def(ops):
     return {'atk':atk,'def':defn}
 
 async def rainbow6statsv7(id_username_dict):
-    xd = {}
+    xd = {
+        'all_data': {},
+        'main_data': {}
+        }
     UIDS = _get_uids(id_username_dict)
 
     auth = Auth(UBISOFT_EMAIL, UBISOFT_PASSW)
@@ -84,7 +87,7 @@ async def rainbow6statsv7(id_username_dict):
 
         casualRankName, casualRankPrev, casualRankNext = _get_rank_from_MMR(c.mmr)
 
-        data = {
+        all_data = {
             'operators': operator_data,
 
             'discordUsername': id_username_dict[p.id],
@@ -158,7 +161,40 @@ async def rainbow6statsv7(id_username_dict):
             'ubisoftID': p.id,
             'ubisoftUsername': p.name,
         }
-        xd[p.id] = data
+        main_data = {
+            'ubisoftID': p.id,
+            'ubisoftUsername': p.name,
+
+            'currentRankImage': get_rank(r.get_rank_name()),
+            'maxRankImage': get_rank(r.get_max_rank_name()),
+            'currentRank': r.get_rank_name(),
+            'maxRank': r.get_max_rank_name(),
+            'maxMMR': r.max_mmr,
+            'currentMMR': r.mmr,
+            'prevRankMMR': r.prev_rank_mmr,
+            'nextRankMMR': r.next_rank_mmr,
+            'lastMMRchange': r.last_mmr_change,
+
+            'sWins': r.wins,
+            'sLosses': r.losses,
+            'sKills': r.kills,
+            'sDeaths': r.deaths,
+            'sAbandons': r.abandons,
+
+            'alphapackProbability': p.lootbox_probability,
+
+            'operators': operator_data,
+
+            'totalPlaytime': p.time_played,
+            'casualPlaytime':pc.time_played,
+            'rankedPlaytime':pr.time_played,
+
+            'hs': round((p.headshots/p.kills)*100, 2),
+        }
+
+        xd['all_data'][p.id] = all_data
+        xd['main_data'][p.id] = main_data
+
 
     await auth.close()
     return xd
