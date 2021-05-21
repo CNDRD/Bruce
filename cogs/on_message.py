@@ -60,14 +60,6 @@ class OnMessage(commands.Cog):
         last_xp_get = ud.get('last_xp_get')
         messages_count = ud.get('messages_count')
 
-        # Get fucked in the mouth if you try to speak and your level is less than 5
-        if current_lvl <= 5 and message.attachments == [] and message.channel.id in valid_post_channels:
-            await message.delete()
-            embed = discord.Embed(colour=discord.Colour(0xb53737),title="You need to be at least level 5 to post shit like that in here..")
-            embed.set_author(name=message.author.name, url='https://chuckwalla-69.web.app/leader.html')
-            await message.channel.send(embed=embed, delete_after=10)
-            return
-
         # Get the time since the user last posted a message
         since_last_mess = now - last_xp_get
 
