@@ -43,6 +43,9 @@ class InNOut(commands.Cog):
         if member.bot == True or member.id == test_account_uid:
             return
 
+        users_count = db.child('serverTotals').child('users').get().val()
+        db.child('serverTotals').child('users').set(users_count + 1)
+
         # Basic-ass variables
         ino = self.client.get_channel(in_n_out_channel_id)
         leaves = leave_counts(member.id)
@@ -105,6 +108,9 @@ class InNOut(commands.Cog):
         # No welcome messages for bots and my test account
         if member.bot == True or member.id == test_account_uid:
             return
+
+        users_count = db.child('serverTotals').child('users').get().val()
+        db.child('serverTotals').child('users').set(users_count - 1)
 
         # Get arrow emoji
         rarrow = self.client.get_emoji(rarrow_emoji)
