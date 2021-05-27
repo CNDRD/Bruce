@@ -19,8 +19,6 @@ r6s_role_id = config.get('r6s_role_id')
 error_channel_id = config.get('error_channel_id')
 dbr6_loop = config.get('dbr6_loop')
 dbr6_loop_time = config.get('dbr6_loop_time')
-dbcsgo_loop = config.get('dbcsgo_loop')
-dbcsgo_loop_time = config.get('dbcsgo_loop_time')
 
 ## Firebase Database ##
 firebase_config = {"apiKey": "AIzaSyDe_xKKup4lVoPasLmAQW9Csc1zUzsxB0U","authDomain": "chuckwalla-69.firebaseapp.com",
@@ -35,11 +33,9 @@ class GameStats(commands.Cog):
         Various Game Stats gathering loops.
 
         - dbr6 (loop)
-        - dbcsgo (loop)
         - stats_update
         """
         self.client = client
-        if dbcsgo_loop: self.dbcsgo.start()
         if dbr6_loop: self.dbr6.start()
 
 
@@ -53,21 +49,8 @@ class GameStats(commands.Cog):
                 a[ubi_id] = u.val().get('discordUsername')
 
         data = asyncio.new_event_loop().run_until_complete(rainbow6statsv7(a))
-
         db.child('GameStats').child('R6Sv8').update(data)
         db.child('GameStats').child('lastUpdate').update({'R6Sv8':int(time.time())})
-
-
-    @tasks.loop(minutes=dbcsgo_loop_time)
-    async def dbcsgo(self):
-        cl('', 'GameStats', 'dbcsgo loop')
-        users = db.child('GameStats').child('IDs').get()
-        for u in users.each():
-            if (steam_id_32 := u.val().get('steamID32')) is not None:
-                steam_id_64 = u.val().get('steamID64')
-                stats = csgostats(int(steam_id_64), u.val().get('discordUsername'))
-                db.child('GameStats').child('CSGO').child(steam_id_32).update(stats)
-        db.child('GameStats').child('lastUpdate').update({'CSGO':int(time.time())})
 
 
     @commands.command(aliases=['su'])
@@ -75,14 +58,10 @@ class GameStats(commands.Cog):
     async def stats_update(self, ctx):
         cl(ctx)
         # Stops and then prompltly starts all stats loops
-        if dbcsgo_loop: self.dbcsgo.cancel()
         if dbr6_loop: self.dbr6.cancel()
         # This 0.5s delay needs to be here because who the fuck knows why
         await asyncio.sleep(0.5)
-
-        if dbcsgo_loop: self.dbcsgo.start()
         if dbr6_loop: self.dbr6.start()
-
         await ctx.message.add_reaction('✅')
 
 
