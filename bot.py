@@ -1,8 +1,9 @@
-import pyrebase, discord, yaml, time, os, json
 from humanfriendly import format_timespan
+import pyrebase, discord, yaml, time, os
 from discord.ext import commands, tasks
 from datetime import datetime
 from pytz import timezone
+import simplejson as json
 
 from dotenv import load_dotenv
 load_dotenv()
