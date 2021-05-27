@@ -4,6 +4,9 @@ from discord.ext import commands, tasks
 from datetime import datetime
 from pytz import timezone
 
+from dotenv import load_dotenv
+load_dotenv()
+
 print('Starting to load..')
 start_time = time.time()
 
@@ -13,14 +16,16 @@ prefix = str(config.get('prefix'))
 error_channel_id = config.get('error_channel_id')
 startup_channel_id = config.get('startup_channel_id')
 db_auto_backup_loop = config.get('db_auto_backup_loop')
-token = config.get('bruce_token')
+token = os.getenv('bruce_token')
 
 ## Firebase ##
-db = pyrebase.initialize_app( json.loads(config.get('firebase')) ).database()
+config = {"apiKey": "AIzaSyDe_xKKup4lVoPasLmAQW9Csc1zUzsxB0U","authDomain": "chuckwalla-69.firebaseapp.com",
+  "databaseURL": "https://chuckwalla-69.firebaseio.com","storageBucket": "chuckwalla-69.appspot.com",
+  "serviceAccount": json.loads(os.environ["serviceAccountKeyJSON"])}
+db = pyrebase.initialize_app(config).database()
 
 ## Basic Bot Setup ##
-intents = discord.Intents.all()
-client = commands.Bot(command_prefix=prefix, intents=intents)
+client = commands.Bot(command_prefix=prefix, intents=discord.Intents.all())
 client.remove_command('help')
 cog_count = 0
 

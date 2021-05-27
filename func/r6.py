@@ -1,11 +1,12 @@
-import json, yaml
+import json, os
 import asyncio
 from r6sapi import *
 
+from dotenv import load_dotenv
+load_dotenv()
 
-config = yaml.safe_load(open('config.yml'))
-UBISOFT_EMAIL = config.get('UBISOFT_EMAIL')
-UBISOFT_PASSW = config.get('UBISOFT_PASSW')
+UBISOFT_EMAIL = os.getenv('UBISOFT_EMAIL')
+UBISOFT_PASSW = os.getenv('UBISOFT_PASSW')
 
 RANKS = [
     { "name": "Copper 5",   "min_mmr": 1,    "max_mmr": 1199 },
@@ -231,7 +232,7 @@ def get_rank(rank):
     return rank_dict.get(rank.lower())
 
 # Here only cuz i reall don't want to go through the struggle
-# of getting all these links from Firebase storage
+# of getting all these links from Firebase storage again
 # Same images are on the imgur..
 OLD_RANK_DICT = {
     "unranked": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FUnranked.png?alt=media&token=295b2528-9813-4add-a46f-9e5c7e2a13c8",

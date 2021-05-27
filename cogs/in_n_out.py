@@ -4,24 +4,27 @@ from func.stuff import ordinal
 
 from humanfriendly import format_timespan
 from discord.ext import commands
+import pyrebase, yaml, json, os
 from discord.utils import get
 from datetime import datetime
-import pyrebase, yaml, json
+
+from dotenv import load_dotenv
+load_dotenv()
 
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
-
 in_n_out_channel_id = config.get('in_n_out_channel_id')
-
 test_account_uid = config.get('test_account_uid')
-
 honkhonk_emoji = config.get('honkhonk_emoji')
 garrow_emoji = config.get('garrow_emoji')
 yarrow_emoji = config.get('yarrow_emoji')
 rarrow_emoji = config.get('rarrow_emoji')
 
 ## Firebase Database ##
-db = pyrebase.initialize_app( json.loads(config.get('firebase')) ).database()
+firebase_config = {"apiKey": "AIzaSyDe_xKKup4lVoPasLmAQW9Csc1zUzsxB0U","authDomain": "chuckwalla-69.firebaseapp.com",
+  "databaseURL": "https://chuckwalla-69.firebaseio.com","storageBucket": "chuckwalla-69.appspot.com",
+  "serviceAccount": json.loads(os.getenv("serviceAccountKeyJSON"))}
+db = pyrebase.initialize_app(firebase_config).database()
 
 
 class InNOut(commands.Cog):

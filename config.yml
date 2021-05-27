@@ -1,67 +1,66 @@
 prefix: ','
 
-bruce_token: 'Njk........................................................'
-
-R6STATS_API_KEY: 'AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE'
-TRN_API_KEY: 'AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE'
-
 # Console Logging
 console_logging: True
 
 # Loops
-dbr6_loop: False
+dbr6_loop: True
 dbcsgo_loop: False
-db_auto_backup_loop: False
+db_auto_backup_loop: True
 
 # Loop times
-dbr6_loop_time: float # minutes
-dbcsgo_loop_time: float # minutes
-db_backup_loop_time: float # hours
+dbr6_loop_time: 30.0 # minutes
+dbcsgo_loop_time: 32.0 # minutes
+db_backup_loop_time: 12.0 # hours
 
 # Server ID's
-diskito_id: 'ID'
+diskito_id: 402356550133350411
 
 # Role ID's
-owner_role_id: 'ID'
-mod_role_id: 'ID'
-bot_mod_role_id: 'ID'
-r6s_role_id: 'ID'
+owner_role_id: 402357508662099981
+mod_role_id: 475345534723555339
+bot_mod_role_id: 553150973581721600
+r6s_role_id: 695320047022768138
 
 # Channel ID's
-startup_channel_id: 'ID'
-error_channel_id: 'ID'
-in_n_out_channel_id: 'ID'
-voice_log_channel_id: 'ID'
+startup_channel_id: 731042702237368400
+error_channel_id: 703303362065596546
+in_n_out_channel_id: 731024736456409159
+voice_log_channel_id: 802111450021232640
 valid_post_channels:
-  - 'ID'
-  - 'ID'
+  - 694161968239607818 # Trashposting
+  - 694162053237309552 # Cute and Blessed
+  - 694162011960901713 # Videoposting
 valid_rr_channels:
-  - 'ID'
-  - 'ID'
+  - 694161229475872808 # Welcome Hall
+  - 703289966842871868 # Role Select
 valid_rp_channels:
-  - 'ID'
-  - 'ID'
+  - 694161968239607818 # Trashposting
+  - 694162011960901713 # Videoposting
 
 # User ID's
-cndrd_account_id: 'ID'
-test_account_uid: 'ID'
-
-# Firebase
-firebase: '{}'
-
+cndrd_account_id: 210471447649320970
+test_account_uid: 552570700171313187
 
 # Emote ID's
-honkhonk_emoji: 'ID'
-garrow_emoji: 'ID' # Green arrow
-yarrow_emoji: 'ID' # Yellow arrow
-rarrow_emoji: 'ID' # Red arrow
+honkhonk_emoji: 570667900529147914
+garrow_emoji: 784822110723112974 # Green arrow
+yarrow_emoji: 784822110622974014 # Yellow arrow
+rarrow_emoji: 784822110836097094 # Red arrow
 
 # Reaction Point Emotes
 good_emotes:
-  - 'E1'
-  - 'E2'
-  - 'E3'
+  - 'ooo'
+  - 'omegateef'
+  - 'omegalul'
+  - 'monkaLMAOXD'
+  - 'kek'
+  - 'AgrLove'
+  - 'LemonJoy'
+  - 'resttHA'
 bad_emotes:
-  - 'E1'
-  - 'E2'
-  - 'E3'
+  - 'WHEEZEtyKUNDO'
+  - 'incredi_wut'
+  - 'HonkHonk'
+  - '_F'
+  - 'Gay'

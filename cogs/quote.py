@@ -1,14 +1,20 @@
 from func.console_logging import cl
 
-import pyrebase, yaml, json, time
+import pyrebase, yaml, json, time, os
 from discord.ext import commands
+
+from dotenv import load_dotenv
+load_dotenv()
 
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
 mod_role_id = config.get('mod_role_id')
 
 ## Firebase Database ##
-db = pyrebase.initialize_app( json.loads(config.get('firebase')) ).database()
+firebase_config = {"apiKey": "AIzaSyDe_xKKup4lVoPasLmAQW9Csc1zUzsxB0U","authDomain": "chuckwalla-69.firebaseapp.com",
+  "databaseURL": "https://chuckwalla-69.firebaseio.com","storageBucket": "chuckwalla-69.appspot.com",
+  "serviceAccount": json.loads(os.getenv("serviceAccountKeyJSON"))}
+db = pyrebase.initialize_app(firebase_config).database()
 
 
 class Quote(commands.Cog):

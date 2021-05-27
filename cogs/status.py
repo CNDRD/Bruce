@@ -7,9 +7,6 @@ from discord.ext import commands
 config = yaml.safe_load(open('config.yml'))
 bot_mod_role_id = config.get('bot_mod_role_id')
 
-## Firebase Database ##
-db = pyrebase.initialize_app( json.loads(config.get('firebase')) ).database()
-
 
 class Status(commands.Cog):
     def __init__(self, client):

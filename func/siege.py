@@ -1,8 +1,10 @@
 from bs4 import BeautifulSoup
-import json, requests, yaml
+import json, requests, os
 
-config = yaml.safe_load(open('config.yml'))
-R6STATS_API_KEY = config.get('R6STATS_API_KEY')
+from dotenv import load_dotenv
+load_dotenv()
+
+R6STATS_API_KEY = os.getenv('R6STATS_API_KEY')
 
 def rainbow6stats(ubi_id, discordUsername):
     genericStats, seasonalStats = fetch_api_data(ubi_id)

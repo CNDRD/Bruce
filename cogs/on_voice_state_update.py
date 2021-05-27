@@ -3,18 +3,24 @@ from func.stuff import add_spaces
 from func.levels import *
 from func.voice import *
 
-import pyrebase, yaml, json, discord, time, datetime
+import pyrebase, yaml, json, discord, time, datetime, os
 from discord.ext import commands, tasks
 from discord.utils import get
 from numerize import numerize
 from pytz import timezone
+
+from dotenv import load_dotenv
+load_dotenv()
 
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
 voice_log_channel_id = config.get('voice_log_channel_id')
 
 ## Firebase Database ##
-db = pyrebase.initialize_app( json.loads(config.get('firebase')) ).database()
+firebase_config = {"apiKey": "AIzaSyDe_xKKup4lVoPasLmAQW9Csc1zUzsxB0U","authDomain": "chuckwalla-69.firebaseapp.com",
+  "databaseURL": "https://chuckwalla-69.firebaseio.com","storageBucket": "chuckwalla-69.appspot.com",
+  "serviceAccount": json.loads(os.getenv("serviceAccountKeyJSON"))}
+db = pyrebase.initialize_app(firebase_config).database()
 
 
 class OnVoiceStateUpdate(commands.Cog):

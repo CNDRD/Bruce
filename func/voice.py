@@ -1,9 +1,14 @@
 from datetime import datetime, timedelta
-import pyrebase, yaml, json
+import pyrebase, json, os
 from pytz import timezone
 
-config = yaml.safe_load(open('config.yml'))
-db = pyrebase.initialize_app( json.loads(config.get('firebase')) ).database()
+from dotenv import load_dotenv
+load_dotenv()
+
+config = {"apiKey": "AIzaSyDe_xKKup4lVoPasLmAQW9Csc1zUzsxB0U","authDomain": "chuckwalla-69.firebaseapp.com",
+  "databaseURL": "https://chuckwalla-69.firebaseio.com","storageBucket": "chuckwalla-69.appspot.com",
+  "serviceAccount": json.loads(os.getenv("serviceAccountKeyJSON"))}
+db = pyrebase.initialize_app(config).database()
 
 
 def get_stay_time(curr_year, uid, now):

@@ -1,8 +1,11 @@
 from func.console_logging import cl
 
+import discord, pyrebase, yaml, json, os
 from discord.ext import commands, tasks
 from datetime import datetime
-import discord, pyrebase, yaml, json
+
+from dotenv import load_dotenv
+load_dotenv()
 
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
@@ -10,7 +13,10 @@ db_backup_loop_time = config.get('db_backup_loop_time')
 db_auto_backup_loop = config.get('db_auto_backup_loop')
 
 ## Firebase Database ##
-db = pyrebase.initialize_app( json.loads(config.get('firebase')) ).database()
+firebase_config = {"apiKey": "AIzaSyDe_xKKup4lVoPasLmAQW9Csc1zUzsxB0U","authDomain": "chuckwalla-69.firebaseapp.com",
+  "databaseURL": "https://chuckwalla-69.firebaseio.com","storageBucket": "chuckwalla-69.appspot.com",
+  "serviceAccount": json.loads(os.getenv("serviceAccountKeyJSON"))}
+db = pyrebase.initialize_app(firebase_config).database()
 
 
 class AutoBackupDB(commands.Cog):

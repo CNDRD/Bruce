@@ -3,3 +3,4 @@ dbAutoBackup*
 __pycache__/
 serviceAccountKey.json
 r6s_api/
+.env

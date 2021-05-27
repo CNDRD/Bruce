@@ -1,6 +1,7 @@
 from func.console_logging import cl
+from func.stuff import add_spaces
 
-import discord, yaml, discord, random
+import pyrebase, discord, yaml, discord, random, json
 from discord.ext import commands
 
 ## Config Load ##

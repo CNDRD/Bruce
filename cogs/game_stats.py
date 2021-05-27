@@ -1,10 +1,12 @@
 from func.console_logging import cl
-from func.siege import rainbow6stats
 from func.csgo import csgostats
 from func.r6 import rainbow6statsv7
 
-import pyrebase, yaml, json, asyncio, time
+import pyrebase, yaml, json, asyncio, time, os
 from discord.ext import commands, tasks
+
+from dotenv import load_dotenv
+load_dotenv()
 
 ## Monkey patch
 import nest_asyncio
@@ -14,16 +16,17 @@ nest_asyncio.apply()
 config = yaml.safe_load(open('config.yml'))
 bot_mod_role_id = config.get('bot_mod_role_id')
 r6s_role_id = config.get('r6s_role_id')
-
 error_channel_id = config.get('error_channel_id')
-
-dbr6v7_loop = config.get('dbr6v7_loop')
-dbr6v7_loop_time = config.get('dbr6v7_loop_time')
+dbr6_loop = config.get('dbr6_loop')
+dbr6_loop_time = config.get('dbr6_loop_time')
 dbcsgo_loop = config.get('dbcsgo_loop')
 dbcsgo_loop_time = config.get('dbcsgo_loop_time')
 
 ## Firebase Database ##
-db = pyrebase.initialize_app( json.loads(config.get('firebase')) ).database()
+firebase_config = {"apiKey": "AIzaSyDe_xKKup4lVoPasLmAQW9Csc1zUzsxB0U","authDomain": "chuckwalla-69.firebaseapp.com",
+  "databaseURL": "https://chuckwalla-69.firebaseio.com","storageBucket": "chuckwalla-69.appspot.com",
+  "serviceAccount": json.loads(os.getenv("serviceAccountKeyJSON"))}
+db = pyrebase.initialize_app(firebase_config).database()
 
 
 class GameStats(commands.Cog):
@@ -31,18 +34,18 @@ class GameStats(commands.Cog):
         """
         Various Game Stats gathering loops.
 
-        - dbr6v7 (loop)
+        - dbr6 (loop)
         - dbcsgo (loop)
         - stats_update
         """
         self.client = client
         if dbcsgo_loop: self.dbcsgo.start()
-        if dbr6v7_loop: self.dbr6v7.start()
+        if dbr6_loop: self.dbr6.start()
 
 
-    @tasks.loop(minutes=dbr6v7_loop_time)
-    async def dbr6v7(self):
-        cl('', 'GameStats', 'dbr6v7 loop')
+    @tasks.loop(minutes=dbr6_loop_time)
+    async def dbr6(self):
+        cl('', 'GameStats', 'dbr6 loop')
         users = db.child('GameStats').child('IDs').get()
         a = {}
         for u in users.each():
@@ -51,8 +54,8 @@ class GameStats(commands.Cog):
 
         data = asyncio.new_event_loop().run_until_complete(rainbow6statsv7(a))
 
-        db.child('GameStats').child('R6Sv7').update(data)
-        db.child('GameStats').child('lastUpdate').update({'R6Sv7':int(time.time())})
+        db.child('GameStats').child('R6Sv8').update(data)
+        db.child('GameStats').child('lastUpdate').update({'R6Sv8':int(time.time())})
 
 
     @tasks.loop(minutes=dbcsgo_loop_time)
@@ -73,12 +76,12 @@ class GameStats(commands.Cog):
         cl(ctx)
         # Stops and then prompltly starts all stats loops
         if dbcsgo_loop: self.dbcsgo.cancel()
-        if dbr6v7_loop: self.dbr6v7.cancel()
+        if dbr6_loop: self.dbr6.cancel()
         # This 0.5s delay needs to be here because who the fuck knows why
         await asyncio.sleep(0.5)
 
         if dbcsgo_loop: self.dbcsgo.start()
-        if dbr6v7_loop: self.dbr6v7.start()
+        if dbr6_loop: self.dbr6.start()
 
         await ctx.message.add_reaction('✅')
 

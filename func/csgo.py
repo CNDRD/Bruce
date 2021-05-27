@@ -1,8 +1,10 @@
+import json, requests, yaml, os
 from bs4 import BeautifulSoup
-import json, requests, yaml
 
-config = yaml.safe_load(open('config.yml'))
-TRN_API_KEY = config.get('TRN_API_KEY')
+from dotenv import load_dotenv
+load_dotenv()
+
+TRN_API_KEY = os.getenv('TRN_API_KEY')
 
 def csgostats(sid, discordUsername):
     name = getSteamUsernameFromID64(sid)
