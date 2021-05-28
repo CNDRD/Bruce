@@ -1,5 +1,4 @@
 from func.console_logging import cl
-from func.csgo import csgostats
 from func.r6 import rainbow6statsv7
 
 import pyrebase, yaml, json, asyncio, time, os
