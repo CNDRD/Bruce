@@ -91,6 +91,7 @@ class OnVoiceStateUpdate(commands.Cog):
             currentLevel = ud.get('level')
             currentXP = ud.get('xp')
             currentATTT = ud.get('all_time_total_voice')
+            currentMoney = ud.get('money')
 
             # Yearly User Data
             yearVoice, yearLVS = get_yearly_user_data(currYear, uid)
@@ -141,7 +142,8 @@ class OnVoiceStateUpdate(commands.Cog):
                     'all_time_total_voice':newUserTotal,
                     f'voice_year_{currYear}':newYearlyUserTotal,
                     'level':new_level,
-                    'xp':newXP
+                    'xp':newXP,
+                    'money': currentMoney + xpToAdd,
                 }
                 serverTotalsData = {
                     'levels':stLevels + (new_level - currentLevel),
@@ -153,7 +155,8 @@ class OnVoiceStateUpdate(commands.Cog):
                 userData = {
                     'all_time_total_voice':newUserTotal,
                     f'voice_year_{currYear}':newYearlyUserTotal,
-                    'xp':newXP
+                    'xp':newXP,
+                    'money': currentMoney + xpToAdd,
                 }
                 serverTotalsData = {
                     'voice': stVoice + stayed,

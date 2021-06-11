@@ -96,7 +96,8 @@ class InNOut(commands.Cog):
                  'joined_server':joinedServer,
                  'joined_discord':joinedDiscord,
                  'avatar_url':avatarURL,
-                 'in_server':True
+                 'in_server':True,
+                 'money': 0,
                  }
             db.child('users').child(member.id).set(d)
 

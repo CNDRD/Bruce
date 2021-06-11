@@ -43,7 +43,7 @@ class OnMessage(commands.Cog):
 
         # Don't work in DM's
         if isinstance(message.channel, discord.channel.DMChannel):
-            return await message.author.send('No')
+            return
 
         # Basic-ass variables
         now = int(time.time())
@@ -62,6 +62,7 @@ class OnMessage(commands.Cog):
         current_xp = ud.get('xp')
         last_xp_get = ud.get('last_xp_get')
         messages_count = ud.get('messages_count')
+        money = ud.get('money')
 
         # Get the time since the user last posted a message
         since_last_mess = now - last_xp_get
@@ -80,7 +81,7 @@ class OnMessage(commands.Cog):
             if new_xp >= xp_from_level(current_lvl+1):
                 # Level-Up
                 level_up = True
-                data = {'level':current_lvl+1, 'last_xp_get':now, 'xp':new_xp, 'messages_count':messages_count+1}
+                data = {'level':current_lvl+1, 'last_xp_get':now, 'xp':new_xp, 'messages_count':messages_count+1, 'money':money+xp_to_add}
                 server_totals = {'xp':st_xp + xp_to_add, 'messages':st_messages+1, 'levels':st_levels+1}
 
                 # Level based roles
@@ -96,7 +97,8 @@ class OnMessage(commands.Cog):
                 # No level change
                 data = {'xp':new_xp,
                         'last_xp_get':now,
-                        'messages_count':messages_count+1}
+                        'messages_count':messages_count+1,
+                        'money':money+xp_to_add}
 
                 server_totals = {'xp':st_xp + xp_to_add, 'messages':st_messages+1}
 
