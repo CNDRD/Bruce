@@ -64,12 +64,13 @@ class User(commands.Cog):
 
 
     @commands.command(aliases=['coin', 'flip'])
-    async def coinflip(self, ctx, heads: str = "Heads", tails: str = "Tails"):
+    async def coinflip(self, ctx, *args):
         cl(ctx)
-        if random.SystemRandom().randint(1,100) % 2 == 0:
-            msg = heads
+        if len(args) == 0 or len(args) == 1:
+            outcomes = ('Heads', 'Tails')
+            msg = outcomes[random.SystemRandom().randint(0,1)]
         else:
-            msg = tails
+            msg = args[random.SystemRandom().randint(0,len(args)-1)]
         await ctx.send(f"**{msg}**")
 
 

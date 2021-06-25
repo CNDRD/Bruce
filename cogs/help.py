@@ -38,7 +38,7 @@ class Help(commands.Cog):
         msg += f'`{prfx}code` - Link to the GitHub repo'
         msg += f'\n`{prfx}ping` - Show bots ping.'
         msg += f'\n`{prfx}vanish` - You\'ll disappear. Magic.'
-        msg += f'\n`{prfx}coinflip <A> <B>` - Flips a coin. A: `{prfx}coin` / `{prfx}flip`'
+        msg += f'\n`{prfx}coinflip <A> <B> ...` - Flips a coin. Accepts more than two outcomes. A: `{prfx}coin` / `{prfx}flip`'
         msg += f'\n`{prfx}flipflop` - Pro debílky'
         ## technically not from 'user.py'
         msg += f'\n`{prfx}cicina` - Can be used once per day.'
