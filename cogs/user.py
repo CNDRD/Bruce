@@ -69,11 +69,11 @@ class User(commands.Cog):
             Option("tails", "Choose something else than 'Tails'", Type.STRING)
         ]
     )
-    async def flip(self, ctx, Heads="Heads", Tails="Tails"):
+    async def flip(self, ctx, heads="Heads", tails="Tails"):
         if random.SystemRandom().randint(0,1) == 0:
-            msg = out1
+            msg = heads
         else:
-            msg = out2
+            msg = tails
         await ctx.create_response(f"**{msg}**")
 
 
