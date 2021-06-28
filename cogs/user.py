@@ -1,16 +1,13 @@
-from func.console_logging import cl
-from func.stuff import add_spaces
-
-import pyrebase, discord, yaml, discord, random, json, os
+import pyrebase, yaml, random, json, os
 from discord.ext import commands
-
 from dotenv import load_dotenv
 load_dotenv()
 
+from dislash import *
+
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
-mod_role_id = config.get('mod_role_id')
-succes_emoji = config.get('succes_emoji')
+slash_guilds = config.get('slash_guilds')
 
 ## Firebase Database ##
 firebase_config = {"apiKey": "AIzaSyDe_xKKup4lVoPasLmAQW9Csc1zUzsxB0U","authDomain": "chuckwalla-69.firebaseapp.com",
@@ -23,62 +20,61 @@ class User(commands.Cog):
         """
         Collection of short user facing commands.
 
-        - connect (to web)
-
+        - connect
         - code
         - ping
-        - vanish
         - coinflip
-        - flipflop
         """
         self.client = client
 
 
-    @commands.command()
-    async def connect(self, ctx, code=None):
-        cl(ctx)
-        if code is None: return await ctx.send("You forgot the code chump")
+    @slash_commands.command(
+        guild_ids=slash_guilds,
+        description="Connect your Discord account to diskito.eu",
+        options=[ Option("code", "The code you got on your profile page", Type.STRING, required=True) ]
+        )
+    async def connect(self, ctx, code):
         db.child("discordConnection").child(ctx.author.id).set(code)
-        await ctx.message.add_reaction('✅')
+        await ctx.create_response("Succesfully connected!", ephemeral=True)
 
 
-    @commands.command()
+    @slash_commands.command(
+        guild_ids=slash_guilds,
+        description="Link to bot's source code"
+    )
     async def code(self, ctx):
-        cl(ctx)
-        embed = discord.Embed(colour=discord.Colour.random())
-        embed.set_author(name='GitHub Repo', url='https://github.com/CNDRD/Bruce')
-        await ctx.send(embed=embed)
+        row = ActionRow(
+            Button(
+                style=ButtonStyle.link,
+                label="GitHub",
+                url="https://github.com/CNDRD/Bruce"
+            )
+        )
+        await ctx.create_response("Here you go!", components=[row])
 
 
-    @commands.command()
+    @slash_commands.command(
+        guild_ids=slash_guilds,
+        description="Bot's ping to Discord"
+    )
     async def ping(self, ctx):
-        cl(ctx)
-        await ctx.send(f"Pong ({round(self.client.latency*1000)}ms)")
+        await ctx.create_response(f"Pong `{round(self.client.latency*1000)}ms`")
 
 
-    @commands.command()
-    async def vanish(self, ctx):
-        cl(ctx)
-        await ctx.message.add_reaction('✅')
-        await ctx.author.kick(reason='Self-kick')
-
-
-    @commands.command(aliases=['coin', 'flip'])
-    async def coinflip(self, ctx, *args):
-        cl(ctx)
-        if len(args) == 0 or len(args) == 1:
-            outcomes = ('Heads', 'Tails')
-            msg = outcomes[random.SystemRandom().randint(0,1)]
+    @slash_commands.command(
+        guild_ids=slash_guilds,
+        description="Flips a coin for you",
+        options=[
+            Option("heads", "Choose something else than 'Heads'", Type.STRING),
+            Option("tails", "Choose something else than 'Tails'", Type.STRING)
+        ]
+    )
+    async def flip(self, ctx, Heads="Heads", Tails="Tails"):
+        if random.SystemRandom().randint(0,1) == 0:
+            msg = out1
         else:
-            msg = args[random.SystemRandom().randint(0,len(args)-1)]
-        await ctx.send(f"**{msg}**")
-
-
-    @commands.command(aliases=['flip-flop'])
-    async def flipflop(self, ctx):
-        cl(ctx)
-        e = discord.utils.get(ctx.guild.emojis, name="kapp")
-        await ctx.message.add_reaction(e)
+            msg = out2
+        await ctx.create_response(f"**{msg}**")
 
 
 def setup(client):
