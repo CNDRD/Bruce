@@ -1,4 +1,3 @@
-from func.console_logging import cl
 from func.stuff import add_spaces
 from func.levels import *
 from func.voice import *
@@ -35,8 +34,6 @@ class OnVoiceStateUpdate(commands.Cog):
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        cl('', 'OnVoiceStateUpdate', 'on_voice_state_update')
-
         # We ain't counting time for bots
         if member.bot:
             return

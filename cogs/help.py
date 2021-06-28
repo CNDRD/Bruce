@@ -1,5 +1,4 @@
 from func.stuff import user_has_role as role
-from func.console_logging import cl
 
 from discord.ext import commands
 import discord, yaml
@@ -20,7 +19,6 @@ class Help(commands.Cog):
 
     @commands.command(aliases=['h'])
     async def help(self, ctx):
-        cl(ctx)
         prfx = ctx.prefix
 
         embed = discord.Embed(colour=discord.Colour.random())

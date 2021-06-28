@@ -1,4 +1,3 @@
-from func.console_logging import cl
 from func.stuff import add_spaces
 from func.levels import *
 
@@ -31,7 +30,6 @@ class OnMessage(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        # cl('', 'OnMessage', 'on_message')
         # We don't want the bot giving XP to itself now do we
         if message.author.bot:
             return

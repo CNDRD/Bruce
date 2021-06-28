@@ -1,5 +1,3 @@
-from func.console_logging import cl
-
 from discord.ext import commands
 import pyrebase, yaml, json, os
 
@@ -26,7 +24,6 @@ class OnUserUpdate(commands.Cog):
 
     @commands.Cog.listener()
     async def on_user_update(self, before, after):
-        cl('', 'OnUserUpdate', 'on_user_update')
         data = {
         "username": str(after),
         "avatar_url":str(after.avatar_url_as(size=4096))

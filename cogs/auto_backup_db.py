@@ -1,5 +1,3 @@
-from func.console_logging import cl
-
 import discord, pyrebase, yaml, json, os
 from discord.ext import commands, tasks
 from datetime import datetime
@@ -31,7 +29,6 @@ class AutoBackupDB(commands.Cog):
 
     @tasks.loop(hours=db_backup_loop_time)
     async def dbAutoBackup(self):
-        cl('', 'AutoBackupDB', 'dbAutoBackup')
         stamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
         filename = f"dbAutoBackup_{stamp}.json"
 

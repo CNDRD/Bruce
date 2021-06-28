@@ -1,5 +1,3 @@
-from func.console_logging import cl
-
 import pyrebase, discord, yaml, json, os
 from discord.ext import commands
 
@@ -31,7 +29,6 @@ class RrRpEc(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
-        cl('', 'RrRpEc', 'on_raw_reaction_add')
         # Oh boy
         # Works only in selected channels (see 'valid_rr_channels' variable for their IDs)
 
@@ -104,7 +101,6 @@ class RrRpEc(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
-        cl('', 'RrRpEc', 'on_raw_reaction_remove')
         # Emoji usage counter
         if (hah := self.client.get_emoji(payload.emoji.id)) is not None:
             if hah.guild_id != diskito_id: return

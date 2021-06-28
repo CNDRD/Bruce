@@ -1,4 +1,3 @@
-from func.console_logging import cl
 from func.levels import rank_name
 from func.stuff import ordinal
 
@@ -40,8 +39,6 @@ class InNOut(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        cl('', 'InNOut', 'on_member_join')
-
         # No welcome messages for bots and my test account
         if member.bot == True or member.id == test_account_uid:
             return
@@ -106,8 +103,6 @@ class InNOut(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-        cl('', 'InNOut', 'on_member_remove')
-
         # No welcome messages for bots and my test account
         if member.bot == True or member.id == test_account_uid:
             return
