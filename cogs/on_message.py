@@ -10,7 +10,6 @@ from numerize import numerize
 
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
-valid_post_channels = config.get('valid_post_channels')
 
 ## Firebase Database ##
 firebase_config = {"apiKey": "AIzaSyDe_xKKup4lVoPasLmAQW9Csc1zUzsxB0U","authDomain": "chuckwalla-69.firebaseapp.com",

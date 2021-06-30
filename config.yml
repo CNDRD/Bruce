@@ -1,16 +1,11 @@
 prefix: ','
 
-# Console Logging
-console_logging: True
-
 # Loops
 dbr6_loop: True
-dbcsgo_loop: False
 db_auto_backup_loop: True
 
 # Loop times
 dbr6_loop_time: 30.0 # minutes
-dbcsgo_loop_time: 32.0 # minutes
 db_backup_loop_time: 12.0 # hours
 
 # Server ID's
@@ -27,13 +22,13 @@ startup_channel_id: 731042702237368400
 error_channel_id: 703303362065596546
 in_n_out_channel_id: 731024736456409159
 voice_log_channel_id: 802111450021232640
-valid_post_channels:
-  - 694161968239607818 # Trashposting
-  - 694162053237309552 # Cute and Blessed
-  - 694162011960901713 # Videoposting
+
+# Channels that reaction roles work in
 valid_rr_channels:
   - 694161229475872808 # Welcome Hall
   - 703289966842871868 # Role Select
+
+# Channels that reaction points work in
 valid_rp_channels:
   - 694161968239607818 # Trashposting
   - 694162011960901713 # Videoposting
@@ -49,6 +44,7 @@ yarrow_emoji: 784822110622974014 # Yellow arrow
 rarrow_emoji: 784822110836097094 # Red arrow
 
 # Reaction Point Emotes
+# Emotes that you recieve +rp for
 good_emotes:
   - 'ooo'
   - 'omegateef'
@@ -58,9 +54,14 @@ good_emotes:
   - 'AgrLove'
   - 'LemonJoy'
   - 'resttHA'
+# Emotes that you recieve -rp for
 bad_emotes:
   - 'WHEEZEtyKUNDO'
   - 'incredi_wut'
   - 'HonkHonk'
   - '_F'
   - 'Gay'
+
+# So Dislash doesn't register the commands as global
+slash_guilds:
+  - 402356550133350411
