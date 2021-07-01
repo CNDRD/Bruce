@@ -33,7 +33,7 @@ class Widget(commands.Cog):
             "house": getHypesquadHouse(after.public_flags),
             "voice": getVoice(after.voice),
             "premium_since": getPremium(after.premium_since),
-            "status": after.status,
+            "status": after.raw_status,
             "is_on_mobile": after.is_on_mobile(),
             "color": getColor(after.color.to_rgb()),
             "activities": getActivities(after.activities),
