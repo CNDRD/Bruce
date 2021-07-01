@@ -1,5 +1,5 @@
 import pyrebase, yaml, random, json, os, discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from datetime import datetime
 from dotenv import load_dotenv
 load_dotenv()
@@ -20,6 +20,29 @@ class Widget(commands.Cog):
         Custom Widget
         """
         self.client = client
+        self.widget_loop.start()
+
+
+    @tasks.loop(hours=69.69)
+    async def widget_loop(self):
+        diskito = self.client.get_guild(diskito_id)
+        widgeee = {}
+
+        for member in diskito.members:
+            if not member.bot:
+                xd = {
+                    "uid": member.id,
+                    "username": member.name,
+                    "house": getHypesquadHouse(member.public_flags),
+                    "voice": getVoice(member.voice),
+                    "premium_since": getPremium(member.premium_since),
+                    "status": getStatus(member.raw_status),
+                    "is_on_mobile": member.is_on_mobile(),
+                    "color": getColor(member.color.to_rgb()),
+                    "activities": getActivities(member.activities),
+                }
+                widgeee[member.id] = xd
+        db.child("widget").update(widgeee)
 
 
     @commands.Cog.listener()
