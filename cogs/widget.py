@@ -84,7 +84,7 @@ def getActivities(activities):
     if activities == (): return "none"
 
     xd = {
-        "spotify": False,
+        "spotify": "none",
         "custom": "none",
         "other": []
     }

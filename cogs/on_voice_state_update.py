@@ -71,6 +71,21 @@ class OnVoiceStateUpdate(commands.Cog):
 
         #######################################################################
 
+        # Widget voice state update
+        widget_voice_state = {
+            "deaf": after.deaf,
+            "mute": after.mute,
+            "self_mute": after.self_mute,
+            "self_deaf": after.self_deaf,
+            "self_stream": after.self_stream,
+            "self_video": after.self_video
+        }
+        db.child("widget").child(uid).child("voice").update(widget_voice_state)
+
+        #######################################################################
+
+        #######################################################################
+
         # Joined voice
         if before.channel is None:
             # Set the channel session timestamp
