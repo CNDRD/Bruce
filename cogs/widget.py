@@ -33,7 +33,7 @@ class Widget(commands.Cog):
             "house": getHypesquadHouse(after.public_flags),
             "voice": getVoice(after.voice),
             "premium_since": getPremium(after.premium_since),
-            "status": after.raw_status,
+            "status": getStatus(after.raw_status),
             "is_on_mobile": after.is_on_mobile(),
             "color": getColor(after.color.to_rgb()),
             "activities": getActivities(after.activities),
@@ -124,3 +124,8 @@ def getPremium(uhh):
 
 def getColor(xd):
     return {"r": xd[0], "g": xd[1], "b": xd[2]}
+
+def getStatus(s):
+    if not isinstance(s, str):
+        return s[0]
+    return s
