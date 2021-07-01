@@ -8,7 +8,6 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fbf1a0369b054703a5a337ea37f588c3)](https://app.codacy.com/gh/CNDRD/Bruce)  
 ![Python Version](https://img.shields.io/badge/python-3.9-blue.svg?logo=python)
 ![GitHub repo size](https://img.shields.io/github/repo-size/CNDRD/bruce)
-![Lines of code](https://img.shields.io/tokei/lines/github/CNDRD/bruce?label=LOC)
 ![GitHub License](https://img.shields.io/github/license/CNDRD/bruce)  
 
 Using [Dislash](https://github.com/EQUENOS/dislash.py) to leverage the power of _slash_ commands and _buttons_ for the some commands  
