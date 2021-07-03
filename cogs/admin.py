@@ -6,6 +6,7 @@ load_dotenv()
 
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
+owner_role_id = config.get('owner_role_id')
 bot_mod_role_id = config.get('bot_mod_role_id')
 mod_role_id = config.get('mod_role_id')
 
@@ -31,40 +32,13 @@ class Admin(commands.Cog):
 
 
     @commands.command(aliases=['bdb'])
-    @commands.is_owner()
+    @commands.has_role(owner_role_id)
     async def backup_db(self, ctx):
         dm_ch = await ctx.author.create_dm()
         with open("db_backup.json","w") as f:
             f.write(json.dumps(db.get().val(), indent=2))
         with open("db_backup.json", "rb") as f:
             await dm_ch.send(file=discord.File(f, "db_backup.json"))
-
-
-    @commands.command(aliases=['mdb'])
-    @commands.is_owner()
-    async def manually_add_to_db(self, ctx, user: discord.User = None):
-        if user is None:
-            return await ctx.send('Need a user chief..')
-
-        member = ctx.guild.get_member(user.id)
-
-        joinedServer = int(member.joined_at.timestamp())
-        joinedDiscord = int(member.created_at.timestamp())
-        avatarURL = str(member.avatar_url_as(size=4096))
-
-        # Create users individial stats
-        d = {'reacc_points':0,
-             'username':str(member),
-             'xp':0,
-             'level':0,
-             'last_xp_get':joinedServer,
-             'messages_count':0,
-             'joined_server':joinedServer,
-             'joined_discord':joinedDiscord,
-             'avatar_url':avatarURL,
-             'in_server':True
-             }
-        db.child('users').child(member.id).set(d)
 
 
     @commands.command()
