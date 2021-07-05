@@ -1,4 +1,4 @@
-import pyrebase, yaml, random, json, os, discord
+import pyrebase, yaml, random, json, os, discord, asyncio
 from discord.ext import commands, tasks
 from datetime import datetime
 from dotenv import load_dotenv
@@ -7,6 +7,7 @@ load_dotenv()
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
 diskito_id = config.get('diskito_id')
+bot_mod_role_id = config.get('bot_mod_role_id')
 
 ## Firebase Database ##
 firebase_config = {"apiKey": "AIzaSyDe_xKKup4lVoPasLmAQW9Csc1zUzsxB0U","authDomain": "chuckwalla-69.firebaseapp.com",
@@ -27,12 +28,19 @@ class Widget(commands.Cog):
     async def widget_loop(self):
         diskito = self.client.get_guild(diskito_id)
         widgeee = {}
-
         for member in diskito.members:
             if not member.bot:
                 widgeee[member.id] = gimmeThemStats(member)
-
         db.child("widget").update(widgeee)
+
+
+    @commands.command(aliases=['wu'])
+    @commands.has_role(bot_mod_role_id)
+    async def widget_update(self, ctx):
+        self.widget_loop.cancel()
+        await asyncio.sleep(0.5)
+        self.widget_loop.start()
+        await ctx.message.add_reaction('✅')
 
 
     @commands.Cog.listener()
@@ -41,7 +49,6 @@ class Widget(commands.Cog):
         if after.bot: return
 
         x = gimmeThemStats(after)
-
         db.child("widget").child(x["uid"]).update(x)
 
 
