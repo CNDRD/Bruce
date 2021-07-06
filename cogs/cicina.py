@@ -75,8 +75,8 @@ class Quote(commands.Cog):
             'cicina_avg':new_avg,
             'cicina_count':new_count}
 
-        db.child('users').child(uid).update(data)
         await ctx.create_response(msg)
+        db.child('users').child(uid).update(data)
 
 
 def setup(client):
