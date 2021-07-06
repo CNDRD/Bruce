@@ -1,4 +1,4 @@
-import yaml, discord, dislash
+import yaml, dislash
 from discord.ext import commands
 
 from dislash import *

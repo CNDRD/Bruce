@@ -1,5 +1,5 @@
 from discord.ext import commands
-import pyrebase, yaml, json, os
+import pyrebase, json, os
 
 from dotenv import load_dotenv
 load_dotenv()

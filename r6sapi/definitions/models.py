@@ -1,4 +1,4 @@
-from typing import Iterable, Union
+from typing import Union
 
 import enum
 
@@ -174,7 +174,6 @@ class UniqueOperatorStat:
         return self.id_template.format("pve")
 
     def __repr__(self):
-        return "{'name':" + self.name + "}"
         return f"UniqueOperatorStat(name={self.name}, id_template={self.id_template})"
 
     def __str__(self):

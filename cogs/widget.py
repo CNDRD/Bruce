@@ -1,4 +1,4 @@
-import pyrebase, yaml, random, json, os, discord, asyncio
+import pyrebase, yaml, json, os, discord, asyncio
 from discord.ext import commands, tasks
 from datetime import datetime
 from dotenv import load_dotenv

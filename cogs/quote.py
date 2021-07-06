@@ -1,4 +1,4 @@
-import pyrebase, yaml, discord, datetime, time, json, os
+import pyrebase, yaml, datetime, time, json, os
 from discord.ext import commands
 from pytz import timezone
 

@@ -1,5 +1,4 @@
 import aiohttp
-import asyncio
 import time
 import json
 import base64
@@ -167,7 +166,7 @@ class Auth:
     async def get(self, *args, retries=0, referer=None, json=True, **kwargs):
         if not self.key:
             last_error = None
-            for i in range(self.max_connect_retries):
+            for _ in range(self.max_connect_retries):
                 try:
                     await self.connect()
                     break
@@ -204,8 +203,6 @@ class Auth:
                 message = text.split("h1>")
                 if len(message) > 1:
                     message = message[1][:-2]
-                    code = 0
-                    if "502" in message: code = 502
                 else:
                     message = text
 

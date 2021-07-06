@@ -1,10 +1,7 @@
 from collections import OrderedDict
 
 import datetime
-import asyncio
-import logging
 
-from .definitions.models import OperatorInfo
 from .definitions import operators, seasons
 
 from .exceptions import InvalidRequest

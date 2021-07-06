@@ -1,5 +1,4 @@
-import json, os
-import asyncio
+import os
 from r6sapi import *
 
 from dotenv import load_dotenv

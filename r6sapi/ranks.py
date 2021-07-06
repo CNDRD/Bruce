@@ -1,6 +1,3 @@
-from r6sapi.definitions.models import RankInfo
-from r6sapi.definitions.stores import Seasons
-
 class RankedRegions:
     """Ranked regions supported
 
