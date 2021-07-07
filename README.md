@@ -10,7 +10,6 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/CNDRD/bruce)
 ![GitHub License](https://img.shields.io/github/license/CNDRD/bruce)  
 
-Using [Dislash](https://github.com/EQUENOS/dislash.py) to leverage the power of _slash_ commands and _buttons_ for the some commands  
 `/r6sapi` is my fork of [r6sapi](https://github.com/billy-yoyo/RainbowSixSiege-Python-API) that I tricked into working..  
 
 ---  

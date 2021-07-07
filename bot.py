@@ -3,7 +3,6 @@ from humanfriendly import format_timespan
 from discord.ext import commands
 from datetime import datetime
 from pytz import timezone
-from dislash import *
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -27,7 +26,6 @@ db = pyrebase.initialize_app(firebase_config).database()
 
 ## Basic Bot Setup ##
 client = commands.Bot(command_prefix=prefix, intents=discord.Intents.all())
-SlashClient(client, show_warnings=True)
 client.remove_command('help')
 cog_count = 0
 

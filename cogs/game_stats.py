@@ -3,8 +3,6 @@ from func.r6 import rainbow6statsv7
 import pyrebase, yaml, json, asyncio, time, os
 from discord.ext import commands, tasks
 
-from dislash import *
-
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -61,18 +59,16 @@ class GameStats(commands.Cog):
         print("R6 Loop Done")
 
 
-    @slash_commands.command(
-        guild_ids=slash_guilds,
-        description="Manually update game stats."
-    )
-    @slash_commands.has_role(bot_mod_role_id)
+    @commands.command(aliases=['su'])
+    @commands.has_role(bot_mod_role_id)
     async def stats_update(self, ctx):
-        await ctx.reply("Stats updating!", ephemeral=True)
-        # Stops and then promptly starts all stats loops
+        cl(ctx)
+        # Stops and then prompltly starts all stats loops
         if dbr6_loop: self.dbr6.cancel()
         # This 0.5s delay needs to be here because who the fuck knows why
         await asyncio.sleep(0.5)
         if dbr6_loop: self.dbr6.start()
+        await ctx.message.add_reaction('✅')
 
 
 def setup(client):
