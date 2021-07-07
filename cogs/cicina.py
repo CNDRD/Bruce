@@ -21,7 +21,6 @@ class Cicina(commands.Cog):
 
     @commands.command()
     async def cicina(self, ctx):
-        cl(ctx)
         uid = ctx.author.id
         today = datetime.datetime.now(timezone('Europe/Prague')).strftime('%Y-%m-%d')
         cicina = np.random.randint(0,51)
