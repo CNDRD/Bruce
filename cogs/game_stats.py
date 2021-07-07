@@ -50,18 +50,29 @@ class GameStats(commands.Cog):
         db.child('GameStats').child('lastUpdate').update({'R6Sv8':int(time.time())})
 
 
+    @dbr6.before_loop
+    async def before_dbr6(self):
+        print('dbr6 - wait_until_ready()')
+        await self.client.wait_until_ready()
+
+
+    @dbr6.after_loop
+    async def after_dbr6(self):
+        print("R6 Loop Done")
+
+
     @slash_commands.command(
         guild_ids=slash_guilds,
         description="Manually update game stats."
     )
     @slash_commands.has_role(bot_mod_role_id)
     async def stats_update(self, ctx):
+        await ctx.reply("Stats updating!", ephemeral=True)
         # Stops and then promptly starts all stats loops
         if dbr6_loop: self.dbr6.cancel()
         # This 0.5s delay needs to be here because who the fuck knows why
         await asyncio.sleep(0.5)
         if dbr6_loop: self.dbr6.start()
-        await ctx.create_response("Stats updated!", ephemeral=True)
 
 
 def setup(client):

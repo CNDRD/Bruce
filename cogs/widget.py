@@ -23,7 +23,6 @@ class Widget(commands.Cog):
         self.client = client
         self.widget_loop.start()
 
-
     @tasks.loop(hours=69.69)
     async def widget_loop(self):
         diskito = self.client.get_guild(diskito_id)
@@ -32,6 +31,12 @@ class Widget(commands.Cog):
             if not member.bot:
                 widgeee[member.id] = gimmeThemStats(member)
         db.child("widget").update(widgeee)
+
+
+    @widget_loop.before_loop
+    async def before_widget_loop(self):
+        print('widget_loop - wait_until_ready()')
+        await self.client.wait_until_ready()
 
 
     @commands.command(aliases=['wu'])
