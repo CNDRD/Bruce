@@ -72,14 +72,18 @@ class OnVoiceStateUpdate(commands.Cog):
 
         # Widget voice state update
         widget_voice_state = {
-            "deaf": after.deaf,
-            "mute": after.mute,
-            "self_mute": after.self_mute,
-            "self_deaf": after.self_deaf,
-            "self_stream": after.self_stream,
-            "self_video": after.self_video
+            "voice": {
+                "deaf": after.deaf,
+                "mute": after.mute,
+                "self_mute": after.self_mute,
+                "self_deaf": after.self_deaf,
+                "self_stream": after.self_stream,
+                "self_video": after.self_video
+            }
         }
-        db.child("widget").child(uid).child("voice").update(widget_voice_state)
+        if after.channel is None:
+            widget_voice_state = {"voice":"none"}
+        db.child("widget").child(uid).update(widget_voice_state)
 
         #######################################################################
 
