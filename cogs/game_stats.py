@@ -62,7 +62,6 @@ class GameStats(commands.Cog):
     @commands.command(aliases=['su'])
     @commands.has_role(bot_mod_role_id)
     async def stats_update(self, ctx):
-        cl(ctx)
         # Stops and then prompltly starts all stats loops
         if dbr6_loop: self.dbr6.cancel()
         # This 0.5s delay needs to be here because who the fuck knows why
