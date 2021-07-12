@@ -1,7 +1,4 @@
 # Bruce  
-### The Discord bot  
-
----  
 
 [![Discord](https://img.shields.io/discord/402356550133350411.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/sXDbtp4)
 ![GitHub deployments](https://img.shields.io/github/deployments/CNDRD/Bruce/bruce-discord?label=Deployment&logo=heroku)
