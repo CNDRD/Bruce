@@ -44,7 +44,10 @@ class GameStats(commands.Cog):
                 request_diff = message["data"] - self.last_siege_update_ts
                 if request_diff >= (180):
                     print("Restarting DBR6 following a wesite request")
-                    if dbr6_loop: self.dbr6.restart()
+                    if dbr6_loop:
+                        self.dbr6.restart()
+                        self.last_siege_update_ts = time.time()
+
         db.child("GameStats").child("updateRequests").child("R6S").stream(wrtus)
 
 
