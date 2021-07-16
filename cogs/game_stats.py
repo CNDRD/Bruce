@@ -32,7 +32,20 @@ class GameStats(commands.Cog):
         - stats_update
         """
         self.client = client
+        self.first_boot = True
         if dbr6_loop: self.dbr6.start()
+
+        self.last_siege_update_ts = db.child("GameStats").child("lastUpdate").child("R6Sv8").get().val()
+        def wrtus(message):
+            "Website Request To Update Siege"
+            if self.first_boot:
+                self.first_boot = not self.first_boot
+            else:
+                request_diff = message["data"] - self.last_siege_update_ts
+                if request_diff >= (180):
+                    print("Restarting DBR6 following a wesite request")
+                    if dbr6_loop: self.dbr6.restart()
+        db.child("GameStats").child("updateRequests").child("R6S").stream(wrtus)
 
 
     @tasks.loop(minutes=dbr6_loop_time)
