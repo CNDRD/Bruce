@@ -51,7 +51,7 @@ class GameStats(commands.Cog):
                             self.dbr6.start()
                         self.last_siege_update_ts = time.time()
 
-        db.child("GameStats").child("updateRequests").child("R6S").stream(mrdkus)
+        db.child("GameStats").child("updateRequests").child("R6S").stream(wrtus)
 
 
     @tasks.loop(minutes=dbr6_loop_time)
