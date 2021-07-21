@@ -25,11 +25,8 @@ class Cicina(commands.Cog):
         today = datetime.datetime.now(timezone('Europe/Prague')).strftime('%Y-%m-%d')
         cicina = np.random.randint(0,51)
 
-        cicinaLast = db.child('users').child(uid).child('cicina_last').get().val()
-        if cicinaLast is None: cicinaLast = 0
-
-        cicinaLongest = db.child('users').child(uid).child('cicina_longest').get().val()
-        if cicinaLongest is None: cicinaLongest = 0
+        cicinaLast = db.child('users').child(uid).child('cicina_last').get().val() or 0
+        cicinaLongest = db.child('users').child(uid).child('cicina_longest').get().val() or 0
 
         if cicinaLast != today:
             emote = discord.utils.get(ctx.guild.emojis, name="resttHA")

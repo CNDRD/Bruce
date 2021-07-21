@@ -103,19 +103,19 @@ class OnVoiceStateUpdate(commands.Cog):
         #########################
             # User data
             ud = db.child('users').child(uid).get().val()
-            currentLevel = ud.get('level')
-            currentXP = ud.get('xp')
-            currentATTT = ud.get('all_time_total_voice')
-            currentMoney = ud.get('money')
+            currentLevel = ud.get('level', 0)
+            currentXP = ud.get('xp', 0)
+            currentATTT = ud.get('all_time_total_voice', 0)
+            currentMoney = ud.get('money', 0)
 
             # Yearly User Data
             yearVoice, yearLVS = get_yearly_user_data(currYear, uid)
 
             # Server Totals Data
             st = db.child('serverTotals').get().val()
-            stLevels = st.get('levels')
-            stVoice = st.get('voice')
-            stXP = st.get('xp')
+            stLevels = st.get('levels', 0)
+            stVoice = st.get('voice', 0)
+            stXP = st.get('xp', 0)
 
             # Hardcore calculations
             stayed = get_stay_time(currYear, uid, now)  # how long did the user stay

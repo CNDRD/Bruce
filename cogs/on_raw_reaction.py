@@ -68,10 +68,9 @@ class RrRpEc(commands.Cog):
 
             if uid != payload.user_id:
                 # Server Totals Data
-                st = db.child('serverTotals').get().val()
-                st_rp = st.get('reactionPoints')
+                st = db.child('serverTotals').child('reactionPoints').get().val() or 0
 
-                curr_points = db.child('users').child(uid).child('reacc_points').get().val()
+                curr_points = db.child('users').child(uid).child('reacc_points').get().val() or 0
                 if emote in good_emotes:
                     data = {'reacc_points':curr_points + 1}
                     server_totals = {'reactionPoints':st_rp + 1}
@@ -92,8 +91,7 @@ class RrRpEc(commands.Cog):
             emoji_id = payload.emoji.id
             emoji_url = str(payload.emoji.url)
 
-            count = db.child('emojiCounts').child(emoji_id).child('count').get().val()
-            if count is None: count = 0
+            count = db.child('emojiCounts').child(emoji_id).child('count').get().val() or 0
 
             count_data = {'count':count+1, 'url':emoji_url}
             db.child('emojiCounts').child(emoji_id).update(count_data)
@@ -109,8 +107,7 @@ class RrRpEc(commands.Cog):
             emoji_id = payload.emoji.id
             emoji_url = str(payload.emoji.url)
 
-            count = db.child('emojiCounts').child(emoji_id).child('count').get().val()
-            if count is None: count = 1
+            count = db.child('emojiCounts').child(emoji_id).child('count').get().val() or 0
 
             count_data = {'count':count-1, 'url':emoji_url}
             db.child('emojiCounts').child(emoji_id).update(count_data)
@@ -129,10 +126,9 @@ class RrRpEc(commands.Cog):
 
         if uid != payload.user_id:
             # Server Totals Data
-            st = db.child('serverTotals').get().val()
-            st_rp = st.get('reactionPoints')
+            st = db.child('serverTotals').child('reactionPoints').get().val() or 0
 
-            curr_points = db.child('users').child(uid).child('reacc_points').get().val()
+            curr_points = db.child('users').child(uid).child('reacc_points').get().val() or 0
             if emote in good_emotes:
                 data = {'reacc_points':curr_points - 1}
                 server_totals = {'reactionPoints':st_rp - 1}
