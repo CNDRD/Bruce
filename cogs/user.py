@@ -33,7 +33,6 @@ class User(commands.Cog):
 
     @commands.command()
     async def connect(self, ctx, code=None):
-        cl(ctx)
         if code is None: return await ctx.send("You forgot the code chump")
         db.child("discordConnection").child(ctx.author.id).set(code)
         await ctx.message.add_reaction('✅')
@@ -41,7 +40,6 @@ class User(commands.Cog):
 
     @commands.command()
     async def code(self, ctx):
-        cl(ctx)
         embed = discord.Embed(colour=discord.Colour.random())
         embed.set_author(name='GitHub Repo', url='https://github.com/CNDRD/Bruce')
         await ctx.send(embed=embed)
@@ -49,20 +47,17 @@ class User(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
-        cl(ctx)
         await ctx.send(f"Pong ({round(self.client.latency*1000)}ms)")
 
 
     @commands.command()
     async def vanish(self, ctx):
-        cl(ctx)
         await ctx.message.add_reaction('✅')
         await ctx.author.kick(reason='Self-kick')
 
 
     @commands.command(aliases=['coin', 'flip'])
     async def coinflip(self, ctx, *args):
-        cl(ctx)
         if len(args) == 0 or len(args) == 1:
             outcomes = ('Heads', 'Tails')
             msg = outcomes[random.SystemRandom().randint(0,1)]
@@ -73,7 +68,6 @@ class User(commands.Cog):
 
     @commands.command(aliases=['flip-flop'])
     async def flipflop(self, ctx):
-        cl(ctx)
         e = discord.utils.get(ctx.guild.emojis, name="kapp")
         await ctx.message.add_reaction(e)
 
