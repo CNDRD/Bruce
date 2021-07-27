@@ -40,6 +40,7 @@ class Help(commands.Cog):
         msg += f'\n`{prfx}flipflop` - Pro debílky'
         ## technically not from 'user.py'
         msg += f'\n`{prfx}cicina` - Can be used once per day.'
+        msg += f'\n`{prfx}cicina top` - Shows who had the biggest cicina today'
         msg += f'\n`{prfx}quote` - Create a quote on https://diskito.eu/quotes'
 
         embed.add_field(name='→ **User**', value=msg, inline=False)

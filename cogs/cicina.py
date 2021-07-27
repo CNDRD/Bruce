@@ -20,10 +20,30 @@ class Cicina(commands.Cog):
 
 
     @commands.command()
-    async def cicina(self, ctx):
+    async def cicina(self, ctx, top: str = None):
         uid = ctx.author.id
         today = datetime.datetime.now(timezone('Europe/Prague')).strftime('%Y-%m-%d')
         cicina = np.random.randint(0,51)
+
+        # Cicina Top
+        if top is not None and top.lower() == "top":
+            cicinaToday = db.child('cicinaToday').get().val() or None
+            listOfToday = get_cicina_today(cicinaToday, today)
+
+            if cicinaToday is None or listOfToday is None:
+                return await ctx.send("Nobody claimed their cicina today")
+
+            listOfTodaySorted = sorted(listOfToday, key = lambda x: x['cicina'], reverse=True)
+
+            topMsg = "**Today's top cicina's:**\n"
+            peepCount = 0
+            for _ in listOfTodaySorted:
+                usr = self.client.get_user(int(listOfTodaySorted[peepCount]['uid'])).name
+                cic = listOfTodaySorted[peepCount]['cicina']
+                topMsg += f"**{peepCount+1}.** {usr} with ***{cic}*** *cm*\n"
+                peepCount += 1
+            return await ctx.send(topMsg)
+
 
         cicinaLast = db.child('users').child(uid).child('cicina_last').get().val() or 0
         cicinaLongest = db.child('users').child(uid).child('cicina_longest').get().val() or 0
@@ -31,6 +51,13 @@ class Cicina(commands.Cog):
         if cicinaLast != today:
             emote = discord.utils.get(ctx.guild.emojis, name="resttHA")
             msg = f'{ctx.author.mention} - Dĺžka tvojej ciciny je {cicina} centimetrov {emote}'
+
+            cicinaTodayData = {
+                "uid": uid,
+                "cicina": cicina,
+                "date": today
+            }
+            db.child('cicinaToday').child(uid).update(cicinaTodayData)
 
         else:
             msg = f'{ctx.author.mention} - Cicina sa ti resetuje zajtra'
@@ -68,3 +95,13 @@ class Cicina(commands.Cog):
 
 def setup(client):
     client.add_cog(Cicina(client))
+
+def get_cicina_today(today, today_date):
+    if today is None: return None
+    xd = []
+    for u in today:
+        if today[u]['date'] == today_date:
+            today[u].pop('date')
+            xd.append(today[u])
+    if xd == []: return None
+    return xd
