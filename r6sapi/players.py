@@ -397,7 +397,7 @@ class Player:
             for stat in data:
                 statU = stat.replace(':infinite','')
                 if statU.endswith(og.index):
-                    ss = f'{og.name}_{statU[12:-4]}'
+                    ss = f'{og.name}_{statU[12:-4]}'.replace(':','')
                     lol[ss] = data[stat]
         return lol
 

@@ -2,6 +2,22 @@
 operators_const = [
     {
         "id": "",
+        "name": "thunderbird",
+        "readable": "Thunderbird",
+        "icon_url": "https://i.imgur.com/aOcoydG.png",
+        "loadouts": [],
+        "side": "defender",
+        "roles": [],
+        "index": "1:1C",
+        "unique_stats": [
+            {
+                "id": "operator{}_thunderbird_heals",
+                "name": "KÓNA Station heals"
+            }
+        ]
+    },
+    {
+        "id": "",
         "name": "flores",
         "readable": "Flores",
         "icon_url": "https://i.imgur.com/EVJZq5H.png",
