@@ -98,11 +98,6 @@ async def rainbow6stats(id_username_dict):
 
         casualRankName, casualRankPrev, casualRankNext = _get_rank_from_MMR(c.mmr)
 
-        # Get Maps data
-        maps_data = []
-        mapsXD = await p.load_maps()
-        maps_data = mapsXD['all']['all']
-
         # Get Weapon type data
         w = await p.check_weapons()
         weapon_type_data = []
@@ -111,7 +106,6 @@ async def rainbow6stats(id_username_dict):
 
         all_data = {
             'operators': operator_data,
-            'maps': maps_data,
             'weapon_types': weapon_type_data,
 
             'discordUsername': id_username_dict[p.id],
@@ -220,7 +214,7 @@ async def rainbow6stats(id_username_dict):
         xd['main_data'][p.id] = main_data
         print(f"Done! [{p.id}]")
         count+=1
-        await asyncio.sleep(13)
+        #await asyncio.sleep(13)
 
     await auth.close()
     return xd
