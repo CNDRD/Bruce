@@ -1,6 +1,7 @@
 import os
 from r6sapi import *
 from collections import OrderedDict
+import asyncio
 
 from dotenv import load_dotenv
 load_dotenv()
