@@ -73,7 +73,10 @@ async def rainbow6stats(id_username_dict):
     ranks = await players.get_rank()
     casuals = await players.get_casual()
 
+    count = 1
+
     for p in players:
+        print(f'Processing [{p.id}].. ({count}/{len(UIDS)+1})')
         await p.check_general()
         await p.load_level()
         await p.load_queues()
@@ -95,6 +98,7 @@ async def rainbow6stats(id_username_dict):
         casualRankName, casualRankPrev, casualRankNext = _get_rank_from_MMR(c.mmr)
 
         # Get Maps data
+        maps_data = []
         mapsXD = await p.load_maps()
         maps_data = mapsXD['all']['all']
 
@@ -213,7 +217,9 @@ async def rainbow6stats(id_username_dict):
 
         xd['all_data'][p.id] = all_data
         xd['main_data'][p.id] = main_data
-
+        print(f"Done! [{p.id}]")
+        count+=1
+        await asyncio.sleep(15)
 
     await auth.close()
     return xd
