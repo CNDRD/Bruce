@@ -14,7 +14,7 @@ prefix = str(config.get('prefix'))
 error_channel_id = config.get('error_channel_id')
 startup_channel_id = config.get('startup_channel_id')
 db_auto_backup_loop = config.get('db_auto_backup_loop')
-token = os.getenv('bruce_too_token')
+token = os.getenv('bruce_token')
 
 
 ## Basic Bot Setup ##
