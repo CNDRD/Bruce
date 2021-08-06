@@ -56,7 +56,7 @@ class GameStats(commands.Cog):
             if (ubi_id := u.val().get('ubiID')) is not None:
                 a[ubi_id] = u.val().get('discordUsername')
 
-        data = asyncio.new_event_loop().run_until_complete(rainbow6statsv7(a))
+        data = asyncio.new_event_loop().run_until_complete(rainbow6stats(a))
         db.child('GameStats').child(f'R6Sv{R6STATS_VERSION}').update(data)
         db.child('GameStats').child('lastUpdate').update({f'R6Sv{R6STATS_VERSION}':int(time.time())})
 
