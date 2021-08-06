@@ -17,24 +17,24 @@ class WeaponTypes:
         the light machine gun weapon id
     MACHINE_PISTOL : int
         the machine pistol weapon id"""
-    ASSAULT_RIFLE = 0
-    SUBMACHINE_GUN = 1
-    MARKSMAN_RIFLE = 2
-    SHOTGUN = 3
-    HANDGUN = 4
-    LIGHT_MACHINE_GUN = 5
-    MACHINE_PISTOL = 6
+    ASSAULT_RIFLE = 1
+    SUBMACHINE_GUN = 2
+    LIGHT_MACHINE_GUN = 3
+    MARKSMAN_RIFLE = 4
+    HANDGUN = 5
+    SHOTGUN = 6
+    MACHINE_PISTOL = 7
 
 
-WeaponNames = [
-    "Assault Rifle",
-    "Submachine Gun",
-    "Marksman Rifle",
-    "Shotgun",
-    "Handgun",
-    "Light Machine Gun",
-    "Machine Pistol"
-]
+WeaponNames = {
+    1: "Assault Rifle",
+    2: "Submachine Gun",
+    3: "Light Machine Gun",
+    4: "Marksman Rifle",
+    5: "Handgun",
+    6: "Shotgun",
+    7: "Machine Pistol"
+}
 
 class Weapon:
     """Contains information about a weapon
@@ -57,12 +57,22 @@ class Weapon:
     """
     def __init__(self, weaponType, stats=None):
         self.type = weaponType
-        self.name = WeaponNames[self.type]
+        self.name = WeaponNames.get(self.type, "Unknown")
 
-        stat_name = lambda name: "weapontypepvp_%s:%s:infinite" % (name, self.type)
+        stat_name = lambda name: f"weapontypepvp_{name}:{self.type}:infinite"
 
         stats = stats or {}
         self.kills = stats.get(stat_name("kills"), 0)
         self.headshots = stats.get(stat_name("headshot"), 0)
         self.hits = stats.get(stat_name("bullethit"), 0)
         self.shots = stats.get(stat_name("bulletfired"), 0)
+
+    def get_dict(self):
+        return {
+            "type": self.type,
+            "name": self.name,
+            "kills": self.kills,
+            "headshots": self.headshots,
+            "hits": self.hits,
+            "shots": self.shots,
+        }

@@ -5,9 +5,21 @@ operators_const = [
         "name": "thunderbird",
         "readable": "Thunderbird",
         "icon_url": "https://i.imgur.com/aOcoydG.png",
-        "loadouts": [],
+        "loadouts": [
+            "5wGib1JAMhp1o32ZKqXmm6",
+            "5gcX8x7LiBHg2LA1JIdEHp",
+            "7sblClEPf57IKm77UCqFSj",
+            "3ECycrhAlLH7str0T4F2hp",
+            "7zuAWr4kVRJFYVj33Ltfex",
+            "4Lnu4kaDPzUIxgCStqfrbR",
+            "4r4vAG3ycZGuS84n3jaWbq",
+        ],
         "side": "defender",
-        "roles": [],
+        "roles": [
+            "secure",
+            "roam",
+            "buff"
+        ],
         "index": "1:1C",
         "unique_stats": [
             {
@@ -21,9 +33,21 @@ operators_const = [
         "name": "flores",
         "readable": "Flores",
         "icon_url": "https://i.imgur.com/EVJZq5H.png",
-        "loadouts": [],
+        "loadouts": [
+            "3af3vtoUw8qRsUtSyDVJVt",
+            "6mq7Ochfrvvq8qX52OOR70",
+            "3Ch5Pac0IKVBJe5oYZzIol",
+            "2NNtCVZhqQykqVEtze4fxJ",
+            "myf6Hy39exE9Cot5zDEis",
+            "OPbsFZMWeoVp1oDUUgmbLg",
+        ],
         "side": "attacker",
-        "roles": [],
+        "roles": [
+            "soft-breach",
+            "disable",
+            "area-denial",
+            "back-line"
+        ],
         "index": "3:18",
         "unique_stats":[
             {

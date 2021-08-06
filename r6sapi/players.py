@@ -185,8 +185,6 @@ class Player:
         if not hasattr(self, "level"):
             await self.load_level()
 
-
-
     async def load_maps(self):
         xddd = {'headers':{
             'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36 Edg/90.0.818.51',
@@ -217,6 +215,7 @@ class Player:
             'THEME PARK V2': 'Theme Park',
             'VILLA': 'Villa',
             'FAVELA': 'Favela',
+            'FAVELA V2': 'Favela_2',
             'SKYSCRAPER V2': 'Skyscraper',
             'BORDER': 'Border',
             'CONSULATE': 'Consulate',
@@ -227,32 +226,34 @@ class Player:
         return maps_dict.get(sd)
 
     def _get_map_image(self, map_name):
+        # https://i.imgur.com/{thisID}.png
         links = {
-            'HOUSE V3': 'https://i.imgur.com/9kOltw3.png',
-            'BANK': 'https://i.imgur.com/B8W0Yiz.png',
-            'YACHT': 'https://i.imgur.com/yBHfPeV.jpg',
-            'OUTBACK': 'https://i.imgur.com/N4E4BpK.png',
-            'HEREFORD BASE': 'https://i.imgur.com/t47T2mO.png',
-            'CLUB HOUSE': 'https://i.imgur.com/7HFAkRl.png',
-            'COASTLINE': 'https://i.imgur.com/ziVyTsr.png',
-            'PRESIDENTIAL PLANE': 'https://i.imgur.com/h963KeO.jpg',
-            'CHALET V2': 'https://i.imgur.com/DwUqw3Z.png',
-            'TOWER': 'https://i.imgur.com/CD9JPkJ.png',
-            'BORDER V2': 'https://i.imgur.com/AqPy3Gw.jpg',
-            'BORDER': 'https://i.imgur.com/AqPy3Gw.jpg',
-            'FORTRESS': 'https://i.imgur.com/J1RwhgZ.png',
-            'THEME PARK V2': 'https://i.imgur.com/4UbPyVs.png',
-            'VILLA': 'https://i.imgur.com/20MBjB7.png',
-            'FAVELA': 'https://i.imgur.com/HofAV1W.jpg',
-            'SKYSCRAPER V2': 'https://i.imgur.com/lY2Htwr.png',
-            'CONSULATE': 'https://i.imgur.com/r3Xhjkf.png',
-            'OREGON': 'https://i.imgur.com/d13gtbi.jpg',
-            'KANAL': 'https://i.imgur.com/trkka0D.png',
-            'KAFE DOSTOYEVSKY': 'https://i.imgur.com/UsUHH9b.png'
+            'HOUSE V3': '9kOltw3',
+            'BANK': 'B8W0Yiz',
+            'YACHT': 'yBHfPeV',
+            'OUTBACK': 'N4E4BpK',
+            'HEREFORD BASE': 't47T2mO',
+            'CLUB HOUSE': '7HFAkRl',
+            'COASTLINE': 'ziVyTsr',
+            'PRESIDENTIAL PLANE': 'h963KeO',
+            'CHALET V2': 'DwUqw3Z',
+            'TOWER': 'CD9JPkJ',
+            'BORDER V2': 'AqPy3Gw',
+            'BORDER': 'AqPy3Gw',
+            'FORTRESS': 'J1RwhgZ',
+            'THEME PARK V2': '4UbPyVs',
+            'VILLA': '20MBjB7',
+            'FAVELA': 'HofAV1W',
+            'FAVELA V2': '06bGnSu',
+            'SKYSCRAPER V2': 'lY2Htwr',
+            'CONSULATE': 'r3Xhjkf',
+            'OREGON': 'd13gtbi',
+            'KANAL': 'trkka0D',
+            'KAFE DOSTOYEVSKY': 'UsUHH9b'
         }
         return links.get(map_name)
 
-    def _process_gamemode(self, data):
+    def _process_map_gamemode(self, data):
         for role in data:
             for one_map in data[role]:
                 one_map['mapName'] = self._process_map_name(one_map['statsDetail'])
@@ -275,18 +276,16 @@ class Player:
 
     def _process_maps(self, data, xd={'all':{},'casual':{},'ranked':{},'unranked':{}}):
         if 'all' in data['platforms']['PC']['gameModes']:
-            xd['all'] = self._process_gamemode(data['platforms']['PC']['gameModes']['all']['teamRoles'])
+            xd['all'] = self._process_map_gamemode(data['platforms']['PC']['gameModes']['all']['teamRoles'])
         if 'casual' in data['platforms']['PC']['gameModes']:
-            xd['casual'] = self._process_gamemode(data['platforms']['PC']['gameModes']['casual']['teamRoles'])
+            xd['casual'] = self._process_map_gamemode(data['platforms']['PC']['gameModes']['casual']['teamRoles'])
         if 'ranked' in data['platforms']['PC']['gameModes']:
-            xd['ranked'] = self._process_gamemode(data['platforms']['PC']['gameModes']['ranked']['teamRoles'])
+            xd['ranked'] = self._process_map_gamemode(data['platforms']['PC']['gameModes']['ranked']['teamRoles'])
         if 'unranked' in data['platforms']['PC']['gameModes']:
-            xd['unranked'] = self._process_gamemode(data['platforms']['PC']['gameModes']['unranked']['teamRoles'])
+            xd['unranked'] = self._process_map_gamemode(data['platforms']['PC']['gameModes']['unranked']['teamRoles'])
         return xd
 
-
-
-    async def load_casual(self, region, season=-1, data=None):
+    async def load_casual(self, region='EU', season=-1, data=None):
         """|coro|
         Loads the players rank for this region and season
 
@@ -338,7 +337,7 @@ class Player:
         result = await self.load_casual(region, season, data=data)
         return result
 
-    async def load_rank(self, region, season=-1, data=None):
+    async def load_rank(self, region='EU', season=-1, data=None):
         """|coro|
         Loads the players rank for this region and season
 
@@ -584,7 +583,7 @@ class Player:
             raise InvalidRequest("Missing key results in returned JSON object %s" % str(data))
 
         data = data["results"][self.id]
-        self.weapons = [Weapon(i, data) for i in range(7)]
+        self.weapons = [Weapon(i, data) for i in range(1,8)]
 
         return self.weapons
 

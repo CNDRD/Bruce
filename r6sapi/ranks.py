@@ -78,16 +78,6 @@ class Rank:
              "Diamond",
              "Champion"]
 
-    # DEPRACATED
-    RANK_CHARMS = [
-        "https://ubistatic-a.akamaihd.net/0058/prod/assets/images/season02%20-%20copper%20charm.44c1ede2.png",
-        "https://ubistatic-a.akamaihd.net/0058/prod/assets/images/season02%20-%20bronze%20charm.5edcf1c6.png",
-        "https://ubistatic-a.akamaihd.net/0058/prod/assets/images/season02%20-%20silver%20charm.adde1d01.png",
-        "https://ubistatic-a.akamaihd.net/0058/prod/assets/images/season02%20-%20gold%20charm.1667669d.png",
-        "https://ubistatic-a.akamaihd.net/0058/prod/assets/images/season02%20-%20platinum%20charm.d7f950d5.png",
-        "https://ubistatic-a.akamaihd.net/0058/prod/assets/images/season02%20-%20diamond%20charm.e66cad88.png"
-    ]
-
     COMPLETE_RANK_ICONS = [
         # unranked
         [
@@ -223,7 +213,6 @@ class Rank:
         self.deaths = data.get('deaths')
         self.prev_rank_mmr = data.get('previous_rank_mmr')
         self.last_mmr_change = data.get('last_match_mmr_change')
-        self.abandons = data.get('abandons')
         # My additions -
 
         self.max_mmr = data.get("max_mmr")
@@ -242,6 +231,26 @@ class Rank:
         self.abandons = data.get("abandons")
         self.skill_mean = data.get("skill_mean")
         self.skill_stdev = data.get("skill_stdev")
+
+    def get_dict(self):
+        return {
+            "kills": self.kills,
+            "deaths": self.deaths,
+            "prev_rank_mmr": self.prev_rank_mmr,
+            "last_mmr_change": self.last_mmr_change,
+            "max_mmr": self.max_mmr,
+            "mmr": self.mmr,
+            "losses": self.losses,
+            "rank_id": self.rank_id,
+            "rank": self.rank,
+            "max_rank": self.max_rank,
+            "next_rank_mmr": self.next_rank_mmr,
+            "season": self.season,
+            "region": self.region,
+            "abandons": self.abandons,
+            "skill_mean": self.skill_mean,
+            "skill_stdev": self.skill_stdev
+        }
 
     @property
     def _season_definitions(self):
@@ -266,23 +275,6 @@ class Rank:
         print("getting icon url for bracket=%s, rank_index=%s (rank = %s)" % (bracket, rank_index, self.get_rank_name()))
 
         return Rank.COMPLETE_RANK_ICONS[bracket + 1][rank_index]
-
-    # DEPRACATED
-    def get_charm_url(self):
-        """Get charm URL for the bracket this rank is in
-
-        Returns
-        -------
-        :class:`str`
-            the URL for the charm
-
-        """
-        if self.rank_id <= 4: return self.RANK_CHARMS[0]
-        if self.rank_id <= 8: return self.RANK_CHARMS[1]
-        if self.rank_id <= 12: return self.RANK_CHARMS[2]
-        if self.rank_id <= 16: return self.RANK_CHARMS[3]
-        if self.rank_id <= 19: return self.RANK_CHARMS[4]
-        return self.RANK_CHARMS[5]
 
     def get_bracket(self, rank_id=None):
         """Get rank bracket

@@ -5,6 +5,8 @@ OperatorUrlStatisticNames = ["operatorpvp_kills","operatorpvp_death","operatorpv
                              "operatorpvp_headshot","operatorpvp_timeplayed","operatorpvp_dbno"]
 
 #  DEPRECATED - this dict is no longer updated with new OPs (sorry)
+#  theoretically unused
+"""
 OperatorProfiles = {
     "DOC": "https://ubistatic-a.akamaihd.net/0058/prod/assets/images/large-doc.0b0321eb.png",
     "TWITCH": "https://ubistatic-a.akamaihd.net/0058/prod/assets/images/large-twitch.70219f02.png",
@@ -36,8 +38,10 @@ OperatorProfiles = {
     "CAVEIRA": "https://ubistatic-a.akamaihd.net/0058/prod/assets/images/large-caveira.e4d82365.png",
     "DEFAULT": "https://ubistatic-a.akamaihd.net/0058/prod/assets/styles/images/mask-large-bandit.fc038cf1.png"
 }
-
+"""
 #  DEPRECATED - use Auth.get_operator_badge() instead
+#  theoretically unused
+"""
 OperatorIcons = {
     "DEFAULT": "https://ubistatic19-a.akamaihd.net/resource/en-GB/game/rainbow6/siege/Glaz_Badge_229122.png",
     "HIBANA": "https://ubistatic19-a.akamaihd.net/resource/en-GB/game/rainbow6/siege/R6-operators-badge-hibana_275569.png",
@@ -77,8 +81,10 @@ OperatorIcons = {
     "VIGIL": "https://ubistatic19-a.akamaihd.net/resource/en-us/game/rainbow6/siege/r6-white-noise-badge-vigil_306315.png",
     "ZOFIA": "https://ubistatic19-a.akamaihd.net/resource/en-gb/game/rainbow6/siege/zofia_badge_306416.png"
 }
-
+"""
 #  DEPRECATED - use OperatorInfo.unique_abilities[0]
+#  theoretically unused
+"""
 OperatorStatistics = {
     "DOC": "teammaterevive",
     "TWITCH": "gadgetdestroybyshockdrone",
@@ -117,8 +123,9 @@ OperatorStatistics = {
     "VIGIL": "diminishedrealitymode",
     "ZOFIA": "concussiongrenade_detonate"
 }
-
-# DEPRECATED - use OperatorInfo.statistic_name
+"""
+#  DEPRECATED - use OperatorInfo.statistic_name
+#  used in /players.py => get_all_operators(), unused tho
 OperatorStatisticNames = {
     "DOC": "Teammates Revived",
     "TWITCH": "Gadgets Destroyed With Shock Drone",
@@ -185,7 +192,7 @@ def get_from_operators_const(name, what):
     for op in operators_const:
         if op['name'] == name:
             return op[what]
-
+    return "????"
 
 
 
