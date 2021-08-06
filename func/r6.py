@@ -220,7 +220,7 @@ async def rainbow6stats(id_username_dict):
         xd['main_data'][p.id] = main_data
         print(f"Done! [{p.id}]")
         count+=1
-        await asyncio.sleep(15)
+        await asyncio.sleep(13)
 
     await auth.close()
     return xd
