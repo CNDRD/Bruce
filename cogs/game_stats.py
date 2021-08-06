@@ -1,4 +1,4 @@
-from func.r6 import rainbow6statsv7
+from func.r6 import rainbow6stats
 from func.firebase_init import db
 
 import pyrebase, yaml, json, asyncio, time, os
@@ -15,6 +15,7 @@ slash_guilds = config.get('slash_guilds')
 dbr6_loop = config.get('dbr6_loop')
 dbr6_loop_time = config.get('dbr6_loop_time')
 
+R6STATS_VERSION = 9
 
 class GameStats(commands.Cog):
     def __init__(self, client):
@@ -28,7 +29,7 @@ class GameStats(commands.Cog):
         self.first_boot = True
         if dbr6_loop: self.dbr6.start()
 
-        self.last_siege_update_ts = db.child("GameStats").child("lastUpdate").child("R6Sv8").get().val()
+        self.last_siege_update_ts = db.child("GameStats").child("lastUpdate").child(f"R6Sv{R6STATS_VERSION}").get().val()
         def wrtus(message):
             "Website Request To Update Siege"
             if self.first_boot:
@@ -56,8 +57,8 @@ class GameStats(commands.Cog):
                 a[ubi_id] = u.val().get('discordUsername')
 
         data = asyncio.new_event_loop().run_until_complete(rainbow6statsv7(a))
-        db.child('GameStats').child('R6Sv8').update(data)
-        db.child('GameStats').child('lastUpdate').update({'R6Sv8':int(time.time())})
+        db.child('GameStats').child(f'R6Sv{R6STATS_VERSION}').update(data)
+        db.child('GameStats').child('lastUpdate').update({f'R6Sv{R6STATS_VERSION}':int(time.time())})
 
 
     @dbr6.before_loop

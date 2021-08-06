@@ -56,7 +56,10 @@ def _sort_atk_def(ops):
             defn[op['name']] = op
     return {'atk':atk,'def':defn}
 
-async def rainbow6statsv7(id_username_dict):
+def _get_top_op(ops):
+    return OrderedDict(sorted(ops.items(), key=lambda i: i[1]['time_played'])).popitem(last=True)[1]
+
+async def rainbow6stats(id_username_dict):
     xd = {
         'all_data': {},
         'main_data': {}
@@ -85,10 +88,25 @@ async def rainbow6statsv7(id_username_dict):
             operator_data[o] = ops[o].get_array()
         operator_data = _sort_atk_def(operator_data)
 
+        top_2_ops = {"atk1": _get_top_op(operator_data['atk']),
+                     "def1": _get_top_op(operator_data['def'])}
+
         casualRankName, casualRankPrev, casualRankNext = _get_rank_from_MMR(c.mmr)
+
+        # Get Maps data
+        mapsXD = await p.load_maps()
+        maps_data = mapsXD['all']['all']
+
+        # Get Weapon type data
+        w = await p.check_weapons()
+        weapon_type_data = []
+        for weapon in w:
+            weapon_type_data.append(weapon.get_dict())
 
         all_data = {
             'operators': operator_data,
+            'maps': maps_data,
+            'weapon_types': weapon_type_data,
 
             'discordUsername': id_username_dict[p.id],
             'seasonName': 'Crimson Heist',
@@ -183,7 +201,7 @@ async def rainbow6statsv7(id_username_dict):
 
             'alphapackProbability': p.lootbox_probability,
 
-            'operators': operator_data,
+            'operators': top_2_ops,
 
             'totalPlaytime': p.time_played,
             'casualPlaytime':pc.time_played,
