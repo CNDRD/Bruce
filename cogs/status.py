@@ -1,4 +1,4 @@
-import pyrebase, yaml, json, discord
+import yaml, discord
 from discord.ext import commands
 
 ## Config Load ##
@@ -24,8 +24,6 @@ class Status(commands.Cog):
     @commands.command()
     @commands.has_role(bot_mod_role_id)  # Diagnostics
     async def status(self, ctx, *args):
-        cl(ctx)
-
         # For when a clown comes along and types a blank command without arguments
         if args == ():
             await ctx.send('You have to type some arguments!')

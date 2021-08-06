@@ -1,10 +1,8 @@
 from func.r6 import rainbow6statsv7
+from func.firebase_init import db
 
 import pyrebase, yaml, json, asyncio, time, os
 from discord.ext import commands, tasks
-
-from dotenv import load_dotenv
-load_dotenv()
 
 ## Monkey patch
 import nest_asyncio
@@ -17,11 +15,6 @@ slash_guilds = config.get('slash_guilds')
 dbr6_loop = config.get('dbr6_loop')
 dbr6_loop_time = config.get('dbr6_loop_time')
 
-## Firebase Database ##
-firebase_config = {"apiKey": "AIzaSyDe_xKKup4lVoPasLmAQW9Csc1zUzsxB0U","authDomain": "chuckwalla-69.firebaseapp.com",
-  "databaseURL": "https://chuckwalla-69.firebaseio.com","storageBucket": "chuckwalla-69.appspot.com",
-  "serviceAccount": json.loads(os.getenv("serviceAccountKeyJSON"))}
-db = pyrebase.initialize_app(firebase_config).database()
 
 class GameStats(commands.Cog):
     def __init__(self, client):

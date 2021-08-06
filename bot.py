@@ -1,11 +1,9 @@
+from func.firebase_init import db
 import pyrebase, discord, yaml, time, os, json
 from humanfriendly import format_timespan
 from discord.ext import commands
 from datetime import datetime
 from pytz import timezone
-
-from dotenv import load_dotenv
-load_dotenv()
 
 print('Starting to load..')
 start_time = time.time()
@@ -16,13 +14,8 @@ prefix = str(config.get('prefix'))
 error_channel_id = config.get('error_channel_id')
 startup_channel_id = config.get('startup_channel_id')
 db_auto_backup_loop = config.get('db_auto_backup_loop')
-token = os.getenv('bruce_token')
+token = os.getenv('bruce_too_token')
 
-## Firebase ##
-firebase_config = {"apiKey": "AIzaSyDe_xKKup4lVoPasLmAQW9Csc1zUzsxB0U","authDomain": "chuckwalla-69.firebaseapp.com",
-  "databaseURL": "https://chuckwalla-69.firebaseio.com","storageBucket": "chuckwalla-69.appspot.com",
-  "serviceAccount": json.loads(os.getenv("serviceAccountKeyJSON"))}
-db = pyrebase.initialize_app(firebase_config).database()
 
 ## Basic Bot Setup ##
 client = commands.Bot(command_prefix=prefix, intents=discord.Intents.all())

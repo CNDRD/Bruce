@@ -1,19 +1,13 @@
-import pyrebase, yaml, json, os, discord, asyncio
+from func.firebase_init import db
 from discord.ext import commands, tasks
 from datetime import datetime
-from dotenv import load_dotenv
-load_dotenv()
+import discord, asyncio, yaml
 
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
 diskito_id = config.get('diskito_id')
 bot_mod_role_id = config.get('bot_mod_role_id')
 
-## Firebase Database ##
-firebase_config = {"apiKey": "AIzaSyDe_xKKup4lVoPasLmAQW9Csc1zUzsxB0U","authDomain": "chuckwalla-69.firebaseapp.com",
-  "databaseURL": "https://chuckwalla-69.firebaseio.com","storageBucket": "chuckwalla-69.appspot.com",
-  "serviceAccount": json.loads(os.getenv("serviceAccountKeyJSON"))}
-db = pyrebase.initialize_app(firebase_config).database()
 
 class Widget(commands.Cog):
     def __init__(self, client):
