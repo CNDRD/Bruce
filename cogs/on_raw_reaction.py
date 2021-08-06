@@ -68,7 +68,7 @@ class RrRpEc(commands.Cog):
 
             if uid != payload.user_id:
                 # Server Totals Data
-                st = db.child('serverTotals').child('reactionPoints').get().val() or 0
+                st_rp = db.child('serverTotals').child('reactionPoints').get().val() or 0
 
                 curr_points = db.child('users').child(uid).child('reacc_points').get().val() or 0
                 if emote in good_emotes:
@@ -126,7 +126,7 @@ class RrRpEc(commands.Cog):
 
         if uid != payload.user_id:
             # Server Totals Data
-            st = db.child('serverTotals').child('reactionPoints').get().val() or 0
+            st_rp = db.child('serverTotals').child('reactionPoints').get().val() or 0
 
             curr_points = db.child('users').child(uid).child('reacc_points').get().val() or 0
             if emote in good_emotes:
