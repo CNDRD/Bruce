@@ -1081,5 +1081,138 @@ seasons_const = [
             }
         ],
         "operation_name": "North Star"
+    },
+    {
+        "id": "None",
+        "season_code": "Y6S3",
+        "startDate": "2020-09-07T07:00:00.000Z",
+        "season_ranks": [
+            {
+                "name": "copper-5",
+                "min_mmr": 1,
+                "max_mmr": 1199
+            },
+            {
+                "name": "copper-4",
+                "min_mmr": 1200,
+                "max_mmr": 1299
+            },
+            {
+                "name": "copper-3",
+                "min_mmr": 1300,
+                "max_mmr": 1399
+            },
+            {
+                "name": "copper-2",
+                "min_mmr": 1400,
+                "max_mmr": 1499
+            },
+            {
+                "name": "copper-1",
+                "min_mmr": 1500,
+                "max_mmr": 1599
+            },
+            {
+                "name": "bronze-5",
+                "min_mmr": 1600,
+                "max_mmr": 1699
+            },
+            {
+                "name": "bronze-4",
+                "min_mmr": 1700,
+                "max_mmr": 1799
+            },
+            {
+                "name": "bronze-3",
+                "min_mmr": 1800,
+                "max_mmr": 1899
+            },
+            {
+                "name": "bronze-2",
+                "min_mmr": 1900,
+                "max_mmr": 1999
+            },
+            {
+                "name": "bronze-1",
+                "min_mmr": 2000,
+                "max_mmr": 2099
+            },
+            {
+                "name": "silver-5",
+                "min_mmr": 2100,
+                "max_mmr": 2199
+            },
+            {
+                "name": "silver-4",
+                "min_mmr": 2200,
+                "max_mmr": 2299
+            },
+            {
+                "name": "silver-3",
+                "min_mmr": 2300,
+                "max_mmr": 2399
+            },
+            {
+                "name": "silver-2",
+                "min_mmr": 2400,
+                "max_mmr": 2499
+            },
+            {
+                "name": "silver-1",
+                "min_mmr": 2500,
+                "max_mmr": 2599
+            },
+            {
+                "name": "gold-3",
+                "min_mmr": 2600,
+                "max_mmr": 2799
+            },
+            {
+                "name": "gold-2",
+                "min_mmr": 2800,
+                "max_mmr": 2999
+            },
+            {
+                "name": "gold-1",
+                "min_mmr": 3000,
+                "max_mmr": 3199
+            },
+            {
+                "name": "platinum-3",
+                "min_mmr": 3200,
+                "max_mmr": 3499
+            },
+            {
+                "name": "platinum-2",
+                "min_mmr": 3500,
+                "max_mmr": 3799
+            },
+            {
+                "name": "platinum-1",
+                "min_mmr": 3800,
+                "max_mmr": 4099
+            },
+            {
+                "name": "diamond-3",
+                "min_mmr": 4100,
+                "max_mmr": 4399
+            },
+            {
+                "name": "diamond-2",
+                "min_mmr": 4400,
+                "max_mmr": 4699
+            },
+            {
+                "name": "diamond-1",
+                "min_mmr": 4700,
+                "max_mmr": 4999
+            },
+            {
+                "name": "champions",
+                "min_mmr": 5000,
+                "max_mmr": 15000
+            }
+        ],
+        "operation_name": "Crystal Guard"
     }
 ]

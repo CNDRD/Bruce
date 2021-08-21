@@ -2,6 +2,33 @@
 operators_const = [
     {
         "id": "",
+        "name": "osa",
+        "readable": "Osa",
+        "icon_url": "https://staticctf.akamaized.net/J3yJr34U2pZ2Ieem48Dwy9uqj5PNUQTn/5tt27EFHYjiDLo2qbYEgXG/2f1acbb8209e45b136ca7b0e2e5eb1f9/r6s-operators-badge-osa.png",
+        "loadouts": [
+            "6KgccwgjLPqJjluHgRiryh",
+            "5Hum7CZF4TohcA6nWHd9pO",
+            "4EmVfbHbYqwRNnK02lU79C",
+            "7aslgBcBTFi4XKqlAkvvrc",
+            "myf6Hy39exE9Cot5zDEis",
+            "ZMWeodTJfIMQN9dEdu84n"
+        ],
+        "side": "attacker",
+        "roles": [
+            "intel-gatherer",
+            "area-denial",
+            "anti-roam"
+        ],
+        "index": "",
+        "unique_stats": [
+            {
+                "id": "operator{}_something",
+                "name": "Talon 8 something"
+            }
+        ]
+    },
+    {
+        "id": "",
         "name": "thunderbird",
         "readable": "Thunderbird",
         "icon_url": "https://i.imgur.com/aOcoydG.png",

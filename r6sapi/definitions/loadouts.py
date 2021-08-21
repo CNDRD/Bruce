@@ -728,6 +728,12 @@ loadouts_const = [
 
     # Unique Abilities
     {
+        "id": "ZMWeodTJfIMQN9dEdu84n",
+        "name": "talon-8",
+        "weapon_type": "unique_ability",
+        "weapon_image_url": "https://staticctf.akamaized.net/J3yJr34U2pZ2Ieem48Dwy9uqj5PNUQTn/71VBmyDtBAx788WnNJfEgo/1e6d78a81f8dc381bf4244b87970038f/r6s-operator-ability-osa.png"
+    },
+    {
         "id": "4r4vAG3ycZGuS84n3jaWbq",
         "name": "kona-station",
         "weapon_type": "unique_ability",
