@@ -61,11 +61,9 @@ def _sort_atk_def(ops):
 def _get_top_op(ops):
     return OrderedDict(sorted(ops.items(), key=lambda i: i[1]['time_played'])).popitem(last=True)[1]
 
-async def rainbow6stats(id_username_dict):
-    xd = {
-        'all_data': {},
-        'main_data': {}
-        }
+async def rainbow6stats(id_username_dict, mmr_watch_data):
+    print(mmr_watch_data)
+    xd = {'all_data':{}, 'main_data':{}, 'mmr_watch':{}}
     UIDS = _get_uids(id_username_dict)
 
     auth = Auth(UBISOFT_EMAIL, UBISOFT_PASSW)
@@ -77,7 +75,7 @@ async def rainbow6stats(id_username_dict):
     count = 1
 
     for p in players:
-        print(f'Processing [{p.id}].. ({count}/{len(UIDS)+1})')
+        print(f'Processing [{p.id}].. ({count}/{len(UIDS)})')
         await p.check_general()
         await p.load_level()
         await p.load_queues()
@@ -103,6 +101,24 @@ async def rainbow6stats(id_username_dict):
         weapon_type_data = []
         for weapon in w:
             weapon_type_data.append(weapon.get_dict())
+
+        # MMR Watch
+        if mmr_watch_data.get(p.id, None) is None:
+            mmr_watch_data[p.id] = {'mmr':r.mmr,'playtime':p.time_played}
+
+        mw_mmr = mmr_watch_data[p.id]['mmr']
+        mw_plt = mmr_watch_data[p.id]['playtime']
+        xd['mmr_watch'][p.id] = {
+            "mmr": r.mmr,
+            "playtime": p.time_played,
+            "adjustment": False,
+            "adjustment_value": 0
+        }
+        if p.time_played == mw_plt and r.mmr != mw_mmr:
+            print("MMR Adjustment detected!")
+            xd['mmr_watch'][p.id]['adjustment'] = True
+            xd['mmr_watch'][p.id]['adjustment_value'] = mw_mmr - r.mmr
+            print(xd['mmr_watch'][p.id])
 
         all_data = {
             'operators': operator_data,

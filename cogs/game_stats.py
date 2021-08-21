@@ -51,12 +51,13 @@ class GameStats(commands.Cog):
     @tasks.loop(minutes=dbr6_loop_time)
     async def dbr6(self):
         users = db.child('GameStats').child('IDs').get()
+        mmr_watch_data = db.child('GameStats').child(f'R6Sv{R6STATS_VERSION}').child('mmr_watch').get().val()
         a = {}
         for u in users.each():
             if (ubi_id := u.val().get('ubiID')) is not None:
                 a[ubi_id] = u.val().get('discordUsername')
 
-        data = asyncio.new_event_loop().run_until_complete(rainbow6stats(a))
+        data = asyncio.new_event_loop().run_until_complete(rainbow6stats(a, mmr_watch_data))
         db.child('GameStats').child(f'R6Sv{R6STATS_VERSION}').update(data)
         db.child('GameStats').child('lastUpdate').update({f'R6Sv{R6STATS_VERSION}':int(time.time())})
 
