@@ -62,7 +62,6 @@ def _get_top_op(ops):
     return OrderedDict(sorted(ops.items(), key=lambda i: i[1]['time_played'])).popitem(last=True)[1]
 
 async def rainbow6stats(id_username_dict, mmr_watch_data):
-    print(mmr_watch_data)
     xd = {'all_data':{}, 'main_data':{}, 'mmr_watch':{}}
     UIDS = _get_uids(id_username_dict)
 
@@ -115,9 +114,9 @@ async def rainbow6stats(id_username_dict, mmr_watch_data):
             "adjustment_value": 0
         }
         if p.time_played == mw_plt and r.mmr != mw_mmr:
-            print("MMR Adjustment detected!")
             xd['mmr_watch'][p.id]['adjustment'] = True
             xd['mmr_watch'][p.id]['adjustment_value'] = mw_mmr - r.mmr
+            print("MMR Adjustment detected!")
             print(xd['mmr_watch'][p.id])
 
         all_data = {
