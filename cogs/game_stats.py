@@ -80,6 +80,7 @@ class GameStats(commands.Cog):
     async def apex(self):
         ape_sex_stats = apexStats()
         db.child('GameStats').child(f'ApexV{APEX_VERSION}').update(ape_sex_stats)
+        db.child('GameStats').child('lastUpdate').update({f'ApexV{APEX_VERSION}':int(time.time())})
 
     @apex.before_loop
     async def before_apex(self):
