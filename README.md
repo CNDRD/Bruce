@@ -36,7 +36,7 @@
 ---  
 
 I'm willing to help answer any questions that you may have  
-You can either join my [Discord](https://discord.com/invite/sXDbtp4) or send me on Discord at __CNDRD#2233__  
+You can either join my [Discord](https://discord.com/invite/sXDbtp4) or send me a DM on Discord at __CNDRD#2233__  
 
 ---  
 
