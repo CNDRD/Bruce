@@ -1,9 +1,9 @@
 prefix: ','
 
 # Loops
-dbr6_loop: False
+dbr6_loop: True
 apex_loop: True
-db_auto_backup_loop: False
+db_auto_backup_loop: True
 
 # Loop times
 dbr6_loop_time: 30.0 # minutes
