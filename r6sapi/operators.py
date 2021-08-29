@@ -266,6 +266,7 @@ class Operator:
         print(f'time_played -> {self.time_played}')
         print(f'atkdef -> {self.atkdef}')
         print(f'icon -> {self.icon}')
+        print(f'unique_stats -> {self.unique_stats}')
 
 
     def get_array(self):
@@ -283,6 +284,7 @@ class Operator:
             'time_played':self.time_played,
             'atkdef':self.atkdef,
             'icon':self.icon,
+            'unique_stats':self.unique_stats,
         }
 
 

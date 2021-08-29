@@ -440,6 +440,23 @@ class Player:
 
         return unique_data
 
+    @staticmethod
+    def _process_unique_data_v2(data, operator_info):
+        unique_data = {}
+        for ability in operator_info.unique_abilities:
+            # try to match each ability to the data returned from the API
+            # currently hard-coded to only return PVP stats
+            match = f"{ability.pvp_stat_name}:{operator_info.index}:infinite"
+            ab_name = ability.pvp_stat_name.replace('operatorpvp_','')
+
+            if match in data:
+                unique_data[ab_name] = {'value':data[match]}
+            else:
+                unique_data[ab_name] = {'value':0}  # the stupid API just doesnt return anything if we have zero of that stat
+            unique_data[ab_name]['name'] = ability.name
+
+        return unique_data
+
     async def load_all_operators(self, data=None):
         # ask the api for all the basic stat names WITHOUT a postfix to ask for all (I assume)
         statistics = list(OperatorUrlStatisticNames)
@@ -460,22 +477,16 @@ class Player:
 
         data = data["results"][self.id]
 
-
-
-        data = self._process_data(data, operators.get_all())
-
-
+        processed_data = self._process_data(data, operators.get_all())
 
         for operator_info in operators.get_all():
             #base_data = self._process_basic_data(data, operator_info)
-            unique_data = self._process_unique_data(data, operator_info)
+            #unique_data = self._process_unique_data(data, operator_info)
 
-            base_data = self._process_basic_data_v2(data, operator_info)
-
+            base_data = self._process_basic_data_v2(processed_data, operator_info)
+            unique_data = self._process_unique_data_v2(data, operator_info)
 
             self.operators[operator_info.name.lower()] = Operator(operator_info.name.lower(), base_data, unique_data)
-
-
 
         return self.operators
 
