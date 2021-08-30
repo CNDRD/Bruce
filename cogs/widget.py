@@ -24,7 +24,7 @@ class Widget(commands.Cog):
         for member in diskito.members:
             if not member.bot:
                 widgeee[member.id] = gimmeThemStats(member)
-        db.child("widget").update(widgeee)
+        db.child("widget").set(widgeee)
 
 
     @widget_loop.before_loop
