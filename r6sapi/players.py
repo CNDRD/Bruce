@@ -533,11 +533,11 @@ class Player:
             # to filter the result + ":infinite"
             # the resulting key will look something like `operatorpvp_kills:1:2:infinite`
             # where :1:2: varies depending on the operator
-            statistics.append("{stat_name}:{index}:infinite".format(stat_name=stat_name, index=op.index))
+            statistics.append(f"{stat_name}:{op.index}:infinite")
 
         # now get the operator unique stats
         for ability in op.unique_abilities:
-            statistics.append("{stat_name}:{index}:infinite".format(stat_name=ability.pvp_stat_name, index=op.index))
+            statistics.append(f"{ability.pvp_stat_name}:{op.index}:infinite")
 
         if data is None:
             # join the statistic name strings to build the url

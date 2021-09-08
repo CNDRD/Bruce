@@ -4,7 +4,7 @@ operators_const = [
         "id": "",
         "name": "osa",
         "readable": "Osa",
-        "icon_url": "https://i.imgur.com/P6bTNjh.png",
+        "icon_url": "https://i.imgur.com/WjvbwYD.png",
         "loadouts": [
             "6KgccwgjLPqJjluHgRiryh",
             "5Hum7CZF4TohcA6nWHd9pO",
@@ -19,11 +19,11 @@ operators_const = [
             "area-denial",
             "anti-roam"
         ],
-        "index": "",
+        "index": "5:16",
         "unique_stats": [
             {
-                "id": "operator{}_something",
-                "name": "Talon 8 something"
+                "id": "operator{}_osa_stillnothing",
+                "name": "Talon 8 still nothing"
             }
         ]
     },
@@ -31,7 +31,7 @@ operators_const = [
         "id": "",
         "name": "thunderbird",
         "readable": "Thunderbird",
-        "icon_url": "https://i.imgur.com/aOcoydG.png",
+        "icon_url": "https://i.imgur.com/21vn9y7.png",
         "loadouts": [
             "5wGib1JAMhp1o32ZKqXmm6",
             "5gcX8x7LiBHg2LA1JIdEHp",
@@ -59,7 +59,7 @@ operators_const = [
         "id": "",
         "name": "flores",
         "readable": "Flores",
-        "icon_url": "https://i.imgur.com/EVJZq5H.png",
+        "icon_url": "https://i.imgur.com/1wBdB2q.png",
         "loadouts": [
             "3af3vtoUw8qRsUtSyDVJVt",
             "6mq7Ochfrvvq8qX52OOR70",
@@ -87,7 +87,7 @@ operators_const = [
         "id": "7feJxtxHhV3TB8dHECwJu",
         "name": "aruni",
         "readable": "Aruni",
-        "icon_url": "https://i.imgur.com/uXBsnOg.png",
+        "icon_url": "https://i.imgur.com/PhCM38D.png",
         "loadouts": [
             "1LVSwzrXIEAd1O3vntSQMs",
             "6xDz1HSwIn3ZcV9nKIeKUN",
@@ -114,7 +114,7 @@ operators_const = [
         "id": "3vcCTPWwwnrW8zbKeZJpm3",
         "name": "tachanka",
         "readable": "Tachanka",
-        "icon_url": "https://i.imgur.com/bRdSEI2.png",
+        "icon_url": "https://i.imgur.com/VTUCIZH.png",
         "loadouts": [
             "1MobOPbsFZoVpLWDUUgmeg",
             "3iisbOg3JC9epuJDdrMcAk",
@@ -146,7 +146,7 @@ operators_const = [
         "id": "5L5ghOjR8KVPsoU2gGkL7k",
         "name": "frost",
         "readable": "Frost",
-        "icon_url": "https://i.imgur.com/prGz6E6.png",
+        "icon_url": "https://i.imgur.com/FTbAE33.png",
         "loadouts": [
             "2Mh1URS57n4Yuc2vHOojl7",
             "4pZ8kx4SSqhhLJ1iaSyEAU",
@@ -173,7 +173,7 @@ operators_const = [
         "id": "2NxRSbPrRn4iodr7IQMCvp",
         "name": "oryx",
         "readable": "Oryx",
-        "icon_url": "https://i.imgur.com/vcUGkSs.png",
+        "icon_url": "https://i.imgur.com/BdJnmYf.png",
         "loadouts": [
             "zs4Rebj67KAk06ASjJPxO",
             "41pnpfTTAjzKYvpEBmNKdD",
@@ -200,7 +200,7 @@ operators_const = [
         "id": "3UaFBQkLJUBXhwjou4bYIc",
         "name": "melusi",
         "readable": "Melusi",
-        "icon_url": "https://i.imgur.com/tlAhOmb.png",
+        "icon_url": "https://i.imgur.com/7BNXQnr.png",
         "loadouts": [
             "eR3JkIxE5GyWvNpybHCRr",
             "2Mh1URS57n4Yuc2vHOojl7",
@@ -227,7 +227,7 @@ operators_const = [
         "id": "53gtHRLApgtoojrS4RrEoE",
         "name": "buck",
         "readable": "Buck",
-        "icon_url": "https://i.imgur.com/nRSxJd2.png",
+        "icon_url": "https://i.imgur.com/u9slUlM.png",
         "loadouts": [
             "wfzQPegCiVkDRgsx6MOjZ",
             "5b6dGdkffoVKAyDycG5hjg",
@@ -253,7 +253,7 @@ operators_const = [
         "id": "7gHiD3KLWOBXCf9ryOMLSN",
         "name": "zofia",
         "readable": "Zofia",
-        "icon_url": "https://i.imgur.com/HRg8qXs.png",
+        "icon_url": "https://i.imgur.com/AMOYwMJ.png",
         "loadouts": [
             "65tbXPRuQxAV8RUaMoCYJh",
             "2dvLoMLwWSRwyK70gARboS",
@@ -282,7 +282,7 @@ operators_const = [
         "id": "4gKF11DuIPfzvHIN8GsMPk",
         "name": "echo",
         "readable": "Echo",
-        "icon_url": "https://i.imgur.com/JLXXREk.png",
+        "icon_url": "https://i.imgur.com/OMNe9qB.png",
         "loadouts": [
             "HCADlLBkfNlDRRvlq3iPo",
             "67fxpqXp4gjOQixPHPaQMB",
@@ -311,7 +311,7 @@ operators_const = [
         "id": "6PszmIIE4cSjvXHxr97AYn",
         "name": "dokkaebi",
         "readable": "Dokkaebi",
-        "icon_url": "https://i.imgur.com/qYfoWsk.png",
+        "icon_url": "https://i.imgur.com/iVLOHr2.png",
         "loadouts": [
             "6xDz1HSwIn3ZcV9nKIeKUN",
             "5cZ1wkLzuOHnnYjma40PwQ",
@@ -340,7 +340,7 @@ operators_const = [
         "id": "6quzxNn6sc1qMHIWqpO0Bj",
         "name": "caveira",
         "readable": "Caveira",
-        "icon_url": "https://i.imgur.com/X8Wn7uP.png",
+        "icon_url": "https://i.imgur.com/IeYRobc.png",
         "loadouts": [
             "kzR6vfRLXm9f1EvoK9dBP",
             "5gcX8x7LiBHg2LA1JIdEHp",
@@ -367,7 +367,7 @@ operators_const = [
         "id": "6E7mOox12Sdomem7JmNjiF",
         "name": "wamai",
         "readable": "Wamai",
-        "icon_url": "https://i.imgur.com/497uSOq.png",
+        "icon_url": "https://i.imgur.com/bFRCKTJ.png",
         "loadouts": [
             "6Il345pPRhv4Xx4qzTFpmA",
             "3Xq4lwAY8Sc1Z687gD9mnD",
@@ -394,7 +394,7 @@ operators_const = [
         "id": "5dWq52BOrSdWPZaD4rJZ2m",
         "name": "ying",
         "readable": "Ying",
-        "icon_url": "https://i.imgur.com/wyJwvWZ.png",
+        "icon_url": "https://i.imgur.com/BHUvTt4.png",
         "loadouts": [
             "3ePDML7HMucggZaNG2nL0a",
             "6pPXSrzgAKEyTiiyrs1Qbn",
@@ -420,7 +420,7 @@ operators_const = [
         "id": "5NIWksKzzKDYtPAGoC4k4W",
         "name": "nomad",
         "readable": "Nomad",
-        "icon_url": "https://i.imgur.com/U8sOErk.png",
+        "icon_url": "https://i.imgur.com/2I6OWIz.png",
         "loadouts": [
             "5hAVF2eVv7NyeJPAJL07sg",
             "Q4Q9LtkAztMdeUT53C39j",
@@ -448,7 +448,7 @@ operators_const = [
         "id": "3NMVnvoVQtOvA6IRporOhx",
         "name": "rook",
         "readable": "Rook",
-        "icon_url": "https://i.imgur.com/AZ2o09d.png",
+        "icon_url": "https://i.imgur.com/UQK1UNc.png",
         "loadouts": [
             "eR3JkIxE5GyWvNpybHCRr",
             "4jhzD37iXaCsWyBAo1PQ5J",
@@ -484,7 +484,7 @@ operators_const = [
         "id": "4GknsfzxkbdoHAbAPIKJku",
         "name": "nokk",
         "readable": "N\u00f8kk",
-        "icon_url": "https://i.imgur.com/P0tYlx7.png",
+        "icon_url": "https://i.imgur.com/oleTyHs.png",
         "loadouts": [
             "3ATrltpsW24BFhZMHNmhfI",
             "4ggSgqX4ixVHJZwhnenHC1",
@@ -511,7 +511,7 @@ operators_const = [
         "id": "4vAXEvm0AeaPKhjNQz7j4G",
         "name": "mozzie",
         "readable": "Mozzie",
-        "icon_url": "https://i.imgur.com/RHwnp7d.png",
+        "icon_url": "https://i.imgur.com/yrFXGCn.png",
         "loadouts": [
             "56o4y5mOsXlFhnzWlq9xMJ",
             "1LVSwzrXIEAd1O3vntSQMs",
@@ -538,7 +538,7 @@ operators_const = [
         "id": "12bsOqEHwoavwivBcCX9cn",
         "name": "montagne",
         "readable": "Montagne",
-        "icon_url": "https://i.imgur.com/p2gGMAo.png",
+        "icon_url": "https://i.imgur.com/bzzVRTU.png",
         "loadouts": [
             "5AVE3Ok87dbmTwuI5K5fZg",
             "ElQvUTqCd5JbW2PIJ0lTS",
@@ -563,7 +563,7 @@ operators_const = [
         "id": "5HqMQeknafJWZVMFgwRSJa",
         "name": "mira",
         "readable": "Mira",
-        "icon_url": "https://i.imgur.com/BXnayiP.png",
+        "icon_url": "https://i.imgur.com/gOnJqiF.png",
         "loadouts": [
             "64NDkY7SFav037M3uh6KRD",
             "1M88HlyLX6jD774vkptDLV",
@@ -591,7 +591,7 @@ operators_const = [
         "id": "7u7D3rZ9dST2Dltv12heyc",
         "name": "maverick",
         "readable": "Maverick",
-        "icon_url": "https://i.imgur.com/hF2gJuY.png",
+        "icon_url": "https://i.imgur.com/8hXt5z6.png",
         "loadouts": [
             "2xDl4cDXX48FuUiMPApZHo",
             "4zn5v7GdQhRyojYT6qAwwM",
@@ -619,7 +619,7 @@ operators_const = [
         "id": "3bkxPv3BP8x7HxabDowe8j",
         "name": "lion",
         "readable": "Lion",
-        "icon_url": "https://i.imgur.com/EgMlCaV.png",
+        "icon_url": "https://i.imgur.com/0zCtOUO.png",
         "loadouts": [
             "4F64StqLivWX4lHm7iNgqG",
             "7MC9QIlZkFL8AAqkAfGIbV",
@@ -649,7 +649,7 @@ operators_const = [
         "id": "1zLvd3YqSJiVi7bREVQROw",
         "name": "iana",
         "readable": "Iana",
-        "icon_url": "https://i.imgur.com/fZbmkVz.png",
+        "icon_url": "https://i.imgur.com/bk77LOt.png",
         "loadouts": [
             "Q4Q9LtkAztMdeUT53C39j",
             "7tItrCBHMWLbtvlBxYDWfS",
@@ -675,7 +675,7 @@ operators_const = [
         "id": "2lJcNEGLHQnmFQB49DBETw",
         "name": "kali",
         "readable": "Kali",
-        "icon_url": "https://i.imgur.com/UH389qh.png",
+        "icon_url": "https://i.imgur.com/sQGypuE.png",
         "loadouts": [
             "E0pKBweJkY0ok4BvfDSxv",
             "5EraRZbq9P8VR8Sd0Sarh9",
@@ -702,7 +702,7 @@ operators_const = [
         "id": "31SkgzYKiYzbFKSpTpqra2",
         "name": "kaid",
         "readable": "Kaid",
-        "icon_url": "https://i.imgur.com/l6UPyA8.png",
+        "icon_url": "https://i.imgur.com/Du1aa9i.png",
         "loadouts": [
             "3rjbxjDZx9mwvN5xHkZDWp",
             "3vCxcPpLsOovwCKEuXLJrN",
@@ -730,7 +730,7 @@ operators_const = [
         "id": "lrDnPHSsfQK6lBlaPyStn",
         "name": "jager",
         "readable": "J\u00e4ger",
-        "icon_url": "https://i.imgur.com/ykglXiD.png",
+        "icon_url": "https://i.imgur.com/Y8EjdSy.png",
         "loadouts": [
             "7gAppJYmlz1A8xXgPt0a5m",
             "2Hre4GaBWs92I37LII1O8M",
@@ -756,7 +756,7 @@ operators_const = [
         "id": "2rVZYXHzcD1mKRv9V0u08C",
         "name": "gridlock",
         "readable": "Gridlock",
-        "icon_url": "https://i.imgur.com/A95h9XN.png",
+        "icon_url": "https://i.imgur.com/WHkIm3H.png",
         "loadouts": [
             "2BpqLwwDeSr7QpNZqsLvBt",
             "3zbsuyeTh78X5KHV3M7Ctt",
@@ -784,7 +784,7 @@ operators_const = [
         "id": "RNoGzESS8km5yvlyVKoFK",
         "name": "glaz",
         "readable": "Glaz",
-        "icon_url": "https://i.imgur.com/Fdr50yV.png",
+        "icon_url": "https://i.imgur.com/7vFvnxZ.png",
         "loadouts": [
             "5nXwwDj4qtPaGvCKrTqdpC",
             "4EmVfbHbYqwRNnK02lU79C",
@@ -815,7 +815,7 @@ operators_const = [
         "id": "3yix1phgKMCjUTWxlSvRWM",
         "name": "goyo",
         "readable": "Goyo",
-        "icon_url": "https://i.imgur.com/s2AjbNb.png",
+        "icon_url": "https://i.imgur.com/tYPrtCH.png",
         "loadouts": [
             "64NDkY7SFav037M3uh6KRD",
             "3vCxcPpLsOovwCKEuXLJrN",
@@ -841,7 +841,7 @@ operators_const = [
         "id": "qNq8DzEWiF5AF5No0PnAe",
         "name": "fuze",
         "readable": "Fuze",
-        "icon_url": "https://i.imgur.com/WpxoTw2.png",
+        "icon_url": "https://i.imgur.com/xsVA73Z.png",
         "loadouts": [
             "bz7Z7LsOpGGFaLxmNl5nY",
             "4t1fOF2T7bKerBD9VJA5HH",
@@ -870,7 +870,7 @@ operators_const = [
         "id": "NcnPddLmhsez73xhI6lZf",
         "name": "finka",
         "readable": "Finka",
-        "icon_url": "https://i.imgur.com/dhemeuU.png",
+        "icon_url": "https://i.imgur.com/dxqOJu3.png",
         "loadouts": [
             "5wGib1JAMhp1o32ZKqXmm6",
             "4t1fOF2T7bKerBD9VJA5HH",
@@ -898,7 +898,7 @@ operators_const = [
         "id": "4sRPnllVTVhBUHIYQZslAN",
         "name": "castle",
         "readable": "Castle",
-        "icon_url": "https://i.imgur.com/Dr5x7e7.png",
+        "icon_url": "https://i.imgur.com/Fv8G4RW.png",
         "loadouts": [
             "3ix2ui28VAIlHII80zcM5w",
             "1DQ0Gw0othORiig1DeyG9p",
@@ -925,7 +925,7 @@ operators_const = [
         "id": "1FfpMgTvv17kWL1Zf8iBJR",
         "name": "capitao",
         "readable": "Capit\u00e3o",
-        "icon_url": "https://i.imgur.com/Qvkut3P.png",
+        "icon_url": "https://i.imgur.com/gBmMrMa.png",
         "loadouts": [
             "1LHrJG8fIAJhMI6aNtPkAK",
             "2u4Ha4SV5Gc18jlkABp5m5",
@@ -952,7 +952,7 @@ operators_const = [
         "id": "6FeizKECxhrkskrcjb6IdF",
         "name": "ace",
         "readable": "Ace",
-        "icon_url": "https://i.imgur.com/9C0j8iz.png",
+        "icon_url": "https://i.imgur.com/GwWGSuu.png",
         "loadouts": [
             "bz7Z7LsOpGGFaLxmNl5nY",
             "1DQ0Gw0othORiig1DeyG9p",
@@ -978,7 +978,7 @@ operators_const = [
         "id": "2aiyRlZ2lsVa199t278saz",
         "name": "amaru",
         "readable": "Amaru",
-        "icon_url": "https://i.imgur.com/BL4ue5Y.png",
+        "icon_url": "https://i.imgur.com/m5u47Mw.png",
         "loadouts": [
             "6zo1HGo261dNdW2J7dBKNF",
             "67fxpqXp4gjOQixPHPaQMB",
@@ -1005,7 +1005,7 @@ operators_const = [
         "id": "5RTKiJ8DJmnjL8WRHsxaIO",
         "name": "zero",
         "readable": "Zero",
-        "icon_url": "https://i.imgur.com/xWtzdxN.png",
+        "icon_url": "https://i.imgur.com/87LCqv1.png",
         "loadouts": [
             "3VKlSROsHKgSvtDPoTEkqA",
             "01zcYOKDgxP24MPkEaswD7",
@@ -1031,7 +1031,7 @@ operators_const = [
         "id": "3cT19hh6rONnvLCcJJxjY2",
         "name": "ash",
         "readable": "Ash",
-        "icon_url": "https://i.imgur.com/gXkH9Cl.png",
+        "icon_url": "https://i.imgur.com/ml0tMs3.png",
         "loadouts": [
             "7tItrCBHMWLbtvlBxYDWfS",
             "3EA7ghdrMfBGGjUNcE4MBE",
@@ -1064,7 +1064,7 @@ operators_const = [
         "id": "2ss3LiQm7UqjPppszr9ZiO",
         "name": "twitch",
         "readable": "Twitch",
-        "icon_url": "https://i.imgur.com/OHZykQL.png",
+        "icon_url": "https://i.imgur.com/jc5pPPK.png",
         "loadouts": [
             "61aQ9zUboTRqi1enZxK9ly",
             "7MC9QIlZkFL8AAqkAfGIbV",
@@ -1098,7 +1098,7 @@ operators_const = [
         "id": "18EH4dqgGBHLUzdAzhnltQ",
         "name": "clash",
         "readable": "Clash",
-        "icon_url": "https://i.imgur.com/EYGBED9.png",
+        "icon_url": "https://i.imgur.com/eogGdHx.png",
         "loadouts": [
             "76NdyGdH2niECMq7R1mmcc",
             "H9nxKMekxjjC0VY4dPkFl",
@@ -1126,7 +1126,7 @@ operators_const = [
         "id": "5E3KpexU4FECNxw5gHpeu3",
         "name": "maestro",
         "readable": "Maestro",
-        "icon_url": "https://i.imgur.com/d0Zy3i4.png",
+        "icon_url": "https://i.imgur.com/PQ8VBAF.png",
         "loadouts": [
             "4NYCY16B7qUBs0HYRIc7vB",
             "52fFOJXcNhgjPzKJTXY7pM",
@@ -1155,7 +1155,7 @@ operators_const = [
         "id": "3dZZFraiAjCOccDYznh2hO",
         "name": "lesion",
         "readable": "Lesion",
-        "icon_url": "https://i.imgur.com/w3PjcvZ.png",
+        "icon_url": "https://i.imgur.com/IvYOwrI.png",
         "loadouts": [
             "4ggSgqX4ixVHJZwhnenHC1",
             "41pnpfTTAjzKYvpEBmNKdD",
@@ -1184,7 +1184,7 @@ operators_const = [
         "id": "2t6cIQL6iW1w9eF9jYkjLR",
         "name": "blackbeard",
         "readable": "Blackbeard",
-        "icon_url": "https://i.imgur.com/h12akm4.png",
+        "icon_url": "https://i.imgur.com/BOAh5x8.png",
         "loadouts": [
             "1v4iBk8OSQ5FCg3RDPeIAN",
             "6mq7Ochfrvvq8qX52OOR70",
@@ -1211,7 +1211,7 @@ operators_const = [
         "id": "1t2844sI8aOwLG5zXrNgQr",
         "name": "hibana",
         "readable": "Hibana",
-        "icon_url": "https://i.imgur.com/ChqyReH.png",
+        "icon_url": "https://i.imgur.com/aqOOm2R.png",
         "loadouts": [
             "2o6tAempnPqYVtMSkBAiN7",
             "67fxpqXp4gjOQixPHPaQMB",
@@ -1239,7 +1239,7 @@ operators_const = [
         "id": "15h9yOUZxMYr7IQsdKJDg2",
         "name": "sledge",
         "readable": "Sledge",
-        "icon_url": "https://i.imgur.com/AKn1ULn.png",
+        "icon_url": "https://i.imgur.com/JXV80ZY.png",
         "loadouts": [
             "eFmXKWVc4sXT4dOujQ75d",
             "3Vx4zT0vcf5CkxoQL1xJQi",
@@ -1270,7 +1270,7 @@ operators_const = [
         "id": "6EMMdRTRqP1maSKqJol2F0",
         "name": "kapkan",
         "readable": "Kapkan",
-        "icon_url": "https://i.imgur.com/LPhga5G.png",
+        "icon_url": "https://i.imgur.com/YHj9igl.png",
         "loadouts": [
             "3iisbOg3JC9epuJDdrMcAk",
             "5drcQCH9GYIQ02G2qL1lUJ",
@@ -1300,7 +1300,7 @@ operators_const = [
         "id": "24k25swCzWGQ6l3Jo9y2kq",
         "name": "jackal",
         "readable": "Jackal",
-        "icon_url": "https://i.imgur.com/hvLklzC.png",
+        "icon_url": "https://i.imgur.com/cGBKp2a.png",
         "loadouts": [
             "7xrnNbilGusIwlgOWGgPci",
             "5Hum7CZF4TohcA6nWHd9pO",
@@ -1328,7 +1328,7 @@ operators_const = [
         "id": "3Ne7k7TUoZO51IR7wR14K8",
         "name": "iq",
         "readable": "IQ",
-        "icon_url": "https://i.imgur.com/UtDoLtT.png",
+        "icon_url": "https://i.imgur.com/M1NaKKv.png",
         "loadouts": [
             "6Il345pPRhv4Xx4qzTFpmA",
             "213tBMKn095fROa9B1cV6n",
@@ -1357,7 +1357,7 @@ operators_const = [
         "id": "4DMii3OalKfuRzPSDDm6bP",
         "name": "bandit",
         "readable": "Bandit",
-        "icon_url": "https://i.imgur.com/iBdRyRn.png",
+        "icon_url": "https://i.imgur.com/p6tWAW7.png",
         "loadouts": [
             "01BtNAaccSZAwYXHWPvftF",
             "7gAppJYmlz1A8xXgPt0a5m",
@@ -1384,7 +1384,7 @@ operators_const = [
         "id": "1vMovJ9L8yAkY208tvbJkW",
         "name": "smoke",
         "readable": "Smoke",
-        "icon_url": "https://i.imgur.com/tkxDFWg.png",
+        "icon_url": "https://i.imgur.com/aodW3TF.png",
         "loadouts": [
             "3Vx4zT0vcf5CkxoQL1xJQi",
             "3ATrltpsW24BFhZMHNmhfI",
@@ -1412,7 +1412,7 @@ operators_const = [
         "id": "76RUCnUN3fnX0FPib5QovT",
         "name": "doc",
         "readable": "Doc",
-        "icon_url": "https://i.imgur.com/MzJAlf9.png",
+        "icon_url": "https://i.imgur.com/19gitiC.png",
         "loadouts": [
             "eR3JkIxE5GyWvNpybHCRr",
             "4jhzD37iXaCsWyBAo1PQ5J",
@@ -1448,7 +1448,7 @@ operators_const = [
         "id": "7iQZnZu1gutAtm6NDbBJkK",
         "name": "warden",
         "readable": "Warden",
-        "icon_url": "https://i.imgur.com/OUhPdNj.png",
+        "icon_url": "https://i.imgur.com/HqTIR7x.png",
         "loadouts": [
             "3Vx4zT0vcf5CkxoQL1xJQi",
             "3NPuy5qu8ubwkr9kkWUqdz",
@@ -1475,7 +1475,7 @@ operators_const = [
         "id": "3t9B1rl6xxdnOVqTMwkMmM",
         "name": "ela",
         "readable": "Ela",
-        "icon_url": "https://i.imgur.com/IRWSllb.png",
+        "icon_url": "https://i.imgur.com/OwjSJNB.png",
         "loadouts": [
             "90Ex0AIJDFcQzHkKhyprN",
             "291z9C5QiWXQ5CzvQBSNe0",
@@ -1502,7 +1502,7 @@ operators_const = [
         "id": "6UHYCC0khgh7ULph74z2rw",
         "name": "thermite",
         "readable": "Thermite",
-        "icon_url": "https://i.imgur.com/9uVh301.png",
+        "icon_url": "https://i.imgur.com/o896oL9.png",
         "loadouts": [
             "1DQ0Gw0othORiig1DeyG9p",
             "6KgccwgjLPqJjluHgRiryh",
@@ -1537,7 +1537,7 @@ operators_const = [
         "id": "5cO6xvTlrmOOwLOVE7rKny",
         "name": "pulse",
         "readable": "Pulse",
-        "icon_url": "https://i.imgur.com/y6hSeej.png",
+        "icon_url": "https://i.imgur.com/Y2iDnWq.png",
         "loadouts": [
             "3ix2ui28VAIlHII80zcM5w",
             "1DQ0Gw0othORiig1DeyG9p",
@@ -1568,7 +1568,7 @@ operators_const = [
         "id": "3DVzjfdmBekNW0IFf84skr",
         "name": "valkyrie",
         "readable": "Valkyrie",
-        "icon_url": "https://i.imgur.com/cG55PvJ.png",
+        "icon_url": "https://i.imgur.com/xJHdqA3.png",
         "loadouts": [
             "3NPuy5qu8ubwkr9kkWUqdz",
             "zs4Rebj67KAk06ASjJPxO",
@@ -1594,7 +1594,7 @@ operators_const = [
         "id": "7jxNRuGAGt7IGaLXK3jB1T",
         "name": "mute",
         "readable": "Mute",
-        "icon_url": "https://i.imgur.com/xJ6iqr1.png",
+        "icon_url": "https://i.imgur.com/peaKoO1.png",
         "loadouts": [
             "3Xq4lwAY8Sc1Z687gD9mnD",
             "3Vx4zT0vcf5CkxoQL1xJQi",
@@ -1626,7 +1626,7 @@ operators_const = [
         "id": "xRGPl5S26pEJnoq1nC5Fl",
         "name": "thatcher",
         "readable": "Thatcher",
-        "icon_url": "https://i.imgur.com/MYl1Gl2.png",
+        "icon_url": "https://i.imgur.com/BuEp8mz.png",
         "loadouts": [
             "3af3vtoUw8qRsUtSyDVJVt",
             "eFmXKWVc4sXT4dOujQ75d",
@@ -1653,7 +1653,7 @@ operators_const = [
         "id": "7BA7dPvstLnPqoVVvKBaAa",
         "name": "blitz",
         "readable": "Blitz",
-        "icon_url": "https://i.imgur.com/IhkK497.png",
+        "icon_url": "https://i.imgur.com/GxXncfV.png",
         "loadouts": [
             "5q7YklKN5fREPQk7jcSWiR",
             "5Y36nPWZ6lXp37GDupoLRV",
@@ -1688,7 +1688,7 @@ operators_const = [
         "id": "5bsH2HpfYXPTIS4V6wnnKf",
         "name": "vigil",
         "readable": "Vigil",
-        "icon_url": "https://i.imgur.com/vGg39cP.png",
+        "icon_url": "https://i.imgur.com/WkqMEZ6.png",
         "loadouts": [
             "2ejX9LEWZ8bnfTRfiYjuAc",
             "5cZ1wkLzuOHnnYjma40PwQ",
@@ -1715,7 +1715,7 @@ operators_const = [
         "id": "44vemmg1yOUhLqA6FB6Qgq",
         "name": "alibi",
         "readable": "Alibi",
-        "icon_url": "https://i.imgur.com/NXEI1ZN.png",
+        "icon_url": "https://i.imgur.com/Phb6OUU.png",
         "loadouts": [
             "4rdWW7rPhzJUlVnP5dGs8f",
             "52fFOJXcNhgjPzKJTXY7pM",
