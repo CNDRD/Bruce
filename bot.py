@@ -33,7 +33,7 @@ for filename in os.listdir('./cogs'):
 async def on_ready():
     tn = datetime.now(timezone('Europe/Prague')).strftime("%d/%m/%Y %H:%M:%S")
     load_time = format_timespan(time.time() - start_time)
-    msg = f"\nHere comes Bruce!\n[With {cog_count} cogs]\n[{tn}]\n[{load_time}]\n"
+    msg = f"\nHere comes Bruce!\n[With {cog_count} cogs]\n[{tn}]\n[{load_time}]\n<t:{int(time.time())}:R>"
     startup = client.get_channel(startup_channel_id)
 
     print(msg)
