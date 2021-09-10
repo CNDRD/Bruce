@@ -30,9 +30,10 @@ class Cicina(commands.Cog):
             topMsg = "**Today's top cicina's:**\n"
             peepCount = 0
             for _ in listOfTodaySorted:
-                usr = self.client.get_user(int(listOfTodaySorted[peepCount]['uid'])).name
+                usr = self.client.get_user(int(listOfTodaySorted[peepCount]['uid']))
+                if not usr: continue
                 cic = listOfTodaySorted[peepCount]['cicina']
-                topMsg += f"**{peepCount+1}.** {usr} with ***{cic}*** *cm*\n"
+                topMsg += f"**{peepCount+1}.** {usr.name} with ***{cic}*** *cm*\n"
                 peepCount += 1
             return await ctx.send(topMsg)
 
