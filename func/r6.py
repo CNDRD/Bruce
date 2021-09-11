@@ -117,7 +117,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data):
             xd['mmr_watch'][p.id]['mmr'] = mw_mmr
             xd['mmr_watch'][p.id]['playtime'] = mw_plt
             xd['mmr_watch'][p.id]['adjustment'] = True
-            xd['mmr_watch'][p.id]['adjustment_value'] = mw_mmr - r.mmr
+            xd['mmr_watch'][p.id]['adjustment_value'] = r.mmr - mw_mmr
             print("MMR Adjustment detected!")
             print(xd['mmr_watch'][p.id])
 
