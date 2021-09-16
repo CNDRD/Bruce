@@ -19,7 +19,7 @@ operators_const = [
             "area-denial",
             "anti-roam"
         ],
-        "index": "5:16",
+        "index": "6:17",
         "unique_stats": [
             {
                 "id": "operator{}_osa_stillnothing",
