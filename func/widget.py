@@ -1,4 +1,5 @@
 import disnake
+from datetime import datetime
 
 def gimme_them_stats(mem):
     x = {
