@@ -77,7 +77,7 @@ class GameStats(commands.Cog):
 
     @tasks.loop(minutes=apex_loop_time)
     async def apex(self):
-        ape_sex_stats = apexStats()
+        ape_sex_stats = apex_stats()
         db.child('GameStats').child(f'ApexV{APEX_VERSION}').update(ape_sex_stats)
         db.child('GameStats').child('lastUpdate').update({f'ApexV{APEX_VERSION}':int(time.time())})
 
