@@ -10,7 +10,6 @@ import yaml
 config = yaml.safe_load(open('config.yml'))
 valid_rp_channels = config.get('valid_rp_channels')
 valid_rr_channels = config.get('valid_rr_channels')
-error_channel_id = config.get('error_channel_id')
 server_id = config.get('server_id')
 good_emotes = config.get('good_emotes')
 bad_emotes = config.get('bad_emotes')
@@ -36,8 +35,6 @@ class RrRpEc(commands.Cog):
         if payload.member.bot: return
 
         if payload.channel_id in valid_rr_channels:
-            err_ch = self.client.get_channel(error_channel_id)
-
             guild = self.client.get_guild(payload.guild_id)
             member = guild.get_member(payload.user_id)
             role = disnake.utils.get(guild.roles, name = payload.emoji.name)  # Role name & Emoji name HAVE to be the same.
