@@ -17,12 +17,7 @@ bad_emotes = config.get('bad_emotes')
 
 class RrRpEc(commands.Cog):
     def __init__(self, client):
-        """
-        Does the following:
-        - Reaction Roles
-        - Reaction Points
-        - Emotes Count
-        """
+        """Reaction Roles & Reaction Points & Emotes Count"""
         self.client = client
 
 

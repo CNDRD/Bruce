@@ -11,10 +11,7 @@ from disnake.utils import get
 
 class OnMessage(commands.Cog):
     def __init__(self, client):
-        """
-        Leveling system.
-        Auto-deleting `User xyz pinned a message` messages.
-        """
+        """Leveling system & Auto-deletion of `User xyz pinned a message` messages"""
         self.client = client
 
 

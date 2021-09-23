@@ -14,13 +14,7 @@ mod_role_id = config.get('mod_role_id')
 
 class Admin(commands.Cog):
     def __init__(self, client):
-        """
-        Admin commands.
-        - clear
-        - add_reaction
-        - say
-        - edit
-        """
+        """Admin commands"""
         self.client = client
 
 

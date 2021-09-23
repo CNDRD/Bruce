@@ -6,12 +6,7 @@ from disnake.ext import commands
 
 class OnUserUpdate(commands.Cog):
     def __init__(self, client):
-        """
-        On User Update Event.
-
-        Updates users username and avatar url in the database
-        whenever they change anything about their account
-        """
+        """User updates their username or avatar, we update that in the database"""
         self.client = client
 
 

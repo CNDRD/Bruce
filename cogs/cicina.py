@@ -10,9 +10,7 @@ import numpy as np
 
 class Cicina(commands.Cog):
     def __init__(self, client):
-        """
-        Cicina command.
-        """
+        """Cicina command"""
         self.client = client
         self.local_timezone = 'Europe/Prague'
 

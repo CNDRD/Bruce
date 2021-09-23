@@ -26,13 +26,7 @@ APEX_VERSION = 1
 
 class GameStats(commands.Cog):
     def __init__(self, client):
-        """
-        Various Game Stats gathering loops.
-
-        - dbr6 (loop)
-        - apex (loop)
-        - stats_update
-        """
+        """Various Game Stats gathering loops"""
         self.client = client
         self.first_boot = True
         if dbr6_loop: self.dbr6.start()
@@ -40,7 +34,7 @@ class GameStats(commands.Cog):
 
         self.last_siege_update_ts = db.child("GameStats").child("lastUpdate").child(f"R6Sv{R6STATS_VERSION}").get().val()
         def wrtus(message):
-            "Website Request To Update Siege"
+            """Website Request To Update Siege"""
             if self.first_boot:
                 self.first_boot = not self.first_boot
             else:

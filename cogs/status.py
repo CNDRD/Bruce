@@ -4,10 +4,7 @@ from disnake.ext import commands
 
 class Status(commands.Cog):
     def __init__(self, client):
-        """
-        Status command.
-        Can be used to set custom statuses
-        """
+        """Custom status command"""
         self.client = client
 
 

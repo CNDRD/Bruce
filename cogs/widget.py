@@ -14,9 +14,7 @@ bot_mod_role_id = config.get('bot_mod_role_id')
 
 class Widget(commands.Cog):
     def __init__(self, client):
-        """
-        Custom Widget
-        """
+        """Custom Widget"""
         self.client = client
         self.widget_loop.start()
 
