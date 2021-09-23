@@ -34,7 +34,7 @@ class GameStats(commands.Cog):
 
         self.last_siege_update_ts = db.child("GameStats").child("lastUpdate").child(f"R6Sv{R6STATS_VERSION}").get().val()
         def wrtus(message):
-            """Website Request To Update Siege"""
+            """Website Request To Update Siege."""
             if self.first_boot:
                 self.first_boot = not self.first_boot
             else:
