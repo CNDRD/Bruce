@@ -2,13 +2,14 @@ from func.firebase_init import db
 from func.stuff import add_spaces
 from func.levels import *
 
-import discord, time
-from discord.ext import commands
+from disnake.ext import commands
+import disnake
+
+import time
 from numpy.random import randint
 from numpy.random import seed
-from discord.utils import get
+from disnake.utils import get
 from numerize import numerize
-
 
 class OnMessage(commands.Cog):
     def __init__(self, client):
@@ -22,22 +23,18 @@ class OnMessage(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         # We don't want the bot giving XP to itself now do we
-        if message.author.bot:
-            return
-
-        # Auto-delete "xyz has pinned a message in this channel" messages
-        if message.type == discord.MessageType.pins_add:
-            await message.delete()
-            return
+        if message.author.bot: return
 
         # Don't work in DM's
-        if isinstance(message.channel, discord.channel.DMChannel):
-            return
+        if isinstance(message.channel, disnake.channel.DMChannel): return
+
+        # Auto-delete "pinned" & "thread has been created" messages
+        if message.type == disnake.MessageType.pins_add or message.type == disnake.MessageType.thread_created:
+            return await message.delete()
 
         # Basic-ass variables
         now = int(time.time())
         uid = message.author.id
-        level_up = False
 
         # Server Totals Data
         st = db.child('serverTotals').get().val()
@@ -68,10 +65,18 @@ class OnMessage(commands.Cog):
                 new_xp += 100
 
             if new_xp >= xp_from_level(current_lvl+1):
-                # Level-Up
-                level_up = True
-                data = {'level':current_lvl+1, 'last_xp_get':now, 'xp':new_xp, 'messages_count':messages_count+1, 'money':money+xp_to_add}
-                server_totals = {'xp':st_xp + xp_to_add, 'messages':st_messages+1, 'levels':st_levels+1}
+                data = {
+                    'level': current_lvl + 1,
+                    'last_xp_get': now,
+                    'xp': new_xp,
+                    'messages_count': messages_count + 1,
+                    'money': money + xp_to_add
+                }
+                server_totals = {
+                    'xp': st_xp + xp_to_add,
+                    'messages': st_messages + 1,
+                    'levels': st_levels + 1
+                }
 
                 # Level based roles
                 # Removes the old role and gives a new one, is applicable
@@ -84,41 +89,26 @@ class OnMessage(commands.Cog):
                     await message.author.remove_roles(old_r)
             else:
                 # No level change
-                data = {'xp':new_xp,
-                        'last_xp_get':now,
-                        'messages_count':messages_count+1,
-                        'money':money+xp_to_add}
+                data = {
+                    'xp': new_xp,
+                    'last_xp_get': now,
+                    'messages_count': messages_count + 1,
+                    'money': money + xp_to_add
+                }
 
-                server_totals = {'xp':st_xp + xp_to_add, 'messages':st_messages+1}
+                server_totals = {
+                    'xp': st_xp + xp_to_add,
+                    'messages': st_messages + 1
+                }
 
         else:
             # Too Fast (less than 60s since last message)
-            data = {'messages_count':messages_count+1}
-            server_totals = {'messages':st_messages+1}
+            data = { 'messages_count': messages_count + 1 }
+            server_totals = { 'messages': st_messages + 1 }
 
         # Update users individual stats & server total stats
         db.child('users').child(uid).update(data)
         db.child('serverTotals').update(server_totals)
-
-        # Send a level up message if there was a level up
-        # could be done above, but this way it's prettier i think
-        if level_up:
-            dm_ch = await message.author.create_dm()
-            approx_messages = add_spaces(int(((xp_from_level(data['level']+1)-xp_from_level(data['level']-1))/20)))
-
-            embed = discord.Embed(colour=discord.Colour.random())
-            embed.set_author(name=message.author.name, url='https://diskito.eu/leader.html')
-            embed.set_thumbnail(url=message.author.avatar_url)
-            embed.set_footer(text=f"That's about {approx_messages} more messages")
-
-            # Split like this because fuck long lines
-            line_1 = f'Your new level is **{data["level"]}**!'
-            line_2 = f'You now have **{numerize.numerize(int(data["xp"]))}** xp'
-
-            embed.add_field(name='You have just levelled up! Congrats!',
-                            value=f'{line_1}\n{line_2}',
-                            inline=False)
-            await dm_ch.send(embed=embed)
 
 
 def setup(client):

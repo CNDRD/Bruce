@@ -1,13 +1,17 @@
 from func.firebase_init import db
-import pyrebase, discord, yaml, json, os
-from discord.ext import commands
+
+import disnake
+from disnake.ext import commands
+
+import yaml
+
 
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
 valid_rp_channels = config.get('valid_rp_channels')
 valid_rr_channels = config.get('valid_rr_channels')
 error_channel_id = config.get('error_channel_id')
-diskito_id = config.get('diskito_id')
+server_id = config.get('server_id')
 good_emotes = config.get('good_emotes')
 bad_emotes = config.get('bad_emotes')
 
@@ -15,9 +19,10 @@ bad_emotes = config.get('bad_emotes')
 class RrRpEc(commands.Cog):
     def __init__(self, client):
         """
-        Reaction Roles
-        Reaction Points
-        Emotes Count
+        Does the following:
+        - Reaction Roles
+        - Reaction Points
+        - Emotes Count
         """
         self.client = client
 
@@ -28,15 +33,14 @@ class RrRpEc(commands.Cog):
         # Works only in selected channels (see 'valid_rr_channels' variable for their IDs)
 
         # Also doesn't work when a bot adds an emoji
-        if payload.member.bot:
-            return
+        if payload.member.bot: return
 
         if payload.channel_id in valid_rr_channels:
             err_ch = self.client.get_channel(error_channel_id)
 
             guild = self.client.get_guild(payload.guild_id)
             member = guild.get_member(payload.user_id)
-            role = discord.utils.get(guild.roles, name = payload.emoji.name)  # Role name & Emoji name HAVE to be the same.
+            role = disnake.utils.get(guild.roles, name = payload.emoji.name)  # Role name & Emoji name HAVE to be the same.
 
             if role is not None and member is not None:
 
@@ -80,15 +84,15 @@ class RrRpEc(commands.Cog):
 
         # Emoji usage counter
         if (hah := self.client.get_emoji(payload.emoji.id)) is not None:
-            if hah.guild_id != diskito_id: return
-            # Otherwise it'll spit out errors when working with non-diskíto emotes
+            # It'll spit out errors when working with non-diskíto emotes
+            if hah.guild_id != server_id: return
 
             emoji_id = payload.emoji.id
             emoji_url = str(payload.emoji.url)
 
             count = db.child('emojiCounts').child(emoji_id).child('count').get().val() or 0
 
-            count_data = {'count':count+1, 'url':emoji_url}
+            count_data = { 'count':count+1, 'url':emoji_url }
             db.child('emojiCounts').child(emoji_id).update(count_data)
 
 
@@ -96,15 +100,15 @@ class RrRpEc(commands.Cog):
     async def on_raw_reaction_remove(self, payload):
         # Emoji usage counter
         if (hah := self.client.get_emoji(payload.emoji.id)) is not None:
-            if hah.guild_id != diskito_id: return
-            # Otherwise it'll spit out errors when working with non-diskíto emotes
+            # It'll spit out errors when working with non-diskíto emotes
+            if hah.guild_id != server_id: return
 
             emoji_id = payload.emoji.id
             emoji_url = str(payload.emoji.url)
 
             count = db.child('emojiCounts').child(emoji_id).child('count').get().val() or 0
 
-            count_data = {'count':count-1, 'url':emoji_url}
+            count_data = { 'count':count-1, 'url':emoji_url }
             db.child('emojiCounts').child(emoji_id).update(count_data)
 
 

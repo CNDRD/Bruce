@@ -1,15 +1,9 @@
+from func.firebase_init import db
 from datetime import datetime, timedelta
-import pyrebase, json, os
 from pytz import timezone
+import yaml
 
-from dotenv import load_dotenv
-load_dotenv()
-
-config = {"apiKey": "AIzaSyDe_xKKup4lVoPasLmAQW9Csc1zUzsxB0U","authDomain": "chuckwalla-69.firebaseapp.com",
-  "databaseURL": "https://chuckwalla-69.firebaseio.com","storageBucket": "chuckwalla-69.appspot.com",
-  "serviceAccount": json.loads(os.getenv("serviceAccountKeyJSON"))}
-db = pyrebase.initialize_app(config).database()
-
+local_timezone = yaml.safe_load(open('config.yml')).get('local_timezone')
 
 def get_stay_time(curr_year, uid, now):
     # Get the time user joined at, delete it, calculate how long they stayed for
@@ -45,15 +39,15 @@ def get_user_total(atvs, stayed):
 
 def get_today_tz():
     # Timezone-aware date string
-    return datetime.now(timezone('Europe/Prague')).strftime('%Y-%m-%d')
+    return datetime.now(timezone(local_timezone)).strftime('%Y-%m-%d')
 
 def get_yesterday_tz():
     # Timezone-aware date string
-    return (datetime.now(timezone('Europe/Prague')) - timedelta(days=1)).strftime('%Y-%m-%d')
+    return (datetime.now(timezone(local_timezone)) - timedelta(days=1)).strftime('%Y-%m-%d')
 
 def get_curr_year_tz():
     # Timezone-aware date year
-    return datetime.now(timezone('Europe/Prague')).year
+    return datetime.now(timezone(local_timezone)).year
 
 def get_yearly_user_data(curr_year, uid):
     yud = db.child('voice').child(curr_year).child('total').child(uid).get().val()
@@ -67,5 +61,5 @@ def get_yearly_user_data(curr_year, uid):
 
 def get_seconds_since_midnight_from_timestamp(leave_time):
     # name -_-
-    leave_time = datetime.fromtimestamp(leave_time, tz=timezone('Europe/Prague'))
+    leave_time = datetime.fromtimestamp(leave_time, tz=timezone(local_timezone))
     return int((leave_time - leave_time.replace(hour=0, minute=0, second=0, microsecond=0)).total_seconds())

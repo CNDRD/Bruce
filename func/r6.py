@@ -28,10 +28,12 @@ RANKS = [
     { "name": "Gold 3",     "min_mmr": 2600, "max_mmr": 2799 },
     { "name": "Gold 2",     "min_mmr": 2800, "max_mmr": 2999 },
     { "name": "Gold 1",     "min_mmr": 3000, "max_mmr": 3199 },
-    { "name": "Platinum 3", "min_mmr": 3200, "max_mmr": 3599 },
-    { "name": "Platinum 2", "min_mmr": 3600, "max_mmr": 3999 },
-    { "name": "Platinum 1", "min_mmr": 4000, "max_mmr": 4399 },
-    { "name": "Diamond",    "min_mmr": 4400, "max_mmr": 4999 },
+    { "name": "Platinum 3", "min_mmr": 3200, "max_mmr": 3499 },
+    { "name": "Platinum 2", "min_mmr": 3500, "max_mmr": 3799 },
+    { "name": "Platinum 1", "min_mmr": 3800, "max_mmr": 4099 },
+    { "name": "Diamond 3",  "min_mmr": 4100, "max_mmr": 4399 },
+    { "name": "Diamond 2",  "min_mmr": 4400, "max_mmr": 4699 },
+    { "name": "Diamond 1",  "min_mmr": 4700, "max_mmr": 4999 },
     { "name": "Champion",   "min_mmr": 5000, "max_mmr": 15000 }
 ]
 
@@ -262,7 +264,9 @@ def get_rank(rank):
         "platinum 3": "https://i.imgur.com/GpEpkDs.png",
         "platinum 2": "https://i.imgur.com/P8IO0Sn.png",
         "platinum 1": "https://i.imgur.com/52Y4EVg.png",
-        "diamond": "https://i.imgur.com/HHPc5HQ.png",
+        "diamond 3": "https://i.imgur.com/HHPc5HQ.png",
+        "diamond 2": "https://i.imgur.com/HHPc5HQ.png",
+        "diamond 1": "https://i.imgur.com/HHPc5HQ.png",
         "champion": "https://i.imgur.com/QHZFdUj.png"
     }
     return rank_dict.get(rank.lower())

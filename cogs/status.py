@@ -1,9 +1,5 @@
-import yaml, discord
-from discord.ext import commands
-
-## Config Load ##
-config = yaml.safe_load(open('config.yml'))
-bot_mod_role_id = config.get('bot_mod_role_id')
+import disnake
+from disnake.ext import commands
 
 
 class Status(commands.Cog):
@@ -11,51 +7,48 @@ class Status(commands.Cog):
         """
         Status command.
         Can be used to set custom statuses
-        Example usage:
-        (,)status watching you all -> Watching you all
-        (,)status listening everything -> Listening to everything
-        (,)status playing games -> Playing games
-        (,)status everyone -> Playing everyone
-        (,)status clear -> Clears the status
         """
         self.client = client
 
 
-    @commands.command()
-    @commands.has_role(bot_mod_role_id)  # Diagnostics
-    async def status(self, ctx, *args):
-        # For when a clown comes along and types a blank command without arguments
-        if args == ():
-            await ctx.send('You have to type some arguments!')
-            await ctx.message.add_reaction('❌')
-            return
-
-        # Because autocorrect is a fucking bitch
-        arg0 = (args[0]).lower()
-
-        if arg0 == 'watching':
-            activity = discord.ActivityType.watching
-            msg = ' '.join(map(str, args[1:]))
-        elif arg0 == 'playing':
-            activity = discord.ActivityType.playing
-            msg = ' '.join(map(str, args[1:]))
-        elif arg0 == 'listening':
-            activity = discord.ActivityType.listening
-            msg = ' '.join(map(str, args[1:]))
+    @commands.slash_command(
+        name="status",
+        description="Change the status of the bot",
+        options=[
+            disnake.Option(
+                name="activity",
+                description="The activity type",
+                choices=[
+                    disnake.OptionChoice(name="Watching", value="watching"),
+                    disnake.OptionChoice(name="Listening", value="listening"),
+                    disnake.OptionChoice(name="Playing", value="playing"),
+                ],
+                required=True
+            ),
+            disnake.Option(
+                name="what_doing",
+                description="The text after the activity. Leave black to clear the status.",
+                type=disnake.OptionType.string
+            )
+        ]
+    )
+    async def status(self, inter, activity, what_doing=None):
+        if activity == 'watching':
+            activity = disnake.ActivityType.watching
+        elif activity == 'listening':
+            activity = disnake.ActivityType.listening
         else:
-            # Defaults to playing
-            activity = discord.ActivityType.playing
-            msg = ' '.join(map(str, args))
+            activity = disnake.ActivityType.playing
 
-        # Use the keyword 'clear' to remove the status
-        if arg0 == 'clear':
-            await self.client.change_presence(activity=None)
-            await ctx.message.add_reaction('✅')
-        # Else set the desired status
+        if what_doing is None:
+            act = None
+            message = "Status cleared!"
         else:
-            a = discord.Activity(type=activity, name=msg)
-            await self.client.change_presence(activity=a)
-            await ctx.message.add_reaction('✅')
+            act = disnake.Activity(type=activity, name=what_doing)
+            message = "Status set!"
+
+        await self.client.change_presence(activity=act)
+        await inter.response.send_message(message, ephemeral=True)
 
 
 def setup(client):

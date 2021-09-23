@@ -2,20 +2,18 @@ from func.firebase_init import db
 from func.levels import rank_name
 from func.stuff import ordinal
 
-from humanfriendly import format_timespan
-from discord.ext import commands
-import pyrebase, yaml, json, os
-from discord.utils import get
-from datetime import datetime
+from disnake.utils import get
+from disnake.ext import commands
 
-from dotenv import load_dotenv
-load_dotenv()
+from humanfriendly import format_timespan
+from datetime import datetime
+import yaml
+
 
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
 in_n_out_channel_id = config.get('in_n_out_channel_id')
 test_account_uid = config.get('test_account_uid')
-honkhonk_emoji = config.get('honkhonk_emoji')
 garrow_emoji = config.get('garrow_emoji')
 yarrow_emoji = config.get('yarrow_emoji')
 rarrow_emoji = config.get('rarrow_emoji')
@@ -28,6 +26,7 @@ class InNOut(commands.Cog):
 
         - Sets up users in database
         - Shames users who leave too soon
+        - Tracks how many times users have left
         """
         self.client = client
 
@@ -35,15 +34,14 @@ class InNOut(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         # No welcome messages for bots and my test account
-        if member.bot == True or member.id == test_account_uid:
-            return
+        if member.bot == True or member.id == test_account_uid: return
 
         users_count = db.child('serverTotals').child('users').get().val()
         db.child('serverTotals').child('users').set(users_count + 1)
 
         # Basic-ass variables
         ino = self.client.get_channel(in_n_out_channel_id)
-        leaves = leave_counts(member.id)
+        leaves = db.child('users').child(member.id).child('leaves_count').get().val() or 0
 
         # Get arrows emoji
         garrow = self.client.get_emoji(garrow_emoji)
@@ -86,7 +84,7 @@ class InNOut(commands.Cog):
                  'last_xp_get':joinedServer,
                  'messages_count':0,
                  'joined_server':joinedServer,
-                 'joined_discord':joinedDiscord,
+                 'joined_disnake':joinedDiscord,
                  'avatar_url':avatarURL,
                  'in_server':True,
                  'money': 0,
@@ -99,8 +97,7 @@ class InNOut(commands.Cog):
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         # No welcome messages for bots and my test account
-        if member.bot == True or member.id == test_account_uid:
-            return
+        if member.bot == True or member.id == test_account_uid: return
 
         users_count = db.child('serverTotals').child('users').get().val()
         db.child('serverTotals').child('users').set(users_count - 1)
@@ -108,7 +105,7 @@ class InNOut(commands.Cog):
         # Get arrow emoji
         rarrow = self.client.get_emoji(rarrow_emoji)
 
-        leaves = leave_counts(member.id)
+        leaves = db.child('users').child(member.id).child('leaves_count').get().val() or 0
         if leaves >= 1:
             count = leaves
         else:
@@ -138,16 +135,9 @@ class InNOut(commands.Cog):
         # if they left within 15 minutes of joining it also adds another clown emoji
         await clown.add_reaction('🤡')
         if int(diff.total_seconds()) < 900:
-            e = self.client.get_emoji(honkhonk_emoji) # :HonkHonk:
+            e = disnake.utils.get(self.client.emojis, name="HonkHonk")
             await clown.add_reaction(e)
 
 
 def setup(client):
     client.add_cog(InNOut(client))
-
-
-def leave_counts(user_id):
-    leaves = db.child('users').child(user_id).child('leaves_count').get().val()
-    if leaves is None:
-        return 0
-    return leaves
