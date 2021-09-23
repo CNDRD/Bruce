@@ -26,7 +26,7 @@ APEX_VERSION = 1
 
 class GameStats(commands.Cog):
     def __init__(self, client):
-        """Various Game Stats gathering loops"""
+        """Various Game Stats gathering loops."""
         self.client = client
         self.first_boot = True
         if dbr6_loop: self.dbr6.start()

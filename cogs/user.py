@@ -8,7 +8,7 @@ import random
 
 class User(commands.Cog):
     def __init__(self, client):
-        """Collection of short user facing commands"""
+        """Collection of short user facing commands."""
         self.client = client
 
 

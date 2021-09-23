@@ -7,12 +7,15 @@ from disnake.ext import commands
 from datetime import datetime
 from pytz import timezone
 import numpy as np
+import yaml
+
+## Config Load ##
+local_timezone = yaml.safe_load(open('config.yml')).get('local_timezone')
 
 class Cicina(commands.Cog):
     def __init__(self, client):
-        """Cicina command"""
+        """Cicina command."""
         self.client = client
-        self.local_timezone = 'Europe/Prague'
 
 
     @commands.slash_command(
@@ -27,7 +30,7 @@ class Cicina(commands.Cog):
     )
     async def cicina(self, inter, top: str = None):
         uid = inter.author.id
-        today = datetime.now(timezone(self.local_timezone)).strftime('%Y-%m-%d')
+        today = datetime.now(timezone(local_timezone)).strftime('%Y-%m-%d')
         cicina = np.random.randint(0,51)
 
         # Cicina Top
@@ -63,7 +66,7 @@ class Cicina(commands.Cog):
             db.child('cicinaToday').child(uid).update(cicinaTodayData)
 
         else:
-            midnight_ts = int(datetime.now(timezone(self.local_timezone)).replace(hour=0, minute=0, second=0).timestamp() + 86400)
+            midnight_ts = int(datetime.now(timezone(local_timezone)).replace(hour=0, minute=0, second=0).timestamp() + 86400)
             msg = f'{inter.author.mention} - Cicina sa ti resetuje zajtra (~<t:{midnight_ts}:R>)'
             return await inter.response.send_message(msg)
 

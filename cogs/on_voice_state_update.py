@@ -19,7 +19,7 @@ local_timezone = config.get('local_timezone')
 
 class OnVoiceStateUpdate(commands.Cog):
     def __init__(self, client):
-        """Generates and stores voice usage statistics"""
+        """Generates and stores voice usage statistics."""
         self.client = client
 
 

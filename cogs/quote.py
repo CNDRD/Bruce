@@ -15,7 +15,7 @@ local_timezone = yaml.safe_load(open('config.yml')).get('local_timezone')
 
 class Quote(commands.Cog):
     def __init__(self, client):
-        """Quote command"""
+        """Quote command."""
         self.client = client
 
     @commands.slash_command(

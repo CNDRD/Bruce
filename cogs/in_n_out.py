@@ -21,7 +21,7 @@ rarrow_emoji = config.get('rarrow_emoji')
 
 class InNOut(commands.Cog):
     def __init__(self, client):
-        """Not so simple 'in & out' events"""
+        """Not so simple 'in & out' events."""
         self.client = client
 
 

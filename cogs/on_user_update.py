@@ -6,7 +6,7 @@ from disnake.ext import commands
 
 class OnUserUpdate(commands.Cog):
     def __init__(self, client):
-        """User updates their username or avatar, we update that in the database"""
+        """User updates their username or avatar, we update that in the database."""
         self.client = client
 
 
