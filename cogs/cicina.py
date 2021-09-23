@@ -4,7 +4,7 @@ from func.cicina import get_cicina_today
 import disnake
 from disnake.ext import commands
 
-from datetime import datetime, time
+from datetime import datetime
 from pytz import timezone
 import numpy as np
 

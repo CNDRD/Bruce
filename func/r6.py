@@ -1,7 +1,6 @@
 import os
 from r6sapi import *
 from collections import OrderedDict
-import asyncio
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -233,7 +232,6 @@ async def rainbow6stats(id_username_dict, mmr_watch_data):
         xd['main_data'][p.id] = main_data
         print(f"Done! [{p.id}]")
         count+=1
-        #await asyncio.sleep(13)
 
     await auth.close()
     return xd

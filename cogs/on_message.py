@@ -1,5 +1,4 @@
 from func.firebase_init import db
-from func.stuff import add_spaces
 from func.levels import *
 
 from disnake.ext import commands
@@ -9,7 +8,6 @@ import time
 from numpy.random import randint
 from numpy.random import seed
 from disnake.utils import get
-from numerize import numerize
 
 class OnMessage(commands.Cog):
     def __init__(self, client):

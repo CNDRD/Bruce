@@ -2,14 +2,12 @@ from func.firebase_init import db
 from func.levels import *
 from func.voice import *
 
-import disnake
 from disnake.ext import commands
 from disnake.utils import get
 
 import yaml
 import time
 import datetime
-from numerize import numerize
 from pytz import timezone
 
 

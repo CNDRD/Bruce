@@ -1,11 +1,8 @@
 from func.firebase_init import db
 from func.widget import gimme_them_stats
 
-import disnake
 from disnake.ext import commands, tasks
 
-from datetime import datetime
-import asyncio
 import yaml
 
 

@@ -1,10 +1,8 @@
 from func.firebase_init import db
-from func.stuff import add_spaces
 
 import disnake
 from disnake.ext import commands
 
-import yaml
 import random
 
 

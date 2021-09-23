@@ -1,5 +1,3 @@
-from func.firebase_init import db
-
 from disnake.ext import commands
 import disnake
 
