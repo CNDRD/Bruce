@@ -129,7 +129,7 @@ class InNOut(commands.Cog):
         # if they left within 15 minutes of joining it also adds another clown emoji
         await clown.add_reaction('🤡')
         if int(diff.total_seconds()) < 900:
-            e = disnake.utils.get(self.client.emojis, name="HonkHonk")
+            e = get(self.client.emojis, name="HonkHonk")
             await clown.add_reaction(e)
 
 
