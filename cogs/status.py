@@ -1,5 +1,9 @@
 import disnake
+from disnake.ext.commands import Param
 from disnake.ext import commands
+
+
+Activities = commands.option_enum({"Watching": "watching", "Listening": "listening", "Playing": "playing"})
 
 
 class Status(commands.Cog):
@@ -8,28 +12,13 @@ class Status(commands.Cog):
         self.client = client
 
 
-    @commands.slash_command(
-        name="status",
-        description="Change the status of the bot",
-        options=[
-            disnake.Option(
-                name="activity",
-                description="The activity type",
-                choices=[
-                    disnake.OptionChoice(name="Watching", value="watching"),
-                    disnake.OptionChoice(name="Listening", value="listening"),
-                    disnake.OptionChoice(name="Playing", value="playing"),
-                ],
-                required=True
-            ),
-            disnake.Option(
-                name="what_doing",
-                description="The text after the activity. Leave black to clear the status.",
-                type=disnake.OptionType.string
-            )
-        ]
-    )
-    async def status(self, inter, activity, what_doing=None):
+    @commands.slash_command(name="status", description="Change the status of the bot")
+    async def status(
+            self,
+            inter: disnake.ApplicationCommandInteraction,
+            activity: Activities = Param(..., desc="The activity type"),
+            what_doing: str = Param(None, desc="The text after the activity. Leave blank to clear the status.")
+        ):
         if activity == 'watching':
             activity = disnake.ActivityType.watching
         elif activity == 'listening':

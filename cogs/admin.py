@@ -1,5 +1,6 @@
-from disnake.ext import commands
 import disnake
+from disnake.ext.commands import Param
+from disnake.ext import commands
 
 import yaml
 
@@ -18,79 +19,50 @@ class Admin(commands.Cog):
         self.client = client
 
 
-    @commands.slash_command(
-        name="clear",
-        description="Clears amount of messages. Default is 1",
-        options=[
-            disnake.Option(
-                name="amount",
-                description="Amount of messages to delete (+1)",
-                type=disnake.OptionType.integer
-            )
-        ]
-    )
+    @commands.slash_command(name="clear", description="Clears amount of messages. Default is 1")
     @commands.has_any_role(bot_mod_role_id, mod_role_id)
-    async def clear(self, inter, amount: int = 1):
+    async def clear(
+            self,
+            inter: disnake.ApplicationCommandInteraction,
+            amount: int = Param(0, desc="Amount of messages to delete (+1)")
+        ):
         await inter.channel.purge(limit=(amount+1))
         await inter.response.send_message(f'Succesfully purged {amount+1} messages!', ephemeral=True)
 
 
-    @commands.slash_command(
-        name="add_reaction",
-        description="Adds a reaction to the message above",
-        options=[
-            disnake.Option(
-                name="reaction",
-                description="Reaction to add",
-                type=disnake.OptionType.string,
-                required=True
-            )
-        ]
-    )
-    async def add_reaction(self, inter, reaction):
+    @commands.slash_command(name="add_reaction", description="Adds a reaction to the message above")
+    @commands.has_any_role(bot_mod_role_id, mod_role_id)
+    async def add_reaction(
+            self,
+            inter: disnake.ApplicationCommandInteraction,
+            reaction: disnake.Emoji = Param(..., desc="Reaction to add",)
+        ):
         messages = await inter.channel.history(limit=1).flatten()
         await messages[0].add_reaction(reaction)
         await inter.response.defer()
         return await inter.delete_original_message()
 
 
-    @commands.slash_command(
-        name="say",
-        description="The bot will send what you want as himself",
-        options=[
-            disnake.Option(
-                name="text",
-                description="What to send",
-                type=disnake.OptionType.string,
-                required=True
-            )
-        ]
-    )
-    async def say(self, inter, text):
+    @commands.slash_command(name="say", description="The bot will send what you want as himself")
+    @commands.has_any_role(bot_mod_role_id, mod_role_id)
+    async def say(
+            self,
+            inter: disnake.ApplicationCommandInteraction,
+            text: str = Param(..., desc="What to send")
+        ):
         await inter.channel.send(text)
         await inter.response.defer()
         return await inter.delete_original_message()
 
 
-    @commands.slash_command(
-        name="edit",
-        description="Edit the message",
-        options=[
-            disnake.Option(
-                name="text",
-                description="What to edit the message with",
-                type=disnake.OptionType.string,
-                required=True
-            ),
-            disnake.Option(
-                name="message_id_to_edit",
-                description="ID of message to edit",
-                type=disnake.OptionType.string,
-                required=True
-            )
-        ]
-    )
-    async def edit(self, inter, text, message_id_to_edit):
+    @commands.slash_command(name="edit", description="Edit the message")
+    @commands.has_any_role(bot_mod_role_id, mod_role_id)
+    async def edit(
+            self,
+            inter: disnake.ApplicationCommandInteraction,
+            text: str = Param(..., desc="What to edit the message with"),
+            message_id_to_edit: str = Param(..., desc="ID of message to edit")
+        ):
         try:
             message = await inter.channel.fetch_message(message_id_to_edit)
         except Exception as e:

@@ -2,6 +2,7 @@ from func.firebase_init import db
 from func.cicina import get_cicina_today
 
 import disnake
+from disnake.ext.commands import Param
 from disnake.ext import commands
 
 from datetime import datetime
@@ -18,17 +19,12 @@ class Cicina(commands.Cog):
         self.client = client
 
 
-    @commands.slash_command(
-        name="cicina",
-        description="Shows your cicina size",
-        options=[
-            disnake.Option(
-                name="top",
-                description="Shows top 30 cicina users for today"
-            )
-        ]
-    )
-    async def cicina(self, inter, top: str = None):
+    @commands.slash_command(name="cicina", description="Shows your cicina size")
+    async def cicina(
+            self,
+            inter: disnake.ApplicationCommandInteraction,
+            top: str = Param(None, desc="Shows top 30 cicina users for today")
+        ):
         uid = inter.author.id
         today = datetime.now(timezone(local_timezone)).strftime('%Y-%m-%d')
         cicina = np.random.randint(0,51)

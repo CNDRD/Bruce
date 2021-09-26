@@ -1,6 +1,7 @@
 from func.firebase_init import db
 
 import disnake
+from disnake.ext.commands import Param
 from disnake.ext import commands
 
 import yaml
@@ -18,31 +19,14 @@ class Quote(commands.Cog):
         """Quote command."""
         self.client = client
 
-    @commands.slash_command(
-        name="quote",
-        description="Creates a quote",
-        options=[
-            disnake.Option(
-                name="quote",
-                description="The quote itself",
-                type=disnake.OptionType.string,
-                required=True
-            ),
-            disnake.Option(
-                name="author",
-                description="Who said it",
-                type=disnake.OptionType.string,
-                required=True
-            ),
-            disnake.Option(
-                name="when",
-                description="When did they (\"now\" for today)",
-                type=disnake.OptionType.string,
-                required=True
-            )
-        ]
-    )
-    async def quote(self, inter, quote, author, when):
+    @commands.slash_command(name="quote", description="Creates a quote")
+    async def quote(
+            self,
+            inter: disnake.ApplicationCommandInteraction,
+            quote: str = Param(..., desc="The quote itself"),
+            author: str = Param(..., desc="Who said it"),
+            when: str = Param(..., desc="When did they (\"now\" for today)")
+        ):
         quote_id = db.generate_key()
 
         if when.lower() == "now":
