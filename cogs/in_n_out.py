@@ -28,7 +28,9 @@ class InNOut(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         # No welcome messages for bots and my test account
-        if member.bot == True or member.id == test_account_uid: return
+        if member.id == test_account_uid: return
+        if member.bot: return await member.add_roles(get(member.guild.roles, name='Hosts'))
+
 
         users_count = db.child('serverTotals').child('users').get().val()
         db.child('serverTotals').child('users').set(users_count + 1)
