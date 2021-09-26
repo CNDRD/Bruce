@@ -33,9 +33,9 @@ valid_rp_channels:
 
 
 # Loops & loop times
-dbr6_loop: False
+dbr6_loop: True
 dbr6_loop_time: 30.0 # minutes
-apex_loop: False
+apex_loop: True
 apex_loop_time: 30.0 # minutes
 
 # Apex usernames lmao
