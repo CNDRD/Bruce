@@ -23,7 +23,6 @@ class MessageCommands(commands.Cog):
         if not inter.target.attachments:
             return await inter.response.send_message("Only pin the funni images / videos / gifs", ephemeral=True)
 
-
         # Create our View and add the profile link button
         # prettier than using mentions imo
         view = disnake.ui.View()
