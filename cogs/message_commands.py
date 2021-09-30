@@ -27,7 +27,7 @@ class MessageCommands(commands.Cog):
         # Create our View and add the profile link button
         # prettier than using mentions imo
         view = disnake.ui.View()
-        view.add_item(disnake.ui.Button(label=f"{inter.author.name}#{inter.author.discriminator}", url=f"discord://-/users/{inter.author.id}"))
+        view.add_item(disnake.ui.Button(label=str(inter.author), url=f"discord://-/users/{inter.author.id}"))
 
         # Create the message by appending all the links together
         msg = '\n'.join([attachment.url for attachment in inter.target.attachments])
