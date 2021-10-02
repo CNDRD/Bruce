@@ -31,7 +31,7 @@ class MessageCommands(commands.Cog):
         # Create the message by appending all the links together
         msg = '\n'.join([attachment.url for attachment in inter.target.attachments])
 
-        pinned = await self.client.get_channel(pins_channel_id).send(msg, view=view)
+        await self.client.get_channel(pins_channel_id).send(msg, view=view)
         await inter.response.send_message("Successfully pinned that message!", ephemeral=True)
 
 

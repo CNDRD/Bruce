@@ -93,7 +93,7 @@ class InNOut(commands.Cog):
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         # No welcome messages for bots and my test account
-        if member.bot == True or member.id == test_account_uid: return
+        if member.bot or member.id == test_account_uid: return
 
         users_count = db.child('serverTotals').child('users').get().val()
         db.child('serverTotals').child('users').set(users_count - 1)
@@ -113,7 +113,7 @@ class InNOut(commands.Cog):
 
         # Basic-ass variables
         ino = self.client.get_channel(in_n_out_channel_id)
-        joined = member.joined_at
+        joined = member.joined_at.replace(tzinfo=None)
         left = datetime.utcnow()
 
         diff = (left - joined)
@@ -121,10 +121,18 @@ class InNOut(commands.Cog):
 
         username = db.child('users').child(member.id).child('username').get().val()
 
-        if count == 1:
-            msg = f"{rarrow} **{username}** has just ***left*** us! Was here for *{stayed}*."
-        else:
-            msg = f"{rarrow} **{username}** has just ***left*** us for the {ordinal(leaves)} time! Was here for *{stayed}*."
+        msg = None
+
+        bans = await member.guild.bans()
+        for banned in bans:
+            if banned.user.id == member.id:
+                msg = f"{rarrow} **{username}** has just been banned! (Reason: {banned.reason})"
+
+        if not msg:
+            if count == 1:
+                msg = f"{rarrow} **{username}** has just ***left*** us! Was here for *{stayed}*."
+            else:
+                msg = f"{rarrow} **{username}** has just ***left*** us for the {ordinal(leaves)} time! Was here for *{stayed}*."
         clown = await ino.send(msg)
 
         # Automatically adds 🤡 emoji to every leave message

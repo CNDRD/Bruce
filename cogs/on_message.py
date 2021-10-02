@@ -1,5 +1,5 @@
 from func.firebase_init import db
-from func.levels import *
+from func.levels import xp_from_level, rank_name
 
 from disnake.ext import commands
 import disnake

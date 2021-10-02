@@ -1,5 +1,5 @@
 import os
-from r6sapi import *
+from r6sapi import Auth, Platforms
 from collections import OrderedDict
 
 from dotenv import load_dotenv
