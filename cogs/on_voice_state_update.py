@@ -1,6 +1,8 @@
 from func.firebase_init import db
-from func.levels import *
-from func.voice import *
+from func.levels import xp_from_level, level_from_xp, rank_name,
+from func.voice import (get_today_tz, get_yesterday_tz, get_curr_year_tz,
+                        get_yearly_user_data, get_stay_time, get_yearly_total,
+                        get_yearly_lvs, get_user_total, get_day_time)
 
 from disnake.ext import commands
 from disnake.utils import get
