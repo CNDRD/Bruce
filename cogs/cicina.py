@@ -1,9 +1,17 @@
 from func.firebase_init import db
-import datetime, discord
-from discord.ext import commands
+from func.cicina import get_cicina_today
+
+import disnake
+from disnake.ext.commands import Param
+from disnake.ext import commands
+
+from datetime import datetime
 from pytz import timezone
 import numpy as np
+import yaml
 
+## Config Load ##
+local_timezone = yaml.safe_load(open('config.yml')).get('local_timezone')
 
 class Cicina(commands.Cog):
     def __init__(self, client):
@@ -11,10 +19,14 @@ class Cicina(commands.Cog):
         self.client = client
 
 
-    @commands.command()
-    async def cicina(self, ctx, top: str = None):
-        uid = ctx.author.id
-        today = datetime.datetime.now(timezone('Europe/Prague')).strftime('%Y-%m-%d')
+    @commands.slash_command(name="cicina", description="Shows your cicina size")
+    async def cicina(
+            self,
+            inter: disnake.ApplicationCommandInteraction,
+            top: str = Param(None, desc="Shows top 30 cicina users for today")
+        ):
+        uid = inter.author.id
+        today = datetime.now(timezone(local_timezone)).strftime('%Y-%m-%d')
         cicina = np.random.randint(0,51)
 
         # Cicina Top
@@ -23,7 +35,7 @@ class Cicina(commands.Cog):
             listOfToday = get_cicina_today(cicinaToday, today)
 
             if cicinaToday is None or listOfToday is None:
-                return await ctx.send("Nobody claimed their cicina today")
+                return await inter.response.send_message("Nobody claimed their cicina today")
 
             listOfTodaySorted = sorted(listOfToday, key = lambda x: x['cicina'], reverse=True)
 
@@ -35,25 +47,24 @@ class Cicina(commands.Cog):
                 cic = listOfTodaySorted[peepCount]['cicina']
                 topMsg += f"**{peepCount+1}.** {usr.name} with ***{cic}*** *cm*\n"
                 peepCount += 1
-            return await ctx.send(topMsg)
+                if peepCount == 30: break
+            return await inter.response.send_message(topMsg)
 
 
         cicinaLast = db.child('users').child(uid).child('cicina_last').get().val() or 0
         cicinaLongest = db.child('users').child(uid).child('cicina_longest').get().val() or 0
 
         if cicinaLast != today:
-            emote = discord.utils.get(ctx.guild.emojis, name="resttHA")
-            msg = f'{ctx.author.mention} - Dĺžka tvojej ciciny je {cicina} centimetrov {emote}'
+            emote = disnake.utils.get(self.client.emojis, name="resttHA")
+            msg = f'{inter.author.mention} - Dĺžka tvojej ciciny je {cicina} centimetrov {emote}'
 
-            cicinaTodayData = {
-                "uid": uid,
-                "cicina": cicina,
-                "date": today
-            }
+            cicinaTodayData = {"uid": uid, "cicina": cicina, "date": today}
             db.child('cicinaToday').child(uid).update(cicinaTodayData)
 
         else:
-            msg = f'{ctx.author.mention} - Cicina sa ti resetuje zajtra'
+            midnight_ts = int(datetime.now(timezone(local_timezone)).replace(hour=0, minute=0, second=0).timestamp() + 86400)
+            msg = f'{inter.author.mention} - Cicina sa ti resetuje zajtra (~<t:{midnight_ts}:R>)'
+            return await inter.response.send_message(msg)
 
 
         if cicina > cicinaLongest:
@@ -82,19 +93,8 @@ class Cicina(commands.Cog):
             'cicina_count':new_count}
 
         db.child('users').child(uid).update(data)
-        await ctx.send(msg)
-
+        await inter.response.send_message(msg)
 
 
 def setup(client):
     client.add_cog(Cicina(client))
-
-def get_cicina_today(today, today_date):
-    if today is None: return None
-    xd = []
-    for u in today:
-        if today[u]['date'] == today_date:
-            today[u].pop('date')
-            xd.append(today[u])
-    if xd == []: return None
-    return xd

@@ -7,8 +7,6 @@ def rank_name(num):
 
 def xp_from_level(level):
     return int(5 / 6 * level * (2 * level * level + 27 * level + 91))
-# Should be the same as mee6 has
-# https://github.com/PsKramer/mee6calc/blob/master/calc.js
 
 def level_from_xp(xp):
     for i in range(0,100):

@@ -1,5 +1,8 @@
 git+https://github.com/thisbejim/Pyrebase
-discord.py==1.7.1
+git+https://github.com/EQUENOS/disnake
+git+https://github.com/CNDRD/RainbowSixSiege-Python-API@v1.5.4
+
+
 beautifulsoup4==4.9.3
 requests==2.25.1
 humanfriendly==9.1
@@ -9,4 +12,3 @@ PyYAML==5.3.1
 pytz==2020.1
 nest-asyncio==1.5.1
 python-dotenv==0.17.1
-dislash.py==1.1.0

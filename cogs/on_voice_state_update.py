@@ -2,45 +2,40 @@ from func.firebase_init import db
 from func.levels import *
 from func.voice import *
 
-import pyrebase, yaml, json, discord, time, datetime, os
-from discord.ext import commands
-from discord.utils import get
-from numerize import numerize
+from disnake.ext import commands
+from disnake.utils import get
+
+import yaml
+import time
+import datetime
 from pytz import timezone
 
-from dotenv import load_dotenv
-load_dotenv()
 
 ## Config Load ##
 config = yaml.safe_load(open('config.yml'))
 voice_log_channel_id = config.get('voice_log_channel_id')
+local_timezone = config.get('local_timezone')
 
 
 class OnVoiceStateUpdate(commands.Cog):
     def __init__(self, client):
-        """
-        Generate and store voice usage statistics.
-        Connected to Firebase to store the data.
-        Stores the data in seconds.
-        """
+        """Generates and stores voice usage statistics."""
         self.client = client
 
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         # We ain't counting time for bots
-        if member.bot:
-            return
+        if member.bot: return
 
         # Basic-ass variables
         now = int(time.time())                                                          # NOW INT
-        nowR = datetime.datetime.now(timezone('Europe/Prague')).strftime('%H:%M:%S')    # NOW READABLE STRING
+        nowR = datetime.datetime.now(timezone(local_timezone)).strftime('%H:%M:%S')     # NOW READABLE STRING
         uid = member.id                                                                 # DISCORD USER ID
         username = str(member)                                                          # DISCORD USER NAME
         today = get_today_tz()                                                          # TODAY'S DATE STRING
         yesterday = get_yesterday_tz()                                                  # YESTERDAY'S DATE STRING
         currYear = get_curr_year_tz()                                                   # CURRENT YEAR
-        levelUp = False                                                                 # LEVEL UP BOOL
         ch = self.client.get_channel(voice_log_channel_id)                              # VOICE LOGGING CHANNEL
 
         #voice-log channel logging
@@ -93,9 +88,6 @@ class OnVoiceStateUpdate(commands.Cog):
 
         # Left voice
         elif after.channel is None:
-        #########################
-        ## Data gathering part ##
-        #########################
             # User data
             ud = db.child('users').child(uid).get().val()
             currentLevel = ud.get('level', 0)
@@ -129,15 +121,11 @@ class OnVoiceStateUpdate(commands.Cog):
                 yesterday: newYesterdayTotalTime
             }
 
-        #############
-        ## XP part ##
-        #############
-            # hardcore calculations
+            # Hardcore XP calculations
             xpToAdd = int(stayed/7)
             newXP = currentXP + xpToAdd
 
             if newXP >= xp_from_level(currentLevel + 1):
-                levelUp = True
                 new_level = level_from_xp(newXP)
 
                 rankToAdd = rank_name(new_level)
@@ -149,23 +137,23 @@ class OnVoiceStateUpdate(commands.Cog):
                     await member.remove_roles(delRank)
 
                 userData = {
-                    'all_time_total_voice':newUserTotal,
-                    f'voice_year_{currYear}':newYearlyUserTotal,
-                    'level':new_level,
-                    'xp':newXP,
+                    'all_time_total_voice': newUserTotal,
+                    f'voice_year_{currYear}': newYearlyUserTotal,
+                    'level': new_level,
+                    'xp': newXP,
                     'money': currentMoney + xpToAdd,
                 }
                 serverTotalsData = {
-                    'levels':stLevels + (new_level - currentLevel),
-                    'voice':stVoice + stayed,
-                    'xp':stXP + xpToAdd
+                    'levels': stLevels + (new_level - currentLevel),
+                    'voice': stVoice + stayed,
+                    'xp': stXP + xpToAdd
                 }
 
             else:
                 userData = {
-                    'all_time_total_voice':newUserTotal,
-                    f'voice_year_{currYear}':newYearlyUserTotal,
-                    'xp':newXP,
+                    'all_time_total_voice': newUserTotal,
+                    f'voice_year_{currYear}': newYearlyUserTotal,
+                    'xp': newXP,
                     'money': currentMoney + xpToAdd,
                 }
                 serverTotalsData = {
@@ -173,27 +161,11 @@ class OnVoiceStateUpdate(commands.Cog):
                     'xp': stXP + xpToAdd
                 }
 
-        ######################
-        ## Data update part ##
-        ######################
+            # Update all the gathered data in the database
             db.child('voice').child(currYear).child('total').child(uid).update(userYearTotalData)
             db.child('voice').child(currYear).child('day').update(todayDayData)
             db.child('users').child(uid).update(userData)
             db.child('serverTotals').update(serverTotalsData)
-
-        ######################
-        ## Level up message ##
-        ######################
-            if levelUp:
-                dm_ch = await member.create_dm()
-                embed = discord.Embed(colour=discord.Colour.random())
-                embed.set_author(name=member, url='https://diskito.eu/leader.html')
-
-                embed.add_field(name=f'You have just levelled up to {new_level}! Congrats!',
-                                value=f'You now have **{numerize.numerize(newXP)}** xp',
-                                inline=False)
-                await dm_ch.send(embed=embed)
-
 
 
 def setup(client):

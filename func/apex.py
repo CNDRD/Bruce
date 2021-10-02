@@ -14,7 +14,7 @@ def _parse_legend_data(uuh):
         x[s[stat]['displayName']] = s[stat]['value']
     return x
 
-def apexStats():
+def apex_stats():
     lmao = {}
     USERNAMES = yaml.safe_load(open('config.yml')).get('apex_usernames')
 
