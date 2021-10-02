@@ -1,6 +1,6 @@
 git+https://github.com/thisbejim/Pyrebase
 git+https://github.com/EQUENOS/disnake
-git+https://github.com/CNDRD/RainbowSixSiege-Python-API@1.5.4
+git+https://github.com/CNDRD/RainbowSixSiege-Python-API@v1.5.4
 
 
 beautifulsoup4==4.9.3
