@@ -56,14 +56,14 @@ class Cicina(commands.Cog):
 
         if cicinaLast != today:
             emote = disnake.utils.get(self.client.emojis, name="resttHA")
-            msg = f'{inter.author.mention} - Dĺžka tvojej ciciny je {cicina} centimetrov {emote}'
+            msg = f'Dĺžka tvojej ciciny je {cicina} centimetrov {emote}'
 
             cicinaTodayData = {"uid": uid, "cicina": cicina, "date": today}
             db.child('cicinaToday').child(uid).update(cicinaTodayData)
 
         else:
             midnight_ts = int(datetime.now(timezone(local_timezone)).replace(hour=0, minute=0, second=0).timestamp() + 86400)
-            msg = f'{inter.author.mention} - Cicina sa ti resetuje zajtra (~<t:{midnight_ts}:R>)'
+            msg = f'Cicina sa ti resetuje zajtra (~<t:{midnight_ts}:R>)'
             return await inter.response.send_message(msg)
 
 
