@@ -53,7 +53,8 @@ class BlackJack(commands.Cog):
         if bet <= 0:
             return await inter.response.send_message("You can't do that, and you know it..", ephemeral=True)
         if bet > user_money:
-            return await inter.response.send_message(f"You cannot bet more than you have.. (You have {user_money:,} monies)", ephemeral=True)
+            message = f"You cannot bet more than you have.. (You have {user_money:,} monies)".replace(',', ' ')
+            return await inter.response.send_message(message, ephemeral=True)
 
         game = BJ(inter, bet, user_money)
 
