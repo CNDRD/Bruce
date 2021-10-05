@@ -50,7 +50,7 @@ class BlackJack(commands.Cog):
 
         user_money = db.child('users').child(inter.author.id).child('money').get().val()
         # user_money = 10
-        if bet < 0:
+        if bet <= 0:
             return await inter.response.send_message("You can't do that, and you know it..", ephemeral=True)
         if bet > user_money:
             return await inter.response.send_message(f"You cannot bet more than you have.. (You have {user_money:,} monies)", ephemeral=True)
