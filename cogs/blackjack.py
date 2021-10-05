@@ -46,7 +46,7 @@ class BlackJack(commands.Cog):
         self.client = client
 
     @commands.slash_command(name="blackjack", description="Game of Black Jack")
-    async def _blackjack(self, inter: disnake.MessageInteraction, bet: int = Param(5, desc="Place your bet!")):
+    async def _blackjack(self, inter: disnake.MessageInteraction, bet: int = Param(..., desc="Place your bet!")):
 
         user_money = db.child('users').child(inter.author.id).child('money').get().val()
         # user_money = 10
