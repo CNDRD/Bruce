@@ -43,8 +43,10 @@ def generate_game_embed(game) -> disnake.Embed():
 
 def _get_embed_footer(game) -> str:
     if game.result is not None:
-        res_mon = get_result_money(game)
-        return f"Bet: {game.bet} monies | Result: {res_mon - game.user_money} | Monies remaining: {res_mon:,}"
+        result_money = get_result_money(game)
+        res_mon = result_money - game.user_money
+        money_outcome = res_mon+game.bet if game.result == 1 or game.result == 2 else res_mon
+        return f"Bet: {game.bet:,} monies | Result: {money_outcome:,} | Monies remaining: {result_money:,}".replace(',', ' ')
     return f"Bet: {game.bet}"
 
 
