@@ -79,7 +79,7 @@ def _get_embed_message(game) -> str:
 
     # default win (player BJ)
     if game.action == 1:
-        game.result = 1
+        game.result = 2
         return "Black Jack! You've won!"
 
     # default lose (dealer BJ)
@@ -118,7 +118,7 @@ def _get_embed_message(game) -> str:
             return "Bust! You lose.."
 
         if sum(game.player) == 21:
-            game.result = 1
+            game.result = 2
             return "Black Jack! You win!!"
 
         return default_message
