@@ -69,7 +69,8 @@ class BlackJack(commands.Cog):
             game.result = -1
 
         if game.action is not None:
-            return await inter.response.send_message(embed=generate_game_embed(game))
+            await inter.response.send_message(embed=generate_game_embed(game))
+            return db.child('users').child(inter.author.id).update({'money': get_result_money(game)})
 
         game.action = 69
         await inter.response.send_message(embed=generate_game_embed(game), view=game)
