@@ -56,7 +56,7 @@ def get_result_money(game) -> int:
     if game.result == 1:  # W
         return game.user_money + game.bet
     if game.result == 2:  # BJ
-        return game.user_money + (game.bet * 1.5)
+        return int(game.user_money + (game.bet * 1.5))
 
 
 def _get_embed_color(game) -> disnake.Color:
