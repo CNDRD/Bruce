@@ -13,7 +13,7 @@ import datetime
 from pytz import timezone
 
 
-## Config Load ##
+# Config Load
 config = yaml.safe_load(open('config.yml'))
 voice_log_channel_id = config.get('voice_log_channel_id')
 local_timezone = config.get('local_timezone')
@@ -24,39 +24,38 @@ class OnVoiceStateUpdate(commands.Cog):
         """Generates and stores voice usage statistics."""
         self.client = client
 
-
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         # We ain't counting time for bots
-        if member.bot: return
+        if member.bot:
+            return
 
         # Basic-ass variables
         now = int(time.time())                                                          # NOW INT
-        nowR = datetime.datetime.now(timezone(local_timezone)).strftime('%H:%M:%S')     # NOW READABLE STRING
+        now_r = datetime.datetime.now(timezone(local_timezone)).strftime('%H:%M:%S')     # NOW READABLE STRING
         uid = member.id                                                                 # DISCORD USER ID
         username = str(member)                                                          # DISCORD USER NAME
         today = get_today_tz()                                                          # TODAY'S DATE STRING
         yesterday = get_yesterday_tz()                                                  # YESTERDAY'S DATE STRING
-        currYear = get_curr_year_tz()                                                   # CURRENT YEAR
+        curr_year = get_curr_year_tz()                                                   # CURRENT YEAR
         ch = self.client.get_channel(voice_log_channel_id)                              # VOICE LOGGING CHANNEL
 
-        #voice-log channel logging
+        # voice-log channel logging
 
         # Switched channels
         if before.channel is not None and after.channel is not None and before.channel != after.channel:
-            msg = f"{username} switched from **{str(before.channel)}** to **{str(after.channel)}** *{nowR}*"
+            msg = f"{username} switched from **{str(before.channel)}** to **{str(after.channel)}** *{now_r}*"
             await ch.send(msg)
 
         # Joined voice
         elif before.channel is None:
-            msg = f"{username} joined **{str(after.channel)}** *{nowR}*"
+            msg = f"{username} joined **{str(after.channel)}** *{now_r}*"
             await ch.send(msg)
 
         # Left voice
         elif after.channel is None:
-            msg = f"{username} left **{str(before.channel)}** *{nowR}*"
+            msg = f"{username} left **{str(before.channel)}** *{now_r}*"
             await ch.send(msg)
-
 
         #######################################################################
 
@@ -74,7 +73,7 @@ class OnVoiceStateUpdate(commands.Cog):
             }
         }
         if after.channel is None:
-            widget_voice_state = {"voice":"none"}
+            widget_voice_state = {"voice": "none"}
         db.child("widget").child(uid).update(widget_voice_state)
 
         #######################################################################
@@ -84,7 +83,7 @@ class OnVoiceStateUpdate(commands.Cog):
         # Joined voice
         if before.channel is None:
             # Set the channel session timestamp
-            db.child('voice').child(currYear).child('in').child(uid).set(now)
+            db.child('voice').child(curr_year).child('in').child(uid).set(now)
 
         #######################################################################
 
@@ -92,82 +91,82 @@ class OnVoiceStateUpdate(commands.Cog):
         elif after.channel is None:
             # User data
             ud = db.child('users').child(uid).get().val()
-            currentLevel = ud.get('level', 0)
-            currentXP = ud.get('xp', 0)
-            currentATTT = ud.get('all_time_total_voice', 0)
-            currentMoney = ud.get('money', 0)
+            current_level = ud.get('level', 0)
+            current_xp = ud.get('xp', 0)
+            current_attt = ud.get('all_time_total_voice', 0)
+            current_money = ud.get('money', 0)
 
             # Yearly User Data
-            yearVoice, yearLVS = get_yearly_user_data(currYear, uid)
+            year_voice, year_lvs = get_yearly_user_data(curr_year, uid)
 
             # Server Totals Data
             st = db.child('serverTotals').get().val()
-            stLevels = st.get('levels', 0)
-            stVoice = st.get('voice', 0)
-            stXP = st.get('xp', 0)
+            st_levels = st.get('levels', 0)
+            st_voice = st.get('voice', 0)
+            st_xp = st.get('xp', 0)
 
             # Hardcore calculations
-            stayed = get_stay_time(currYear, uid, now)  # how long did the user stay
-            newYearlyUserTotal = get_yearly_total(stayed, yearVoice)  # their yearly new total time
-            newYearlyLVS = get_yearly_lvs(stayed, yearLVS)  # Longest Voice Session
-            newUserTotal = get_user_total(currentATTT, stayed) # users all time total voice time
-            newCurrentDayTotalTime, newYesterdayTotalTime = get_day_time(currYear, today, yesterday, stayed, now)  # current day and yesterday total time
+            stayed = get_stay_time(curr_year, uid, now)  # how long did the user stay
+            new_yearly_user_total = get_yearly_total(stayed, year_voice)  # their yearly new total time
+            new_yearly_lvs = get_yearly_lvs(stayed, year_lvs)  # Longest Voice Session
+            new_user_total = get_user_total(current_attt, stayed)  # users all time total voice time
+            new_current_day_total_time, new_yesterday_total_time = get_day_time(curr_year, today, yesterday, stayed, now)  # current day and yesterday total time
 
-            userYearTotalData = {
+            user_year_total_data = {
                 'name': str(member),
-                'voice': newYearlyUserTotal,
-                'lvs': newYearlyLVS
+                'voice': new_yearly_user_total,
+                'lvs': new_yearly_lvs
             }
-            todayDayData = {
-                today: newCurrentDayTotalTime,
-                yesterday: newYesterdayTotalTime
+            today_day_data = {
+                today: new_current_day_total_time,
+                yesterday: new_yesterday_total_time
             }
 
             # Hardcore XP calculations
-            xpToAdd = int(stayed/7)
-            newXP = currentXP + xpToAdd
+            xp_to_add = int(stayed/7)
+            new_xp = current_xp + xp_to_add
 
-            if newXP >= xp_from_level(currentLevel + 1):
-                new_level = level_from_xp(newXP)
+            if new_xp >= xp_from_level(current_level + 1):
+                new_level = level_from_xp(new_xp)
 
-                rankToAdd = rank_name(new_level)
-                rankToDel = rank_name(currentLevel)
-                if rankToAdd != rankToDel:
-                    addRank = get(member.guild.roles, name=rankToAdd)
-                    await member.add_roles(addRank)
-                    delRank = get(member.guild.roles, name=rankToDel)
-                    await member.remove_roles(delRank)
+                rank_to_add = rank_name(new_level)
+                rank_to_del = rank_name(current_level)
+                if rank_to_add != rank_to_del:
+                    add_rank = get(member.guild.roles, name=rank_to_add)
+                    await member.add_roles(add_rank)
+                    del_rank = get(member.guild.roles, name=rank_to_del)
+                    await member.remove_roles(del_rank)
 
-                userData = {
-                    'all_time_total_voice': newUserTotal,
-                    f'voice_year_{currYear}': newYearlyUserTotal,
+                user_data = {
+                    'all_time_total_voice': new_user_total,
+                    f'voice_year_{curr_year}': new_yearly_user_total,
                     'level': new_level,
-                    'xp': newXP,
-                    'money': currentMoney + xpToAdd,
+                    'xp': new_xp,
+                    'money': current_money + xp_to_add,
                 }
-                serverTotalsData = {
-                    'levels': stLevels + (new_level - currentLevel),
-                    'voice': stVoice + stayed,
-                    'xp': stXP + xpToAdd
+                server_totals_data = {
+                    'levels': st_levels + (new_level - current_level),
+                    'voice': st_voice + stayed,
+                    'xp': st_xp + xp_to_add
                 }
 
             else:
-                userData = {
-                    'all_time_total_voice': newUserTotal,
-                    f'voice_year_{currYear}': newYearlyUserTotal,
-                    'xp': newXP,
-                    'money': currentMoney + xpToAdd,
+                user_data = {
+                    'all_time_total_voice': new_user_total,
+                    f'voice_year_{curr_year}': new_yearly_user_total,
+                    'xp': new_xp,
+                    'money': current_money + xp_to_add,
                 }
-                serverTotalsData = {
-                    'voice': stVoice + stayed,
-                    'xp': stXP + xpToAdd
+                server_totals_data = {
+                    'voice': st_voice + stayed,
+                    'xp': st_xp + xp_to_add
                 }
 
             # Update all the gathered data in the database
-            db.child('voice').child(currYear).child('total').child(uid).update(userYearTotalData)
-            db.child('voice').child(currYear).child('day').update(todayDayData)
-            db.child('users').child(uid).update(userData)
-            db.child('serverTotals').update(serverTotalsData)
+            db.child('voice').child(curr_year).child('total').child(uid).update(user_year_total_data)
+            db.child('voice').child(curr_year).child('day').update(today_day_data)
+            db.child('users').child(uid).update(user_data)
+            db.child('serverTotals').update(server_totals_data)
 
 
 def setup(client):

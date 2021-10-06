@@ -3,7 +3,7 @@ from disnake.ext import commands
 
 import yaml
 
-## Config Load ##
+# Config Load
 pins_channel_id = yaml.safe_load(open('config.yml')).get('pins_channel_id')
 
 
@@ -11,7 +11,6 @@ class MessageCommands(commands.Cog):
     def __init__(self, client):
         """Message commands."""
         self.client = client
-
 
     @commands.message_command(name="Pin this message")
     async def pin(self, inter: disnake.ApplicationCommandInteraction):

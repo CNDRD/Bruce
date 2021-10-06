@@ -9,8 +9,7 @@ from humanfriendly import format_timespan
 from datetime import datetime
 import yaml
 
-
-## Config Load ##
+# Config Load
 config = yaml.safe_load(open('config.yml'))
 in_n_out_channel_id = config.get('in_n_out_channel_id')
 test_account_uid = config.get('test_account_uid')
@@ -24,13 +23,13 @@ class InNOut(commands.Cog):
         """Not so simple 'in & out' events."""
         self.client = client
 
-
     @commands.Cog.listener()
     async def on_member_join(self, member):
         # No welcome messages for bots and my test account
-        if member.id == test_account_uid: return
-        if member.bot: return await member.add_roles(get(member.guild.roles, name='Hosts'))
-
+        if member.id == test_account_uid:
+            return
+        if member.bot:
+            return await member.add_roles(get(member.guild.roles, name='Hosts'))
 
         users_count = db.child('serverTotals').child('users').get().val()
         db.child('serverTotals').child('users').set(users_count + 1)
@@ -55,8 +54,8 @@ class InNOut(commands.Cog):
             jeetard = get(member.guild.roles, name='Jeetard')
             await member.add_roles(jeetard)
 
-            # Update users individial stats
-            data = {'in_server':True}
+            # Update users individual stats
+            data = {'in_server': True}
             db.child('users').child(member.id).update(data)
 
         else:
@@ -68,32 +67,32 @@ class InNOut(commands.Cog):
             await member.add_roles(role)
 
             # Get timestamps to when the user joined Discord and the server, and a link to their avatar
-            joinedServer = int(member.joined_at.timestamp())
-            joinedDiscord = int(member.created_at.timestamp())
-            avatarURL = str(member.avatar_url_as(size=4096))
+            joined_server = int(member.joined_at.timestamp())
+            joined_discord = int(member.created_at.timestamp())
+            avatar_url = str(member.avatar_url_as(size=4096))
 
-            # Create users individial stats
-            d = {'reacc_points':0,
-                 'username':str(member),
-                 'xp':0,
-                 'level':0,
-                 'last_xp_get':joinedServer,
-                 'messages_count':0,
-                 'joined_server':joinedServer,
-                 'joined_disnake':joinedDiscord,
-                 'avatar_url':avatarURL,
-                 'in_server':True,
+            # Create users individual stats
+            d = {'reacc_points': 0,
+                 'username': str(member),
+                 'xp': 0,
+                 'level': 0,
+                 'last_xp_get': joined_server,
+                 'messages_count': 0,
+                 'joined_server': joined_server,
+                 'joined_disnake': joined_discord,
+                 'avatar_url': avatar_url,
+                 'in_server': True,
                  'money': 0,
                  }
             db.child('users').child(member.id).set(d)
 
         await ino.send(msg)
 
-
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         # No welcome messages for bots and my test account
-        if member.bot or member.id == test_account_uid: return
+        if member.bot or member.id == test_account_uid:
+            return
 
         users_count = db.child('serverTotals').child('users').get().val()
         db.child('serverTotals').child('users').set(users_count - 1)
@@ -107,8 +106,8 @@ class InNOut(commands.Cog):
         else:
             count = 1
 
-        # Update users individial stats
-        data = {'leaves_count':count+1, 'in_server':False}
+        # Update users individual stats
+        data = {'leaves_count': count + 1, 'in_server': False}
         db.child('users').child(member.id).update(data)
 
         # Basic-ass variables
@@ -133,6 +132,7 @@ class InNOut(commands.Cog):
                 msg = f"{rarrow} **{username}** has just ***left*** us! Was here for *{stayed}*."
             else:
                 msg = f"{rarrow} **{username}** has just ***left*** us for the {ordinal(leaves)} time! Was here for *{stayed}*."
+
         clown = await ino.send(msg)
 
         # Automatically adds 🤡 emoji to every leave message

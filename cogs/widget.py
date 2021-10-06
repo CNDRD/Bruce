@@ -6,7 +6,7 @@ from disnake.ext import commands, tasks
 import yaml
 
 
-## Config Load ##
+# Config Load
 config = yaml.safe_load(open('config.yml'))
 server_id = config.get('server_id')
 bot_mod_role_id = config.get('bot_mod_role_id')
@@ -27,16 +27,16 @@ class Widget(commands.Cog):
                 widgeee[member.id] = gimme_them_stats(member)
         db.child("widget").set(widgeee)
 
-
     @widget_loop.before_loop
     async def before_widget_loop(self):
         await self.client.wait_until_ready()
 
-
     @commands.Cog.listener()
     async def on_presence_update(self, before, after):
-        if after.guild.id != server_id: return
-        if after.bot: return
+        if after.guild.id != server_id:
+            return
+        if after.bot:
+            return
 
         x = gimme_them_stats(after)
         db.child("widget").child(x["uid"]).update(x)

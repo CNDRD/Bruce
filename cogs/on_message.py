@@ -9,19 +9,21 @@ from numpy.random import randint
 from numpy.random import seed
 from disnake.utils import get
 
+
 class OnMessage(commands.Cog):
     def __init__(self, client):
         """Leveling system & Auto-deletion of `User xyz pinned a message` messages."""
         self.client = client
 
-
     @commands.Cog.listener()
     async def on_message(self, message):
         # We don't want the bot giving XP to itself now do we
-        if message.author.bot: return
+        if message.author.bot:
+            return
 
-        # Don't work in DM's
-        if isinstance(message.channel, disnake.channel.DMChannel): return
+        # Don't work in DMs
+        if isinstance(message.channel, disnake.channel.DMChannel):
+            return
 
         # Auto-delete "pinned" & "thread has been created" messages
         if message.type == disnake.MessageType.pins_add or message.type == disnake.MessageType.thread_created:
@@ -98,8 +100,8 @@ class OnMessage(commands.Cog):
 
         else:
             # Too Fast (less than 60s since last message)
-            data = { 'messages_count': messages_count + 1 }
-            server_totals = { 'messages': st_messages + 1 }
+            data = {'messages_count': messages_count + 1}
+            server_totals = {'messages': st_messages + 1}
 
         # Update users individual stats & server total stats
         db.child('users').child(uid).update(data)

@@ -9,8 +9,7 @@ import datetime
 import time
 from pytz import timezone
 
-
-## Config Load ##
+# Config Load
 local_timezone = yaml.safe_load(open('config.yml')).get('local_timezone')
 
 
@@ -26,7 +25,7 @@ class Quote(commands.Cog):
             quote: str = Param(..., desc="The quote itself"),
             author: str = Param(..., desc="Who said it"),
             when: str = Param(..., desc="When did they (\"now\" for today)")
-        ):
+    ):
         quote_id = db.generate_key()
 
         if when.lower() == "now":

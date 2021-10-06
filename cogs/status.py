@@ -11,14 +11,13 @@ class Status(commands.Cog):
         """Custom status command."""
         self.client = client
 
-
     @commands.slash_command(name="status", description="Change the status of the bot")
     async def status(
             self,
             inter: disnake.ApplicationCommandInteraction,
             activity: Activities = Param(..., desc="The activity type"),
             what_doing: str = Param(None, desc="The text after the activity. Leave blank to clear the status.")
-        ):
+    ):
         if activity == 'watching':
             activity = disnake.ActivityType.watching
         elif activity == 'listening':
