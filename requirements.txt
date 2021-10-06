@@ -5,6 +5,7 @@ git+https://github.com/CNDRD/RainbowSixSiege-Python-API@v1.5.4
 
 beautifulsoup4==4.10.0
 requests==2.25.1
+requests-toolbelt==0.9.1
 humanfriendly==10.0
 numpy==1.21.2
 numerize==0.12
