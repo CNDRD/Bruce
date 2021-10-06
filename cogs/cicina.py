@@ -67,8 +67,7 @@ class Cicina(commands.Cog):
             db.child('cicinaToday').child(uid).update(cicina_today_data)
 
         else:
-            midnight_ts = int(
-                datetime.now(timezone(local_timezone)).replace(hour=0, minute=0, second=0).timestamp() + 86400)
+            midnight_ts = int(datetime.now(timezone(local_timezone)).replace(hour=0, minute=0, second=0).timestamp() + 86400)
             msg = f'Cicina sa ti resetuje zajtra (~<t:{midnight_ts}:R>)'
             return await inter.response.send_message(msg, ephemeral=True)
 
@@ -93,7 +92,8 @@ class Cicina(commands.Cog):
             'cicina_last': today,
 
             'cicina_avg': new_avg,
-            'cicina_count': new_count}
+            'cicina_count': new_count
+        }
 
         db.child('users').child(uid).update(data)
         await inter.response.send_message(msg)
