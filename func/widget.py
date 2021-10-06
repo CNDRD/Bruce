@@ -1,6 +1,7 @@
 import disnake
 from datetime import datetime
 
+
 def gimme_them_stats(mem):
     x = {
         "uid": mem.id,
@@ -14,6 +15,8 @@ def gimme_them_stats(mem):
         "early_supporter": mem.public_flags.early_supporter
     }
     return x
+
+
 def _get_hypesquad_house(flags):
     if flags.hypesquad_balance:
         return "balance"
@@ -22,6 +25,8 @@ def _get_hypesquad_house(flags):
     if flags.hypesquad_brilliance:
         return "brilliance"
     return "none"
+
+
 def _get_voice(v):
     xd = {
         'deaf': False, 'mute': False,
@@ -46,8 +51,11 @@ def _get_voice(v):
         xd['self_video'] = True
 
     return xd
+
+
 def _get_activities(activities):
-    if activities == (): return "none"
+    if activities == ():
+        return "none"
 
     xd = {
         "spotify": "none",
@@ -80,9 +88,14 @@ def _get_activities(activities):
             xd["other"].append(str(activity.name))
 
     return xd
+
+
 def _get_premium(uhh):
-    if uhh is None: return "none"
+    if uhh is None:
+        return "none"
     return datetime.timestamp(uhh)
+
+
 def _get_status(s):
     if not isinstance(s, str):
         return s[0]

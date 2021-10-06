@@ -3,45 +3,47 @@ from r6sapi import Auth, Platforms
 from collections import OrderedDict
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
 UBISOFT_EMAIL = os.getenv('UBISOFT_EMAIL')
 UBISOFT_PASSW = os.getenv('UBISOFT_PASSW')
 
 RANKS = [
-    { "name": "Copper 5",   "min_mmr": 1,    "max_mmr": 1199 },
-    { "name": "Copper 4",   "min_mmr": 1200, "max_mmr": 1299 },
-    { "name": "Copper 3",   "min_mmr": 1300, "max_mmr": 1399 },
-    { "name": "Copper 2",   "min_mmr": 1400, "max_mmr": 1499 },
-    { "name": "Copper 1",   "min_mmr": 1500, "max_mmr": 1599 },
-    { "name": "Bronze 5",   "min_mmr": 1600, "max_mmr": 1699 },
-    { "name": "Bronze 4",   "min_mmr": 1700, "max_mmr": 1799 },
-    { "name": "Bronze 3",   "min_mmr": 1800, "max_mmr": 1899 },
-    { "name": "Bronze 2",   "min_mmr": 1900, "max_mmr": 1999 },
-    { "name": "Bronze 1",   "min_mmr": 2000, "max_mmr": 2099 },
-    { "name": "Silver 5",   "min_mmr": 2100, "max_mmr": 2199 },
-    { "name": "Silver 4",   "min_mmr": 2200, "max_mmr": 2299 },
-    { "name": "Silver 3",   "min_mmr": 2300, "max_mmr": 2399 },
-    { "name": "Silver 2",   "min_mmr": 2400, "max_mmr": 2499 },
-    { "name": "Silver 1",   "min_mmr": 2500, "max_mmr": 2599 },
-    { "name": "Gold 3",     "min_mmr": 2600, "max_mmr": 2799 },
-    { "name": "Gold 2",     "min_mmr": 2800, "max_mmr": 2999 },
-    { "name": "Gold 1",     "min_mmr": 3000, "max_mmr": 3199 },
-    { "name": "Platinum 3", "min_mmr": 3200, "max_mmr": 3499 },
-    { "name": "Platinum 2", "min_mmr": 3500, "max_mmr": 3799 },
-    { "name": "Platinum 1", "min_mmr": 3800, "max_mmr": 4099 },
-    { "name": "Diamond 3",  "min_mmr": 4100, "max_mmr": 4399 },
-    { "name": "Diamond 2",  "min_mmr": 4400, "max_mmr": 4699 },
-    { "name": "Diamond 1",  "min_mmr": 4700, "max_mmr": 4999 },
-    { "name": "Champion",   "min_mmr": 5000, "max_mmr": 15000 }
+    {"name": "Copper 5", "min_mmr": 1, "max_mmr": 1199},
+    {"name": "Copper 4", "min_mmr": 1200, "max_mmr": 1299},
+    {"name": "Copper 3", "min_mmr": 1300, "max_mmr": 1399},
+    {"name": "Copper 2", "min_mmr": 1400, "max_mmr": 1499},
+    {"name": "Copper 1", "min_mmr": 1500, "max_mmr": 1599},
+    {"name": "Bronze 5", "min_mmr": 1600, "max_mmr": 1699},
+    {"name": "Bronze 4", "min_mmr": 1700, "max_mmr": 1799},
+    {"name": "Bronze 3", "min_mmr": 1800, "max_mmr": 1899},
+    {"name": "Bronze 2", "min_mmr": 1900, "max_mmr": 1999},
+    {"name": "Bronze 1", "min_mmr": 2000, "max_mmr": 2099},
+    {"name": "Silver 5", "min_mmr": 2100, "max_mmr": 2199},
+    {"name": "Silver 4", "min_mmr": 2200, "max_mmr": 2299},
+    {"name": "Silver 3", "min_mmr": 2300, "max_mmr": 2399},
+    {"name": "Silver 2", "min_mmr": 2400, "max_mmr": 2499},
+    {"name": "Silver 1", "min_mmr": 2500, "max_mmr": 2599},
+    {"name": "Gold 3", "min_mmr": 2600, "max_mmr": 2799},
+    {"name": "Gold 2", "min_mmr": 2800, "max_mmr": 2999},
+    {"name": "Gold 1", "min_mmr": 3000, "max_mmr": 3199},
+    {"name": "Platinum 3", "min_mmr": 3200, "max_mmr": 3499},
+    {"name": "Platinum 2", "min_mmr": 3500, "max_mmr": 3799},
+    {"name": "Platinum 1", "min_mmr": 3800, "max_mmr": 4099},
+    {"name": "Diamond 3", "min_mmr": 4100, "max_mmr": 4399},
+    {"name": "Diamond 2", "min_mmr": 4400, "max_mmr": 4699},
+    {"name": "Diamond 1", "min_mmr": 4700, "max_mmr": 4999},
+    {"name": "Champion", "min_mmr": 5000, "max_mmr": 15000}
 ]
 
 
-def _get_rank_from_MMR(mmr):
+def _get_rank_from_mmr(mmr):
     for r in RANKS:
         if r['min_mmr'] <= int(mmr) <= r['max_mmr']:
             return r['name'], r['min_mmr'], r['max_mmr']
     return 'Unranked', 0, 0
+
 
 def _get_uids(a):
     x = []
@@ -49,33 +51,36 @@ def _get_uids(a):
         x.append(i)
     return x
 
+
 def _sort_atk_def(ops):
-    atk,defn = {},{}
+    atk, defn = {}, {}
     for op in ops:
         op = ops[op]
         if op['atkdef'] == 'attacker':
             atk[op['name']] = op
         elif op['atkdef'] == 'defender':
             defn[op['name']] = op
-    return {'atk':atk,'def':defn}
+    return {'atk': atk, 'def': defn}
+
 
 def _get_top_op(ops):
     return OrderedDict(sorted(ops.items(), key=lambda i: i[1]['time_played'])).popitem(last=True)[1]
 
+
 async def rainbow6stats(id_username_dict, mmr_watch_data):
-    xd = {'all_data':{}, 'main_data':{}, 'mmr_watch':{}}
-    UIDS = _get_uids(id_username_dict)
+    xd = {'all_data': {}, 'main_data': {}, 'mmr_watch': {}}
+    uids = _get_uids(id_username_dict)
 
     auth = Auth(UBISOFT_EMAIL, UBISOFT_PASSW)
 
-    players = await auth.get_player_batch(uids=UIDS, platform=Platforms.UPLAY)
+    players = await auth.get_player_batch(uids=uids, platform=Platforms.UPLAY)
     ranks = await players.get_rank()
     casuals = await players.get_casual()
 
     count = 1
 
     for p in players:
-        print(f'Processing [{p.id}].. ({count}/{len(UIDS)})')
+        print(f'Processing [{p.id}].. ({count}/{len(uids)})')
         await p.check_general()
         await p.load_level()
         await p.load_queues()
@@ -94,7 +99,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data):
         top_2_ops = {"atk1": _get_top_op(operator_data['atk']),
                      "def1": _get_top_op(operator_data['def'])}
 
-        casualRankName, casualRankPrev, casualRankNext = _get_rank_from_MMR(c.mmr)
+        casual_rank_name, casual_rank_prev, casual_rank_next = _get_rank_from_mmr(c.mmr)
 
         # Get Weapon type data
         w = await p.check_weapons()
@@ -104,7 +109,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data):
 
         # MMR Watch
         if mmr_watch_data.get(p.id, None) is None:
-            mmr_watch_data[p.id] = {'mmr':r.mmr,'playtime':p.time_played}
+            mmr_watch_data[p.id] = {'mmr': r.mmr, 'playtime': p.time_played}
 
         mw_mmr = mmr_watch_data[p.id]['mmr']
         mw_plt = mmr_watch_data[p.id]['playtime']
@@ -146,11 +151,11 @@ async def rainbow6stats(id_username_dict, mmr_watch_data):
             'sDeaths': r.deaths,
             'sAbandons': r.abandons,
 
-            'currentRankImageCasual': get_rank(casualRankName),
-            'currentRankCasual': casualRankName,
+            'currentRankImageCasual': get_rank(casual_rank_name),
+            'currentRankCasual': casual_rank_name,
             'currentMMRcasual': c.mmr,
-            'prevRankMMRcasual': casualRankPrev,
-            'nextRankMMRcasual': casualRankNext,
+            'prevRankMMRcasual': casual_rank_prev,
+            'nextRankMMRcasual': casual_rank_next,
             'lastMMRchangeCasual': c.last_mmr_change,
             'sWinsCasual': c.wins,
             'sLossesCasual': c.losses,
@@ -158,24 +163,24 @@ async def rainbow6stats(id_username_dict, mmr_watch_data):
             'sDeathsCasual': c.deaths,
             'sAbandonsCasual': c.abandons,
 
-            'hs': round((p.headshots/p.kills)*100, 2),
+            'hs': round((p.headshots / p.kills) * 100, 2),
             'xp': p.xp,
             'level': p.level,
             'alphapackProbability': p.lootbox_probability,
 
-            'rankedGames':pr.played,
-            'rankedWins':pr.won,
-            'rankedLosses':pr.lost,
-            'rankedPlaytime':pr.time_played,
-            'rankedKills':pr.kills,
-            'rankedDeaths':pr.deaths,
+            'rankedGames': pr.played,
+            'rankedWins': pr.won,
+            'rankedLosses': pr.lost,
+            'rankedPlaytime': pr.time_played,
+            'rankedKills': pr.kills,
+            'rankedDeaths': pr.deaths,
 
-            'casualGames':pc.played,
-            'casualWins':pc.won,
-            'casualLosses':pc.lost,
-            'casualPlaytime':pc.time_played,
-            'casualKills':pc.kills,
-            'casualDeaths':pc.deaths,
+            'casualGames': pc.played,
+            'casualWins': pc.won,
+            'casualLosses': pc.lost,
+            'casualPlaytime': pc.time_played,
+            'casualKills': pc.kills,
+            'casualDeaths': pc.deaths,
 
             'totalPlaytime': p.time_played,
             'totalHeadshots': p.headshots,
@@ -222,19 +227,20 @@ async def rainbow6stats(id_username_dict, mmr_watch_data):
             'operators': top_2_ops,
 
             'totalPlaytime': p.time_played,
-            'casualPlaytime':pc.time_played,
-            'rankedPlaytime':pr.time_played,
+            'casualPlaytime': pc.time_played,
+            'rankedPlaytime': pr.time_played,
 
-            'hs': round((p.headshots/p.kills)*100, 2),
+            'hs': round((p.headshots / p.kills) * 100, 2),
         }
 
         xd['all_data'][p.id] = all_data
         xd['main_data'][p.id] = main_data
         print(f"Done! [{p.id}]")
-        count+=1
+        count += 1
 
     await auth.close()
     return xd
+
 
 def get_rank(rank):
     # A really obscene way to do this, BUT it was easier than to use the Firebase Storage calls every time
@@ -268,6 +274,7 @@ def get_rank(rank):
         "champion": "https://i.imgur.com/QHZFdUj.png"
     }
     return rank_dict.get(rank.lower())
+
 
 # Here only cuz i reall don't want to go through the struggle
 # of getting all these links from Firebase storage again

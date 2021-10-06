@@ -134,4 +134,3 @@ def _get_embed_message(game) -> str:
         return "action is None"
 
     return "WHAT HOW"
-

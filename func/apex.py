@@ -7,19 +7,21 @@ load_dotenv()
 
 TRN_Api_Key = os.getenv('TRN_API_KEY')
 
+
 def _parse_legend_data(uuh):
-    x = { 'name': uuh['metadata']['name'], 'imageUrl': uuh['metadata']['imageUrl'], 'tallImageUrl': uuh['metadata']['tallImageUrl'] }
+    x = {'name': uuh['metadata']['name'], 'imageUrl': uuh['metadata']['imageUrl'], 'tallImageUrl': uuh['metadata']['tallImageUrl']}
     s = uuh['stats']
     for stat in s:
         x[s[stat]['displayName']] = s[stat]['value']
     return x
 
+
 def apex_stats():
     lmao = {}
-    USERNAMES = yaml.safe_load(open('config.yml')).get('apex_usernames')
+    usernames = yaml.safe_load(open('config.yml')).get('apex_usernames')
 
-    for name in USERNAMES:
-        headers = { 'TRN-Api-Key': TRN_Api_Key, 'Accept': 'application/json', 'Accept-Encoding': 'gzip' }
+    for name in usernames:
+        headers = { 'TRN-Api-Key': TRN_Api_Key, 'Accept': 'application/json', 'Accept-Encoding': 'gzip'}
         r = requests.get(f"https://public-api.tracker.gg/v2/apex/standard/profile/origin/{name}", headers=headers).json()
         segments = r['data']['segments']
         stats = segments[0]['stats']
