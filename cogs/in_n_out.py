@@ -25,7 +25,7 @@ class InNOut(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        # Do not harrass the in-n-out channel with test account
+        # Do not harass the in-n-out channel with test account
         if member.id == test_account_uid:
             return
 
@@ -93,7 +93,7 @@ class InNOut(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-        # Do not harrass the in-n-out channel with test account
+        # Do not harass the in-n-out channel with test account
         if member.id == test_account_uid:
             return
             
