@@ -33,6 +33,11 @@ valid_rp_channels:
   - 694161968239607818 # Trashposting
   - 694162011960901713 # Videoposting
 
+# Emote ID's
+honkhonk_emoji: 570667900529147914
+garrow_emoji: 784822110723112974 # Green arrow
+yarrow_emoji: 784822110622974014 # Yellow arrow
+rarrow_emoji: 784822110836097094 # Red arrow
 
 # Loops & loop times
 dbr6_loop: True
