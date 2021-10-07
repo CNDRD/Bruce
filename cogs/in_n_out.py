@@ -12,7 +12,6 @@ import yaml
 # Config Load
 config = yaml.safe_load(open('config.yml'))
 in_n_out_channel_id = config.get('in_n_out_channel_id')
-test_account_uid = config.get('test_account_uid')
 garrow_emoji = config.get('garrow_emoji')
 yarrow_emoji = config.get('yarrow_emoji')
 rarrow_emoji = config.get('rarrow_emoji')
@@ -25,9 +24,7 @@ class InNOut(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        # No welcome messages for bots and my test account
-        if member.id == test_account_uid:
-            return
+        # No welcome messages
         if member.bot:
             return await member.add_roles(get(member.guild.roles, name='Hosts'))
 
@@ -90,8 +87,8 @@ class InNOut(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-        # No welcome messages for bots and my test account
-        if member.bot or member.id == test_account_uid:
+        # No welcome messages for bots
+        if member.bot:
             return
 
         users_count = db.child('serverTotals').child('users').get().val()
