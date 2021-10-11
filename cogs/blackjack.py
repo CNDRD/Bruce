@@ -19,6 +19,9 @@ class BJ(disnake.ui.View):
 
     @disnake.ui.button(label="Stand", style=disnake.ButtonStyle.gray)
     async def stand(self, button: disnake.ui.Button, inter: disnake.MessageInteraction):
+        if self.og_inter.author.id != inter.author.id:
+            return await inter.response.send_message("You are NOT allowed to do this..", ephemeral=True)
+
         self.action = 20
         while sum(self.dealer) <= 16:
             self.dealer.append(self.deck.pop(0))
@@ -29,6 +32,9 @@ class BJ(disnake.ui.View):
 
     @disnake.ui.button(label="Hit", style=disnake.ButtonStyle.success)
     async def hit(self, button: disnake.ui.Button, inter: disnake.MessageInteraction):
+        if self.og_inter.author.id != inter.author.id:
+            return await inter.response.send_message("You are NOT allowed to do this..", ephemeral=True)
+
         self.action = 30
         self.player.append(self.deck.pop(0))
 
