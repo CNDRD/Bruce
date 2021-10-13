@@ -8,11 +8,7 @@ from disnake.ext import commands
 from datetime import datetime
 from pytz import timezone
 import yaml
-import os
-from dotenv import load_dotenv
-load_dotenv()
 
-random_org_api_key = os.getenv("RANDOM_ORG_API_KEY")
 
 # Config Load
 local_timezone = yaml.safe_load(open('config.yml')).get('local_timezone')
@@ -31,7 +27,7 @@ class Cicina(commands.Cog):
     ):
         uid = inter.author.id
         today = datetime.now(timezone(local_timezone)).strftime('%Y-%m-%d')
-        cicina = get_random_cicina(random_org_api_key)
+        cicina = get_random_cicina()
 
         # Cicina Top
         if top is not None and top.lower() == "top":
@@ -92,8 +88,7 @@ class Cicina(commands.Cog):
             'cicina_last': today,
 
             'cicina_avg': new_avg,
-            'cicina_count': new_count
-        }
+            'cicina_count': new_count}
 
         db.child('users').child(uid).update(data)
         await inter.response.send_message(msg)
