@@ -4,6 +4,7 @@ from func.blackjack import *
 
 from disnake.ext.commands import Param
 from disnake.ext import commands
+import disnake
 
 
 class BJ(disnake.ui.View):
