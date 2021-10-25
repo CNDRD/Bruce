@@ -25,6 +25,8 @@ class Cicina(commands.Cog):
             inter: disnake.ApplicationCommandInteraction,
             top: str = Param(None, desc="Shows top 30 cicina users for today")
     ):
+        await inter.response.defer()
+
         uid = inter.author.id
         today = datetime.now(timezone(local_timezone)).strftime('%Y-%m-%d')
         cicina = get_random_cicina()
@@ -35,7 +37,7 @@ class Cicina(commands.Cog):
             list_of_today = get_cicina_today(cicina_today, today)
 
             if cicina_today is None or list_of_today is None:
-                return await inter.response.send_message("Nobody claimed their cicina today")
+                return await inter.edit_original_message(content="Nobody claimed their cicina today")
 
             list_of_today_sorted = sorted(list_of_today, key=lambda x: x['cicina'], reverse=True)
 
@@ -50,7 +52,7 @@ class Cicina(commands.Cog):
                 peep_count += 1
                 if peep_count == 30:
                     break
-            return await inter.response.send_message(top_msg)
+            return await inter.edit_original_message(content=top_msg)
 
         cicina_last = db.child('users').child(uid).child('cicina_last').get().val() or 0
         cicina_longest = db.child('users').child(uid).child('cicina_longest').get().val() or 0
@@ -65,7 +67,7 @@ class Cicina(commands.Cog):
         else:
             midnight_ts = int(datetime.now(timezone(local_timezone)).replace(hour=0, minute=0, second=0).timestamp() + 86400)
             msg = f'Cicina sa ti resetuje zajtra (~<t:{midnight_ts}:R>)'
-            return await inter.response.send_message(msg, ephemeral=True)
+            return await inter.edit_original_message(content=msg, ephemeral=True)
 
         if cicina > cicina_longest:
             cicina_for_db = cicina
@@ -91,7 +93,7 @@ class Cicina(commands.Cog):
             'cicina_count': new_count}
 
         db.child('users').child(uid).update(data)
-        await inter.response.send_message(msg)
+        await inter.edit_original_message(content=msg)
 
 
 def setup(client):

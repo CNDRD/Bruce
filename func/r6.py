@@ -268,9 +268,9 @@ def get_rank(rank):
         "platinum 3": "https://i.imgur.com/GpEpkDs.png",
         "platinum 2": "https://i.imgur.com/P8IO0Sn.png",
         "platinum 1": "https://i.imgur.com/52Y4EVg.png",
-        "diamond 3": "https://i.imgur.com/HHPc5HQ.png",
-        "diamond 2": "https://i.imgur.com/HHPc5HQ.png",
-        "diamond 1": "https://i.imgur.com/HHPc5HQ.png",
+        "diamond 3": "https://i.imgur.com/XEqbdS5.png",
+        "diamond 2": "https://i.imgur.com/A9hsLtc.png",
+        "diamond 1": "https://i.imgur.com/n0izxYa.png",
         "champion": "https://i.imgur.com/QHZFdUj.png"
     }
     return rank_dict.get(rank.lower())
