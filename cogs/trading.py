@@ -26,6 +26,7 @@ class Trading(commands.Cog):
 
         if stock is not None:
             stock = stock.upper()
+            stock = stock.replace('/', '-')
 
         user_money = db.child("users").child(inter.author.id).child("money").get().val()
         currently_owns = db.child("trading").child(inter.author.id).get().val() or None
