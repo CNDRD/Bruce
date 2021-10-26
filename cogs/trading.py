@@ -81,18 +81,22 @@ class Trading(commands.Cog):
 
                 msg = "__Your current stonks sir:__\n\n"
                 currently_owns_prices = get_multiple_prices(currently_owns)
+                total_profit = 0
 
                 for stonk in currently_owns:
                     current_price = currently_owns_prices[stonk.replace('-', '/')]
                     bought_price = currently_owns[stonk]['boughtAt']
                     amount_bought = currently_owns[stonk]['amount']
                     profit = (current_price*amount_bought)-(bought_price*amount_bought)
+                    total_profit += profit
 
                     msg += f"**{stonk.replace('-', '/')}** - " \
                            f"Current Price: `{current_price}` | " \
                            f"Bought at: `{bought_price}` | " \
                            f"Profit: `{add_spaces(int(profit))}` " \
                            f"*({amount_bought} stock{'s' if amount_bought > 1 else ''})*\n"
+
+                msg += f"\n*You total profit is `{add_spaces(int(total_profit))}` shekels*"
 
                 return await inter.edit_original_message(content=msg)
 
