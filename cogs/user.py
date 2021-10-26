@@ -52,7 +52,7 @@ class User(commands.Cog):
     @commands.slash_command(name="money", description="Shows your balance")
     async def money(self, inter: disnake.ApplicationCommandInteraction):
         monies = db.child('users').child(inter.author.id).child('money').get().val()
-        await inter.response.send_message(f"You have {monies:,} monies", ephemeral=True)
+        await inter.response.send_message(f"You have {monies:,} shekels", ephemeral=True)
 
 
 def setup(client):
