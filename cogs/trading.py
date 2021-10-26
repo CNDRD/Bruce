@@ -90,13 +90,19 @@ class Trading(commands.Cog):
                     profit = (current_price*amount_bought)-(bought_price*amount_bought)
                     total_profit += profit
 
+                    if current_price >= .01:
+                        current_price = round(current_price, 2)
+
+                    if bought_price >= .01:
+                        bought_price = round(bought_price, 2)
+
                     msg += f"**{stonk.replace('-', '/')}** - " \
                            f"Current Price: `{current_price}` | " \
                            f"Bought at: `{bought_price}` | " \
                            f"Profit: `{add_spaces(int(profit))}` " \
-                           f"*({amount_bought} stock{'s' if amount_bought > 1 else ''})*\n"
+                           f"*({add_spaces(amount_bought)} stock{'s' if amount_bought > 1 else ''})*\n"
 
-                msg += f"\n*You total profit is `{add_spaces(int(total_profit))}` shekels*"
+                msg += f"\n*Your total profit is `{add_spaces(int(total_profit))}` shekels*"
 
                 return await inter.edit_original_message(content=msg)
 
