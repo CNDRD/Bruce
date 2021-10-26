@@ -82,7 +82,7 @@ class Trading(commands.Cog):
                 currently_owns_prices = get_multiple_prices(currently_owns)
 
                 for stonk in currently_owns:
-                    current_price = currently_owns_prices[stonk]
+                    current_price = currently_owns_prices[stonk.replace('-', '/')]
                     bought_price = currently_owns[stonk]['boughtAt']
                     amount_bought = currently_owns[stonk]['amount']
                     profit = (current_price*amount_bought)-(bought_price*amount_bought)
