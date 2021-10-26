@@ -45,7 +45,7 @@ class Trading(commands.Cog):
 
                 db.child("trading").child(inter.author.id).update(get_trading_buy_db(stock, amount, current_price))
                 db.child("users").child(inter.author.id).update({"money": int(user_money - buying_cost)})
-                return await inter.edit_original_message(content=f"Successfully bought *{add_spaces(amount)}* shares of **{stock}** for *{add_spaces(int(buying_cost))}* shekels")
+                return await inter.edit_original_message(content=f"Successfully bought *{add_spaces(amount)}* shares of **{stock.replace('-', '/')}** for *{add_spaces(int(buying_cost))}* shekels")
 
             case 'Sell':
                 if currently_owns is None:
@@ -72,7 +72,7 @@ class Trading(commands.Cog):
                 db.child("trading").child(inter.author.id).child(stock).remove()
                 db.child("users").child(inter.author.id).update({"money": int(user_money + selling_cost)})
 
-                msg = f"Successfully sold *{amount_bought}* stocks of **{stock}** for a {profit_loss} of `{add_spaces(int(outcome_money))}` shekels"
+                msg = f"Successfully sold *{amount_bought}* stocks of **{stock.replace('-', '/')}** for a {profit_loss} of `{add_spaces(int(outcome_money))}` shekels"
                 return await inter.edit_original_message(content=msg)
 
             case "View":
@@ -88,7 +88,7 @@ class Trading(commands.Cog):
                     amount_bought = currently_owns[stonk]['amount']
                     profit = (current_price*amount_bought)-(bought_price*amount_bought)
 
-                    msg += f"**{stonk}** - " \
+                    msg += f"**{stonk.replace('-', '/')}** - " \
                            f"Current Price: `{current_price}` | " \
                            f"Bought at: `{bought_price}` | " \
                            f"Profit: `{add_spaces(int(profit))}` " \
