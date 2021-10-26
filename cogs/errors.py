@@ -35,6 +35,9 @@ class Errors(commands.Cog):
             case _:
                 message = "This is an unexpected error. Please notify someone about this if the issue persists."
 
+        if inter.response.is_done():
+            return await inter.edit_original_message(content=message, ephemeral=True)
+
         await inter.response.send_message(message, ephemeral=True)
 
 
