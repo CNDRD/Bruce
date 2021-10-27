@@ -9,6 +9,13 @@ import disnake
 from typing import Literal
 
 
+class AvailableTokens(disnake.ui.View):
+    def __init__(self):
+        super().__init__()
+        url = "https://github.com/redstone-finance/redstone-api/blob/main/docs/ALL_SUPPORTED_TOKENS.md"
+        self.add_item(disnake.ui.Button(label="List of available tokens", url=url))
+
+
 class Trading(commands.Cog):
     def __init__(self, client):
         """Trading simulator with real stocks."""
@@ -39,6 +46,10 @@ class Trading(commands.Cog):
                     return await inter.edit_original_message(content=f"You already own shares of **{stock}**")
 
                 current_price = get_current_price(stock)
+
+                if current_price is None:
+                    return await inter.edit_original_message(content=f"Symbol `{stock}` either doesn't exist or I don't have access to it", view=AvailableTokens())
+
                 buying_cost = current_price * amount
                 if buying_cost > user_money:
                     return await inter.edit_original_message(content=f"You don't have enough money for this ({add_spaces(int(buying_cost))} > {add_spaces(user_money)})")
@@ -97,14 +108,14 @@ class Trading(commands.Cog):
                         bought_price = round(bought_price, 2)
 
                     msg += f"**{stonk.replace('-', '/')}** - " \
-                           f"Current Price: `{current_price}` | " \
-                           f"Bought at: `{bought_price}` | " \
-                           f"Profit: `{add_spaces(int(profit))}` " \
-                           f"*({add_spaces(amount_bought)} stock{'s' if amount_bought > 1 else ''})*\n"
+                           f"Current Price: `{current_price:,}` | " \
+                           f"Bought at: `{bought_price:,}` | " \
+                           f"Profit: `{int(profit):,}` " \
+                           f"*({amount_bought:,} stock{'s' if amount_bought > 1 else ''})*\n"
 
-                msg += f"\n*Your total profit is `{add_spaces(int(total_profit))}` shekels*"
+                msg += f"\n*Your total profit is `{int(total_profit):,}` shekels*"
 
-                return await inter.edit_original_message(content=msg)
+                return await inter.edit_original_message(content=msg.replace(',', ' '))
 
 
 def setup(client):
