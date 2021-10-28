@@ -66,8 +66,7 @@ class Cicina(commands.Cog):
 
         else:
             midnight_ts = int(datetime.now(timezone(local_timezone)).replace(hour=0, minute=0, second=0).timestamp() + 86400)
-            msg = f'Cicina sa ti resetuje zajtra (~<t:{midnight_ts}:R>)'
-            return await inter.edit_original_message(content=msg, ephemeral=True)
+            return await inter.edit_original_message(content=f'Cicina sa ti resetuje zajtra (~<t:{midnight_ts}:R>)')
 
         if cicina > cicina_longest:
             cicina_for_db = cicina
