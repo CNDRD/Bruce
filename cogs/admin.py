@@ -22,7 +22,7 @@ class Admin(commands.Cog):
     async def clear(
             self,
             inter: disnake.ApplicationCommandInteraction,
-            amount: int = Param(0, desc="Amount of messages to delete")
+            amount: int = Param(1, desc="Amount of messages to delete")
     ):
         await inter.channel.purge(limit=(amount))
         await inter.response.send_message(f'Successfully purged {amount} messages!', ephemeral=True)
