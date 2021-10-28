@@ -22,10 +22,10 @@ class Admin(commands.Cog):
     async def clear(
             self,
             inter: disnake.ApplicationCommandInteraction,
-            amount: int = Param(0, desc="Amount of messages to delete (+1)")
+            amount: int = Param(0, desc="Amount of messages to delete")
     ):
-        await inter.channel.purge(limit=(amount + 1))
-        await inter.response.send_message(f'Successfully purged {amount + 1} messages!', ephemeral=True)
+        await inter.channel.purge(limit=(amount))
+        await inter.response.send_message(f'Successfully purged {amount} messages!', ephemeral=True)
 
     @commands.slash_command(name="add_reaction", description="Adds a reaction to the message above")
     @commands.has_any_role(bot_mod_role_id, mod_role_id)
