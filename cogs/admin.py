@@ -7,9 +7,11 @@ import yaml
 # Config Load
 config = yaml.safe_load(open('config.yml'))
 slash_guilds = config.get('slash_guilds')
+server_id = config.get('server_id')
 owner_role_id = config.get('owner_role_id')
 bot_mod_role_id = config.get('bot_mod_role_id')
 mod_role_id = config.get('mod_role_id')
+yeetard_role_id = config.get('yeetard_role_id')
 
 
 class Admin(commands.Cog):
@@ -17,18 +19,18 @@ class Admin(commands.Cog):
         """Admin commands."""
         self.client = client
 
+    @commands.guild_permissions(server_id, role_ids={yeetard_role_id: False, mod_role_id: True, bot_mod_role_id: True})
     @commands.slash_command(name="clear", description="Clears amount of messages. Default is 1")
-    @commands.has_any_role(bot_mod_role_id, mod_role_id)
     async def clear(
             self,
             inter: disnake.ApplicationCommandInteraction,
             amount: int = Param(1, desc="Amount of messages to delete")
     ):
-        await inter.channel.purge(limit=(amount))
+        await inter.channel.purge(limit=amount)
         await inter.response.send_message(f'Successfully purged {amount} messages!', ephemeral=True)
 
+    @commands.guild_permissions(server_id, role_ids={yeetard_role_id: False, mod_role_id: True, bot_mod_role_id: True})
     @commands.slash_command(name="add_reaction", description="Adds a reaction to the message above")
-    @commands.has_any_role(bot_mod_role_id, mod_role_id)
     async def add_reaction(
             self,
             inter: disnake.ApplicationCommandInteraction,
@@ -39,8 +41,8 @@ class Admin(commands.Cog):
         await inter.response.defer()
         return await inter.delete_original_message()
 
+    @commands.guild_permissions(server_id, role_ids={yeetard_role_id: False, mod_role_id: True, bot_mod_role_id: True})
     @commands.slash_command(name="say", description="The bot will send what you want as himself")
-    @commands.has_any_role(bot_mod_role_id, mod_role_id)
     async def say(
             self,
             inter: disnake.ApplicationCommandInteraction,
@@ -50,8 +52,8 @@ class Admin(commands.Cog):
         await inter.response.defer()
         return await inter.delete_original_message()
 
+    @commands.guild_permissions(server_id, role_ids={yeetard_role_id: False, mod_role_id: True, bot_mod_role_id: True})
     @commands.slash_command(name="edit", description="Edit the message")
-    @commands.has_any_role(bot_mod_role_id, mod_role_id)
     async def edit(
             self,
             inter: disnake.ApplicationCommandInteraction,
