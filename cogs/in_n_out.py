@@ -82,7 +82,7 @@ class InNOut(commands.Cog):
                  'last_xp_get': joined_server,
                  'messages_count': 0,
                  'joined_server': joined_server,
-                 'joined_disnake': joined_discord,
+                 'joined_discord': joined_discord,
                  'avatar_url': avatar_url,
                  'in_server': True,
                  'money': 0,
@@ -96,7 +96,7 @@ class InNOut(commands.Cog):
         # Do not harass the in-n-out channel with test account
         if member.id == test_account_uid:
             return
-            
+
         # No welcome messages for bots
         if member.bot:
             return
