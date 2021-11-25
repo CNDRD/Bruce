@@ -78,7 +78,7 @@ class Trading(commands.Cog):
                 db.child("trading").child(inter.author.id).child(stock).remove()
                 db.child("users").child(inter.author.id).update({"money": int(user_money + selling_cost)})
 
-                msg = f"Successfully sold *{amount_bought}* stocks of **{stock}** for a {profit_loss} of `{int(outcome_money):,}` shekels".replace(',', ' ')
+                msg = f"Successfully sold *{amount_bought:,}* stocks of **{stock}** for a {profit_loss} of `{int(outcome_money):,}` shekels".replace(',', ' ')
                 return await inter.edit_original_message(content=msg)
 
             case "View":

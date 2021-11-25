@@ -14,7 +14,12 @@ startup_channel_id = config.get('startup_channel_id')
 token = os.getenv('TOKEN')
 
 
-client = commands.Bot(command_prefix=prefix, intents=disnake.Intents.all(), test_guilds=slash_guilds)
+client = commands.Bot(
+    command_prefix=prefix,
+    intents=disnake.Intents.all(),
+    sync_permissions=True,
+    test_guilds=slash_guilds
+)
 
 
 for filename in os.listdir('./cogs'):
