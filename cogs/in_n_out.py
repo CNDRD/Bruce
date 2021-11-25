@@ -72,7 +72,7 @@ class InNOut(commands.Cog):
             # Get timestamps to when the user joined Discord and the server, and a link to their avatar
             joined_server = int(member.joined_at.timestamp())
             joined_discord = int(member.created_at.timestamp())
-            avatar_url = str(member.avatar_url_as(size=4096))
+            avatar_url = str(member.display_avatar.with_size(4096))
 
             # Create users individual stats
             d = {'reacc_points': 0,
