@@ -1,4 +1,4 @@
-git+https://github.com/EQUENOS/disnake@v2.1.3
+git+https://github.com/DisnakeDev/disnake@v2.1.3
 git+https://github.com/CNDRD/RainbowSixSiege-Python-API@v1.5.4
 
 pyrebase4==4.5.0
