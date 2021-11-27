@@ -38,18 +38,15 @@ RANKS = [
 ]
 
 
-def _get_rank_from_mmr(mmr):
+def _get_rank_from_mmr(mmr) -> tuple[str, int, int]:
     for r in RANKS:
         if r['min_mmr'] <= int(mmr) <= r['max_mmr']:
             return r['name'], r['min_mmr'], r['max_mmr']
     return 'Unranked', 0, 0
 
 
-def _get_uids(a):
-    x = []
-    for i in a:
-        x.append(i)
-    return x
+def _get_uids(a) -> list[str]:
+    return [i for i in a]
 
 
 def _sort_atk_def(ops):
@@ -241,67 +238,34 @@ async def rainbow6stats(id_username_dict, mmr_watch_data):
     return xd
 
 
-def get_rank(rank):
-    # A really obscene way to do this, BUT it was easier than to use the Firebase Storage calls every time
+def get_rank(rank) -> str:
     rank_dict = {
-        "unranked": "https://i.imgur.com/RpPdtbU.png",
-        "copper 5": "https://i.imgur.com/SNSfudP.png",
-        "copper 4": "https://i.imgur.com/7PiisA2.png",
-        "copper 3": "https://i.imgur.com/aNCvwAI.png",
-        "copper 2": "https://i.imgur.com/fUzUApd.png",
-        "copper 1": "https://i.imgur.com/eGuxE0k.png",
-        "bronze v": "https://i.imgur.com/bbjMf4V.png",
-        "bronze 4": "https://i.imgur.com/75IEQkD.png",
-        "bronze 3": "https://i.imgur.com/GIt29R0.png",
-        "bronze 2": "https://i.imgur.com/sTIXKlh.png",
-        "bronze 1": "https://i.imgur.com/zKRDUdK.png",
-        "silver 5": "https://i.imgur.com/CbAbvOa.png",
-        "silver 4": "https://i.imgur.com/2Y8Yr11.png",
-        "silver 3": "https://i.imgur.com/zNUuJSn.png",
-        "silver 2": "https://i.imgur.com/utTa5mq.png",
-        "silver 1": "https://i.imgur.com/27ISr4q.png",
-        "gold 4": "https://i.imgur.com/YIWWNzf.png",
-        "gold 3": "https://i.imgur.com/JJvq35l.png",
-        "gold 2": "https://i.imgur.com/Fco8pIl.png",
-        "gold 1": "https://i.imgur.com/m8FFWGi.png",
-        "platinum 3": "https://i.imgur.com/GpEpkDs.png",
-        "platinum 2": "https://i.imgur.com/P8IO0Sn.png",
-        "platinum 1": "https://i.imgur.com/52Y4EVg.png",
-        "diamond 3": "https://i.imgur.com/XEqbdS5.png",
-        "diamond 2": "https://i.imgur.com/A9hsLtc.png",
-        "diamond 1": "https://i.imgur.com/n0izxYa.png",
-        "champion": "https://i.imgur.com/QHZFdUj.png"
+        "unranked": "RpPdtbU",
+        "copper 5": "SNSfudP",
+        "copper 4": "7PiisA2",
+        "copper 3": "aNCvwAI",
+        "copper 2": "fUzUApd",
+        "copper 1": "eGuxE0k",
+        "bronze v": "bbjMf4V",
+        "bronze 4": "75IEQkD",
+        "bronze 3": "GIt29R0",
+        "bronze 2": "sTIXKlh",
+        "bronze 1": "zKRDUdK",
+        "silver 5": "CbAbvOa",
+        "silver 4": "2Y8Yr11",
+        "silver 3": "zNUuJSn",
+        "silver 2": "utTa5mq",
+        "silver 1": "27ISr4q",
+        "gold 4": "YIWWNzf",
+        "gold 3": "JJvq35l",
+        "gold 2": "Fco8pIl",
+        "gold 1": "m8FFWGi",
+        "platinum 3": "GpEpkDs",
+        "platinum 2": "P8IO0Sn",
+        "platinum 1": "52Y4EVg",
+        "diamond 3": "XEqbdS5",
+        "diamond 2": "A9hsLtc",
+        "diamond 1": "n0izxYa",
+        "champion": "QHZFdUj"
     }
-    return rank_dict.get(rank.lower())
-
-
-# Here only cuz i reall don't want to go through the struggle
-# of getting all these links from Firebase storage again
-# Same images are on the imgur..
-OLD_RANK_DICT = {
-    "unranked": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FUnranked.png?alt=media&token=295b2528-9813-4add-a46f-9e5c7e2a13c8",
-    "copper 5": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FCopper_05.png?alt=media&token=34112e43-01cd-496a-83ca-a6d2008b1c70",
-    "copper 4": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FCopper_04.png?alt=media&token=4e1351b3-25bc-4176-a7a0-f513626be2d7",
-    "copper 3": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FCopper_03.png?alt=media&token=b6e0acf8-98d0-4acf-b991-e660ec57be36",
-    "copper 2": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FCopper_02.png?alt=media&token=85f9e162-5a17-45ff-bac4-b7ceb08391ff",
-    "copper 1": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FCopper_01.png?alt=media&token=f7bdf9c6-a82d-4ca4-a12c-b73dc1a68cd5",
-    "bronze v": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FBronze_05.png?alt=media&token=46f3b6d7-22ad-478d-841f-af659a254b6e",
-    "bronze 4": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FBronze_04.png?alt=media&token=ccb5e10e-4941-469d-8b2b-2c5b0d1d58bd",
-    "bronze 3": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FBronze_03.png?alt=media&token=fa0aa632-b533-44d7-aefc-57a5a1aad708",
-    "bronze 2": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FBronze_02.png?alt=media&token=70f6b0c8-307a-4bfb-9f83-c1e98e9748d9",
-    "bronze 1": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FBronze_01.png?alt=media&token=a4ef33bb-cebe-49f9-a712-9b0e28af1a14",
-    "silver 5": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FSilver_05.png?alt=media&token=85011248-cf4e-4799-bee9-eb758375de7c",
-    "silver 4": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FSilver_04.png?alt=media&token=454fe077-5a6e-4c9f-887e-c789265374a9",
-    "silver 3": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FSilver_03.png?alt=media&token=9e50ead1-cf08-4f55-a99c-da9160f8f171",
-    "silver 2": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FSilver_02.png?alt=media&token=8fd1e6df-67a1-4abd-820a-b5da03cc2e23",
-    "silver 1": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FSilver_01.png?alt=media&token=4331a891-e150-4b18-b940-50667ec27185",
-    "gold 4": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FGOLD_04.png?alt=media&token=bae67b53-35f3-4f81-a019-a7a69fe82f67",
-    "gold 3": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FGOLD_03.png?alt=media&token=9a489888-23ac-4290-97fc-59276dc34044",
-    "gold 2": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FGOLD_02.png?alt=media&token=615b0a9f-39c6-4db2-a97e-13fa5b0bf8c1",
-    "gold 1": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FGOLD_01.png?alt=media&token=3661b9e6-99d8-4742-a913-9788ac94c810",
-    "platinum 3": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FPlatinum_03.png?alt=media&token=e5944dea-8df2-4b33-a6e7-b07800bd870b",
-    "platinum 2": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FPlatinum_02.png?alt=media&token=9a09a0f4-2d66-4092-8e26-3d4528c315a4",
-    "platinum 1": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FPlatinum_01.png?alt=media&token=00086d17-f099-4c00-a2e8-530392d70ce9",
-    "diamond": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FDiamond_01.png?alt=media&token=b64afb2e-4739-4d07-b0d5-41fb74a22b21",
-    "champion": "https://firebasestorage.googleapis.com/v0/b/chuckwalla-69.appspot.com/o/R6%20Ranks%2FChampions_01.png?alt=media&token=aefcce88-98cf-48e3-ac76-7acfa2af30c4"
-}
+    return f"https://i.imgur.com/{rank_dict.get(rank.lower())}.png"
