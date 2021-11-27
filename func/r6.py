@@ -132,7 +132,6 @@ async def rainbow6stats(id_username_dict, mmr_watch_data):
             'weapon_types': weapon_type_data,
 
             'discordUsername': id_username_dict[p.id],
-            'seasonName': 'Crimson Heist',
             'season': r.season,
 
             'currentRankImage': get_rank(r.get_rank_name()),
