@@ -35,7 +35,7 @@ class NFT(commands.Cog):
 
     @commands.slash_command(
         name="mint",
-        description="Mints a random NFT from a collection of over 100 million custom Diskíto NFTs for the low cost of 100k shekels"
+        description="Mints a random NFT from a collection of over 100 million custom Diskíto NFTs for 100k shekels"
     )
     async def _mint(self, inter: disnake.MessageInteraction):
         buyer_money = db.child("users").child(inter.author.id).child("money").get().val()
