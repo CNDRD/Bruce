@@ -20,7 +20,7 @@ dbr6_loop_time = config.get('dbr6_loop_time')
 apex_loop = config.get('apex_loop')
 apex_loop_time = config.get('apex_loop_time')
 
-R6STATS_VERSION = 9
+R6STATS_VERSION = 10
 APEX_VERSION = 1
 
 

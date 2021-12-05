@@ -1,5 +1,5 @@
 import os
-from r6sapi import Auth, Platforms
+from siegeapi import Auth, Platforms
 from collections import OrderedDict
 
 from dotenv import load_dotenv
@@ -71,16 +71,21 @@ async def rainbow6stats(id_username_dict, mmr_watch_data):
     auth = Auth(UBISOFT_EMAIL, UBISOFT_PASSW)
 
     players = await auth.get_player_batch(uids=uids, platform=Platforms.UPLAY)
-    ranks = await players.get_rank()
-    casuals = await players.get_casual()
+
+    print(players)
+
+    ranks = await players.load_rank()
+    casuals = await players.load_casual()
 
     count = 1
 
     for p in players:
         print(f'Processing [{p.id}].. ({count}/{len(uids)})')
-        await p.check_general()
+        await p.load_playtime()
+        await p.load_general()
         await p.load_level()
-        await p.load_queues()
+        await p.load_gamemodes()
+
         r = ranks[p.id]
         c = casuals[p.id]
 
@@ -90,18 +95,20 @@ async def rainbow6stats(id_username_dict, mmr_watch_data):
         ops = await p.load_all_operators()
         operator_data = {}
         for o in ops:
-            operator_data[o] = ops[o].get_array()
+            operator_data[o] = ops[o].get_dict()
         operator_data = _sort_atk_def(operator_data)
 
-        top_2_ops = {"atk1": _get_top_op(operator_data['atk']),
-                     "def1": _get_top_op(operator_data['def'])}
+        top_2_ops = {
+            "atk1": _get_top_op(operator_data['atk']),
+            "def1": _get_top_op(operator_data['def'])
+        }
 
         casual_rank_name, casual_rank_prev, casual_rank_next = _get_rank_from_mmr(c.mmr)
 
         # Get Weapon type data
-        w = await p.check_weapons()
+        await p.load_weapon_types()
         weapon_type_data = []
-        for weapon in w:
+        for weapon in p.weapons:
             weapon_type_data.append(weapon.get_dict())
 
         # MMR Watch
@@ -117,10 +124,12 @@ async def rainbow6stats(id_username_dict, mmr_watch_data):
             "adjustment_value": 0
         }
         if p.time_played == mw_plt and r.mmr != mw_mmr:
-            xd['mmr_watch'][p.id]['mmr'] = mw_mmr
-            xd['mmr_watch'][p.id]['playtime'] = mw_plt
-            xd['mmr_watch'][p.id]['adjustment'] = True
-            xd['mmr_watch'][p.id]['adjustment_value'] = r.mmr - mw_mmr
+            xd['mmr_watch'][p.id] = {
+                "mmr": mw_mmr,
+                "playtime": mw_plt,
+                "adjustment": True,
+                "adjustment_value": r.mmr - mw_mmr
+            }
             print("MMR Adjustment detected!")
             print(xd['mmr_watch'][p.id])
 
@@ -131,10 +140,10 @@ async def rainbow6stats(id_username_dict, mmr_watch_data):
             'discordUsername': id_username_dict[p.id],
             'season': r.season,
 
-            'currentRankImage': get_rank(r.get_rank_name()),
-            'maxRankImage': get_rank(r.get_max_rank_name()),
-            'currentRank': r.get_rank_name(),
-            'maxRank': r.get_max_rank_name(),
+            'currentRankImage': get_rank(r.rank),
+            'maxRankImage': get_rank(r.max_rank),
+            'currentRank': r.rank,
+            'maxRank': r.max_rank,
             'maxMMR': r.max_mmr,
             'currentMMR': r.mmr,
             'prevRankMMR': r.prev_rank_mmr,
@@ -202,10 +211,10 @@ async def rainbow6stats(id_username_dict, mmr_watch_data):
             'ubisoftID': p.id,
             'ubisoftUsername': p.name,
 
-            'currentRankImage': get_rank(r.get_rank_name()),
-            'maxRankImage': get_rank(r.get_max_rank_name()),
-            'currentRank': r.get_rank_name(),
-            'maxRank': r.get_max_rank_name(),
+            'currentRankImage': get_rank(r.rank),
+            'maxRankImage': get_rank(r.max_rank),
+            'currentRank': r.rank,
+            'maxRank': r.max_rank,
             'maxMMR': r.max_mmr,
             'currentMMR': r.mmr,
             'prevRankMMR': r.prev_rank_mmr,
