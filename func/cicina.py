@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def get_cicina_today(today, today_date):
+def get_cicina_today(today: None | dict[dict[str: int | str]], today_date: str) -> None | list[dict[str: int]]:
     if today is None:
         return None
 

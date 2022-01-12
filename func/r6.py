@@ -49,7 +49,7 @@ def _get_uids(a) -> list[str]:
     return [i for i in a]
 
 
-def _sort_atk_def(ops):
+def _sort_atk_def(ops) -> dict[str: dict[str: dict[str: int | str | dict[str: dict[str: str | int]]]]]:
     atk, defn = {}, {}
     for op in ops:
         op = ops[op]
@@ -60,11 +60,11 @@ def _sort_atk_def(ops):
     return {'atk': atk, 'def': defn}
 
 
-def _get_top_op(ops):
+def _get_top_op(ops) -> OrderedDict:
     return OrderedDict(sorted(ops.items(), key=lambda i: i[1]['time_played'])).popitem(last=True)[1]
 
 
-async def rainbow6stats(id_username_dict, mmr_watch_data):
+async def rainbow6stats(id_username_dict, mmr_watch_data) -> dict:
     xd = {'all_data': {}, 'main_data': {}, 'mmr_watch': {}}
     uids = _get_uids(id_username_dict)
 

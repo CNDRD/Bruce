@@ -2,7 +2,7 @@ import disnake
 from datetime import datetime
 
 
-def gimme_them_stats(mem):
+def gimme_them_stats(mem) -> dict[str: str | bool | int | float | list | dict[str: bool] | dict[str: str | dict[str: str]]]:
     x = {
         "uid": mem.id,
         "username": mem.name,
@@ -17,7 +17,7 @@ def gimme_them_stats(mem):
     return x
 
 
-def _get_hypesquad_house(flags):
+def _get_hypesquad_house(flags) -> str:
     if flags.hypesquad_balance:
         return "balance"
     if flags.hypesquad_bravery:
@@ -27,7 +27,7 @@ def _get_hypesquad_house(flags):
     return "none"
 
 
-def _get_voice(v):
+def _get_voice(v) -> dict[str: bool]:
     xd = {
         'deaf': False, 'mute': False,
         'self_mute': False, 'self_deaf': False,
@@ -53,7 +53,7 @@ def _get_voice(v):
     return xd
 
 
-def _get_activities(activities):
+def _get_activities(activities) -> dict[str: str | list | dict[str: str]]:
     if activities == ():
         return "none"
 
@@ -90,13 +90,13 @@ def _get_activities(activities):
     return xd
 
 
-def _get_premium(uhh):
+def _get_premium(uhh) -> float | str:
     if uhh is None:
         return "none"
     return datetime.timestamp(uhh)
 
 
-def _get_status(s):
+def _get_status(s) -> str:
     if not isinstance(s, str):
         return s[0]
     return s

@@ -8,7 +8,7 @@ load_dotenv()
 TRN_Api_Key = os.getenv('TRN_API_KEY')
 
 
-def _parse_legend_data(uuh):
+def _parse_legend_data(uuh) -> dict[str: str]:
     x = {'name': uuh['metadata']['name'], 'imageUrl': uuh['metadata']['imageUrl'], 'tallImageUrl': uuh['metadata']['tallImageUrl']}
     s = uuh['stats']
     for stat in s:
@@ -16,7 +16,7 @@ def _parse_legend_data(uuh):
     return x
 
 
-def apex_stats():
+def apex_stats() -> dict[dict[str: int | str] | dict[dict[str: str]]]:
     lmao = {}
     usernames = yaml.safe_load(open('config.yml')).get('apex_usernames')
 
@@ -40,7 +40,8 @@ def apex_stats():
         legends = []
         i = 0
         for legend in segments:
-            if i == 0: i = 1
+            if i == 0:
+                i = 1
             else:
                 i += 1
                 legends.append(_parse_legend_data(legend))
