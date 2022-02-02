@@ -255,7 +255,7 @@ def get_rank(rank) -> str:
         "copper 3": "aNCvwAI",
         "copper 2": "fUzUApd",
         "copper 1": "eGuxE0k",
-        "bronze v": "bbjMf4V",
+        "bronze 5": "bbjMf4V",
         "bronze 4": "75IEQkD",
         "bronze 3": "GIt29R0",
         "bronze 2": "sTIXKlh",
