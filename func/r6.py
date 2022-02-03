@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-UBISOFT_EMAIL = os.getenv('UBISOFT_EMAIL')
-UBISOFT_PASSW = os.getenv('UBISOFT_PASSW')
+UBISOFT_EMAIL = os.getenv("UBISOFT_EMAIL")
+UBISOFT_PASSW = os.getenv("UBISOFT_PASSW")
 
 RANKS = [
     {"name": "Copper 5", "min_mmr": 1, "max_mmr": 1199},
@@ -40,9 +40,9 @@ RANKS = [
 
 def _get_rank_from_mmr(mmr) -> tuple[str, int, int]:
     for r in RANKS:
-        if r['min_mmr'] <= int(mmr) <= r['max_mmr']:
-            return r['name'], r['min_mmr'], r['max_mmr']
-    return 'Unranked', 0, 0
+        if r["min_mmr"] <= int(mmr) <= r["max_mmr"]:
+            return r["name"], r["min_mmr"], r["max_mmr"]
+    return "Unranked", 0, 0
 
 
 def _get_uids(a) -> list[str]:
@@ -53,26 +53,25 @@ def _sort_atk_def(ops) -> dict[str: dict[str: dict[str: int | str | dict[str: di
     atk, defn = {}, {}
     for op in ops:
         op = ops[op]
-        if op['atkdef'] == 'attacker':
-            atk[op['name']] = op
-        elif op['atkdef'] == 'defender':
-            defn[op['name']] = op
-    return {'atk': atk, 'def': defn}
+        if op["atkdef"] == "attacker":
+            atk[op["name"]] = op
+        elif op["atkdef"] == "defender":
+            defn[op["name"]] = op
+    return {"atk": atk, "def": defn}
 
 
 def _get_top_op(ops) -> OrderedDict:
-    return OrderedDict(sorted(ops.items(), key=lambda i: i[1]['time_played'])).popitem(last=True)[1]
+    return OrderedDict(sorted(ops.items(), key=lambda i: i[1]["time_played"])).popitem(last=True)[1]
 
 
-async def rainbow6stats(id_username_dict, mmr_watch_data) -> dict:
-    xd = {'all_data': {}, 'main_data': {}, 'mmr_watch': {}}
+async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (dict, str):
+    xd = {"all_data": {}, "main_data": {}, "mmr_watch": {}}
+    mmr_watch_message = ""
     uids = _get_uids(id_username_dict)
 
     auth = Auth(UBISOFT_EMAIL, UBISOFT_PASSW)
 
     players = await auth.get_player_batch(uids=uids, platform=Platforms.UPLAY)
-
-    print(players)
 
     ranks = await players.load_rank()
     casuals = await players.load_casual()
@@ -80,7 +79,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data) -> dict:
     count = 1
 
     for p in players:
-        print(f'Processing [{p.id}].. ({count}/{len(uids)})')
+        print(f"Processing [{p.id}].. ({count}/{len(uids)})")
         await p.load_playtime()
         await p.load_general()
         await p.load_level()
@@ -99,8 +98,8 @@ async def rainbow6stats(id_username_dict, mmr_watch_data) -> dict:
         operator_data = _sort_atk_def(operator_data)
 
         top_2_ops = {
-            "atk1": _get_top_op(operator_data['atk']),
-            "def1": _get_top_op(operator_data['def'])
+            "atk1": _get_top_op(operator_data["atk"]),
+            "def1": _get_top_op(operator_data["def"])
         }
 
         casual_rank_name, casual_rank_prev, casual_rank_next = _get_rank_from_mmr(c.mmr)
@@ -113,25 +112,29 @@ async def rainbow6stats(id_username_dict, mmr_watch_data) -> dict:
 
         # MMR Watch
         if mmr_watch_data.get(p.id, None) is None:
-            mmr_watch_data[p.id] = {'mmr': r.mmr, 'playtime': p.time_played}
+            mmr_watch_data[p.id] = {"mmr": r.mmr, "playtime": p.time_played}
 
-        mw_mmr = mmr_watch_data[p.id]['mmr']
-        mw_plt = mmr_watch_data[p.id]['playtime']
-        xd['mmr_watch'][p.id] = {
+        mw_mmr = mmr_watch_data[p.id]["mmr"]
+        mw_plt = mmr_watch_data[p.id]["playtime"]
+        xd["mmr_watch"][p.id] = {
             "mmr": r.mmr,
             "playtime": p.time_played,
             "adjustment": False,
             "adjustment_value": 0
         }
+
         if p.time_played == mw_plt and r.mmr != mw_mmr:
-            xd['mmr_watch'][p.id] = {
+            print(f"MMR Adjustment detected! \n {xd['mmr_watch'][p.id]}")
+            xd["mmr_watch"][p.id] = {
                 "mmr": mw_mmr,
                 "playtime": mw_plt,
                 "adjustment": True,
                 "adjustment_value": mw_mmr - r.mmr
             }
-            print("MMR Adjustment detected!")
-            print(xd['mmr_watch'][p.id])
+
+            if not mmr_watch_data[p.id].get("message_sent", False):
+                mmr_watch_message += f"**{p.name}** just __*{'lost' if (mw_mmr-r.mmr) < 0 else 'gained'}*__ ***{int(mw_mmr-r.mmr)}*** MMR"
+                xd["mmr_watch"][p.id]["message_sent"] = True
 
         all_data = {
             'operators': operator_data,
@@ -238,13 +241,17 @@ async def rainbow6stats(id_username_dict, mmr_watch_data) -> dict:
             'hs': round((p.headshots / p.kills) * 100, 2),
         }
 
-        xd['all_data'][p.id] = all_data
-        xd['main_data'][p.id] = main_data
-        print(f"Done! [{p.id}]")
+        xd["all_data"][p.id] = all_data
+        xd["main_data"][p.id] = main_data
+        print(f"Done!      [{p.id}]")
         count += 1
 
+    if mmr_watch_message:
+        mmr_watch_message = f"**Rainbow Six Siege** MMR adjustment announcement \n\n{mmr_watch_message}"
+        mmr_watch_message += f"\n\nThis happened since the last check <t:{int(last_db_update)}:R>"
+
     await auth.close()
-    return xd
+    return xd, mmr_watch_message
 
 
 def get_rank(rank) -> str:

@@ -14,11 +14,12 @@ import nest_asyncio
 nest_asyncio.apply()
 
 # Config Load
-config = yaml.safe_load(open('config.yml'))
-dbr6_loop = config.get('dbr6_loop')
-dbr6_loop_time = config.get('dbr6_loop_time')
-apex_loop = config.get('apex_loop')
-apex_loop_time = config.get('apex_loop_time')
+config = yaml.safe_load(open("config.yml"))
+dbr6_loop = config.get("dbr6_loop")
+dbr6_loop_time = config.get("dbr6_loop_time")
+apex_loop = config.get("apex_loop")
+apex_loop_time = config.get("apex_loop_time")
+r6_channel_id = config.get("r6_channel_id")
 
 R6STATS_VERSION = 10
 APEX_VERSION = 1
@@ -55,16 +56,20 @@ class GameStats(commands.Cog):
 
     @tasks.loop(minutes=dbr6_loop_time)
     async def dbr6(self):
-        users = db.child('GameStats').child('IDs').get()
-        mmr_watch_data = db.child('GameStats').child(f'R6Sv{R6STATS_VERSION}').child('mmr_watch').get().val()
+        users = db.child("GameStats").child("IDs").get()
+        mmr_watch_data = db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").child("mmr_watch").get().val()
         a = {}
         for u in users.each():
-            if (ubi_id := u.val().get('ubiID')) is not None:
-                a[ubi_id] = u.val().get('discordUsername')
+            if (ubi_id := u.val().get("ubiID")) is not None:
+                a[ubi_id] = u.val().get("discordUsername")
 
-        data = asyncio.new_event_loop().run_until_complete(rainbow6stats(a, mmr_watch_data))
-        db.child('GameStats').child(f'R6Sv{R6STATS_VERSION}').update(data)
-        db.child('GameStats').child('lastUpdate').update({f'R6Sv{R6STATS_VERSION}': int(time.time())})
+        data, mmr_message = asyncio.new_event_loop().run_until_complete(rainbow6stats(a, mmr_watch_data, self.last_siege_update_ts))
+        if mmr_message:
+            await self.client.get_channel(r6_channel_id).send(mmr_message)
+
+        db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").update(data)
+        db.child('GameStats').child("lastUpdate").update({f"R6Sv{R6STATS_VERSION}": int(time.time())})
+        self.last_siege_update_ts = time.time()
 
     @dbr6.before_loop
     async def before_dbr6(self):
@@ -73,8 +78,8 @@ class GameStats(commands.Cog):
     @tasks.loop(minutes=apex_loop_time)
     async def apex(self):
         ape_sex_stats = apex_stats()
-        db.child('GameStats').child(f'ApexV{APEX_VERSION}').update(ape_sex_stats)
-        db.child('GameStats').child('lastUpdate').update({f'ApexV{APEX_VERSION}': int(time.time())})
+        db.child("GameStats").child(f"ApexV{APEX_VERSION}").update(ape_sex_stats)
+        db.child("GameStats").child("lastUpdate").update({f"ApexV{APEX_VERSION}": int(time.time())})
 
     @apex.before_loop
     async def before_apex(self):
