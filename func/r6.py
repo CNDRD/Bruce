@@ -9,41 +9,6 @@ load_dotenv()
 UBISOFT_EMAIL = os.getenv("UBISOFT_EMAIL")
 UBISOFT_PASSW = os.getenv("UBISOFT_PASSW")
 
-RANKS = [
-    {"name": "Copper 5", "min_mmr": 1, "max_mmr": 1199},
-    {"name": "Copper 4", "min_mmr": 1200, "max_mmr": 1299},
-    {"name": "Copper 3", "min_mmr": 1300, "max_mmr": 1399},
-    {"name": "Copper 2", "min_mmr": 1400, "max_mmr": 1499},
-    {"name": "Copper 1", "min_mmr": 1500, "max_mmr": 1599},
-    {"name": "Bronze 5", "min_mmr": 1600, "max_mmr": 1699},
-    {"name": "Bronze 4", "min_mmr": 1700, "max_mmr": 1799},
-    {"name": "Bronze 3", "min_mmr": 1800, "max_mmr": 1899},
-    {"name": "Bronze 2", "min_mmr": 1900, "max_mmr": 1999},
-    {"name": "Bronze 1", "min_mmr": 2000, "max_mmr": 2099},
-    {"name": "Silver 5", "min_mmr": 2100, "max_mmr": 2199},
-    {"name": "Silver 4", "min_mmr": 2200, "max_mmr": 2299},
-    {"name": "Silver 3", "min_mmr": 2300, "max_mmr": 2399},
-    {"name": "Silver 2", "min_mmr": 2400, "max_mmr": 2499},
-    {"name": "Silver 1", "min_mmr": 2500, "max_mmr": 2599},
-    {"name": "Gold 3", "min_mmr": 2600, "max_mmr": 2799},
-    {"name": "Gold 2", "min_mmr": 2800, "max_mmr": 2999},
-    {"name": "Gold 1", "min_mmr": 3000, "max_mmr": 3199},
-    {"name": "Platinum 3", "min_mmr": 3200, "max_mmr": 3499},
-    {"name": "Platinum 2", "min_mmr": 3500, "max_mmr": 3799},
-    {"name": "Platinum 1", "min_mmr": 3800, "max_mmr": 4099},
-    {"name": "Diamond 3", "min_mmr": 4100, "max_mmr": 4399},
-    {"name": "Diamond 2", "min_mmr": 4400, "max_mmr": 4699},
-    {"name": "Diamond 1", "min_mmr": 4700, "max_mmr": 4999},
-    {"name": "Champion", "min_mmr": 5000, "max_mmr": 15000}
-]
-
-
-def _get_rank_from_mmr(mmr) -> tuple[str, int, int]:
-    for r in RANKS:
-        if r["min_mmr"] <= int(mmr) <= r["max_mmr"]:
-            return r["name"], r["min_mmr"], r["max_mmr"]
-    return "Unranked", 0, 0
-
 
 def _get_uids(a) -> list[str]:
     return [i for i in a]
@@ -62,6 +27,49 @@ def _sort_atk_def(ops) -> dict[str: dict[str: dict[str: int | str | dict[str: di
 
 def _get_top_op(ops) -> OrderedDict:
     return OrderedDict(sorted(ops.items(), key=lambda i: i[1]["time_played"])).popitem(last=True)[1]
+
+
+def _db_ready_trends(data) -> dict[str: dict[str: str | int | float]]:
+    xd = {}
+    for i, date in enumerate(data.get("stats_period")):
+        xd[date] = {
+            "matches_played": data["matches_played"][i],
+            "rounds_played": data["rounds_played"][i],
+            "minutes_played": data["minutes_played"][i],
+            "matches_won": data["matches_won"][i],
+            "matches_lost": data["matches_lost"][i],
+            "rounds_won": data["rounds_won"][i],
+            "rounds_lost": data["rounds_lost"][i],
+            "kills": data["kills"][i],
+            "assists": data["assists"][i],
+            "death": data["death"][i],
+            "headshots": data["headshots"][i],
+            "melee_kills": data["melee_kills"][i],
+            "team_kills": data["team_kills"][i],
+            "opening_kills": data["opening_kills"][i],
+            "opening_deaths": data["opening_deaths"][i],
+            "trades": data["trades"][i],
+            "opening_kill_trades": data["opening_kill_trades"][i],
+            "opening_death_trades": data["opening_death_trades"][i],
+            "revives": data["revives"][i],
+            "distance_travelled": data["distance_travelled"][i],
+            "win_loss_ratio": data["win_loss_ratio"][i],
+            "kill_death_ratio": data["kill_death_ratio"][i],
+            "headshot_accuracy": data["headshot_accuracy"][i],
+            "kills_per_round": data["kills_per_round"][i],
+            "rounds_with_kill": data["rounds_with_kill"][i],
+            "rounds_with_multi_kill": data["rounds_with_multi_kill"][i],
+            "rounds_with_opening_kill": data["rounds_with_opening_kill"][i],
+            "rounds_with_opening_death": data["rounds_with_opening_death"][i],
+            "rounds_with_kost": data["rounds_with_kost"][i],
+            "rounds_survived": data["rounds_survived"][i],
+            "rounds_with_ace": data["rounds_with_ace"][i],
+            "rounds_with_clutch": data["rounds_with_clutch"][i],
+            "time_alive_per_match": data["time_alive_per_match"][i],
+            "time_dead_per_match": data["time_dead_per_match"][i],
+            "distance_per_round": data["distance_per_round"][i],
+        }
+    return xd
 
 
 async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (dict, str):
@@ -84,6 +92,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
         await p.load_general()
         await p.load_level()
         await p.load_gamemodes()
+        # await p.load_trends()
 
         r = ranks[p.id]
         c = casuals[p.id]
@@ -101,8 +110,6 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
             "atk1": _get_top_op(operator_data["atk"]),
             "def1": _get_top_op(operator_data["def"])
         }
-
-        casual_rank_name, casual_rank_prev, casual_rank_next = _get_rank_from_mmr(c.mmr)
 
         # Get Weapon type data
         await p.load_weapon_types()
@@ -137,6 +144,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
                 xd["mmr_watch"][p.id]["message_sent"] = True
 
         all_data = {
+            # 'trends': _db_ready_trends(vars(p.trends.all.all)),
             'operators': operator_data,
             'weapon_types': weapon_type_data,
 
@@ -159,11 +167,11 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
             'sDeaths': r.deaths,
             'sAbandons': r.abandons,
 
-            'currentRankImageCasual': get_rank(casual_rank_name),
-            'currentRankCasual': casual_rank_name,
+            'currentRankImageCasual': get_rank(c.rank),
+            'currentRankCasual': c.rank,
             'currentMMRcasual': c.mmr,
-            'prevRankMMRcasual': casual_rank_prev,
-            'nextRankMMRcasual': casual_rank_next,
+            'prevRankMMRcasual': c.prev_rank_mmr,
+            'nextRankMMRcasual': c.next_rank_mmr,
             'lastMMRchangeCasual': c.last_mmr_change,
             'sWinsCasual': c.wins,
             'sLossesCasual': c.losses,
