@@ -92,7 +92,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
         await p.load_general()
         await p.load_level()
         await p.load_gamemodes()
-        # await p.load_trends()
+        await p.load_trends()
 
         r = ranks[p.id]
         c = casuals[p.id]
@@ -144,7 +144,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
                 xd["mmr_watch"][p.id]["message_sent"] = True
 
         all_data = {
-            # 'trends': _db_ready_trends(vars(p.trends.all.all)),
+            "trends": _db_ready_trends(vars(p.trends.all.all)),
             "operators": operator_data,
             "weapon_types": weapon_type_data,
 
