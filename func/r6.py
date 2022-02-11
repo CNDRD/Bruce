@@ -1,5 +1,6 @@
 import os
 from siegeapi import Auth, Platforms
+from siegeapi.trends import TrendBlockDuration
 from collections import OrderedDict
 
 from dotenv import load_dotenv
@@ -92,7 +93,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
         await p.load_general()
         await p.load_level()
         await p.load_gamemodes()
-        await p.load_trends()
+        await p.load_trends(block_duration=TrendBlockDuration.DAILY)
 
         r = ranks[p.id]
         c = casuals[p.id]
