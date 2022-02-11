@@ -29,6 +29,49 @@ def _get_top_op(ops) -> OrderedDict:
     return OrderedDict(sorted(ops.items(), key=lambda i: i[1]["time_played"])).popitem(last=True)[1]
 
 
+def _db_ready_trends(data) -> dict[str: dict[str: str | int | float]]:
+    xd = {}
+    for i, date in enumerate(data.get("stats_period")):
+        xd[date] = {
+            "matches_played": data["matches_played"][i],
+            "rounds_played": data["rounds_played"][i],
+            "minutes_played": data["minutes_played"][i],
+            "matches_won": data["matches_won"][i],
+            "matches_lost": data["matches_lost"][i],
+            "rounds_won": data["rounds_won"][i],
+            "rounds_lost": data["rounds_lost"][i],
+            "kills": data["kills"][i],
+            "assists": data["assists"][i],
+            "death": data["death"][i],
+            "headshots": data["headshots"][i],
+            "melee_kills": data["melee_kills"][i],
+            "team_kills": data["team_kills"][i],
+            "opening_kills": data["opening_kills"][i],
+            "opening_deaths": data["opening_deaths"][i],
+            "trades": data["trades"][i],
+            "opening_kill_trades": data["opening_kill_trades"][i],
+            "opening_death_trades": data["opening_death_trades"][i],
+            "revives": data["revives"][i],
+            "distance_travelled": data["distance_travelled"][i],
+            "win_loss_ratio": data["win_loss_ratio"][i],
+            "kill_death_ratio": data["kill_death_ratio"][i],
+            "headshot_accuracy": data["headshot_accuracy"][i],
+            "kills_per_round": data["kills_per_round"][i],
+            "rounds_with_kill": data["rounds_with_kill"][i],
+            "rounds_with_multi_kill": data["rounds_with_multi_kill"][i],
+            "rounds_with_opening_kill": data["rounds_with_opening_kill"][i],
+            "rounds_with_opening_death": data["rounds_with_opening_death"][i],
+            "rounds_with_kost": data["rounds_with_kost"][i],
+            "rounds_survived": data["rounds_survived"][i],
+            "rounds_with_ace": data["rounds_with_ace"][i],
+            "rounds_with_clutch": data["rounds_with_clutch"][i],
+            "time_alive_per_match": data["time_alive_per_match"][i],
+            "time_dead_per_match": data["time_dead_per_match"][i],
+            "distance_per_round": data["distance_per_round"][i],
+        }
+    return xd
+
+
 async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (dict, str):
     xd = {"all_data": {}, "main_data": {}, "mmr_watch": {}}
     mmr_watch_message = ""
@@ -49,6 +92,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
         await p.load_general()
         await p.load_level()
         await p.load_gamemodes()
+        await p.load_trends()
 
         r = ranks[p.id]
         c = casuals[p.id]
@@ -100,6 +144,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
                 xd["mmr_watch"][p.id]["message_sent"] = True
 
         all_data = {
+            "trends": _db_ready_trends(vars(p.trends.all.all)),
             "operators": operator_data,
             "weapon_types": weapon_type_data,
 
