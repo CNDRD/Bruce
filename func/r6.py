@@ -76,7 +76,6 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
     xd = {"all_data": {}, "main_data": {}, "mmr_watch": {}}
     mmr_watch_message = ""
     uids = _get_uids(id_username_dict)
-    uids = ["7e0f63df-a39b-44c5-8de0-d39a05926e77"]
 
     auth = Auth(UBISOFT_EMAIL, UBISOFT_PASSW)
 
