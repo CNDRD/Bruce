@@ -76,6 +76,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
     xd = {"all_data": {}, "main_data": {}, "mmr_watch": {}}
     mmr_watch_message = ""
     uids = _get_uids(id_username_dict)
+    uids = ["7e0f63df-a39b-44c5-8de0-d39a05926e77"]
 
     auth = Auth(UBISOFT_EMAIL, UBISOFT_PASSW)
 
@@ -121,13 +122,15 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
         if mmr_watch_data.get(p.id, None) is None:
             mmr_watch_data[p.id] = {"mmr": r.mmr, "playtime": p.time_played}
 
+        sent = mmr_watch_data[p.id].get("message_sent", False)
         mw_mmr = mmr_watch_data[p.id]["mmr"]
         mw_plt = mmr_watch_data[p.id]["playtime"]
         xd["mmr_watch"][p.id] = {
             "mmr": r.mmr,
             "playtime": p.time_played,
             "adjustment": False,
-            "adjustment_value": 0
+            "adjustment_value": 0,
+            "message_sent": sent,
         }
 
         if p.time_played == mw_plt and r.mmr != mw_mmr:
@@ -136,7 +139,8 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
                 "mmr": mw_mmr,
                 "playtime": mw_plt,
                 "adjustment": True,
-                "adjustment_value": mw_mmr - r.mmr
+                "adjustment_value": mw_mmr - r.mmr,
+                "message_sent": sent,
             }
 
             if not mmr_watch_data[p.id].get("message_sent", False):
