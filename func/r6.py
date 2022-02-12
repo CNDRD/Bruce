@@ -144,7 +144,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
             }
 
             if not mmr_watch_data[p.id].get("message_sent", False):
-                mmr_watch_message += f"**{p.name}** just __*{'lost' if (mw_mmr-r.mmr) < 0 else 'gained'}*__ ***{int(mw_mmr-r.mmr)}*** MMR"
+                mmr_watch_message += f"**{p.name}** just __*{'lost' if (mw_mmr-r.mmr) < 0 else 'gained'}*__ ***{int(mw_mmr-r.mmr)}*** MMR\n"
                 xd["mmr_watch"][p.id]["message_sent"] = True
 
         all_data = {
