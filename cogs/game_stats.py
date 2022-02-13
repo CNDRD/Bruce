@@ -1,5 +1,4 @@
 from func.r6 import rainbow6stats
-from func.apex import apex_stats
 from func.firebase_init import db
 
 from disnake.ext import commands, tasks
@@ -17,23 +16,18 @@ nest_asyncio.apply()
 config = yaml.safe_load(open("config.yml"))
 dbr6_loop = config.get("dbr6_loop")
 dbr6_loop_time = config.get("dbr6_loop_time")
-apex_loop = config.get("apex_loop")
-apex_loop_time = config.get("apex_loop_time")
 r6_channel_id = config.get("r6_channel_id")
 
 R6STATS_VERSION = 10
-APEX_VERSION = 1
 
 
 class GameStats(commands.Cog):
     def __init__(self, client):
-        """Various Game Stats gathering loops."""
+        """Various Game Stat gathering loops."""
         self.client = client
         self.first_boot = True
         if dbr6_loop:
             self.dbr6.start()
-        if apex_loop:
-            self.apex.start()
 
         self.last_siege_update_ts = db.child("GameStats").child("lastUpdate").child(f"R6Sv{R6STATS_VERSION}").get().val()
 
@@ -73,16 +67,6 @@ class GameStats(commands.Cog):
 
     @dbr6.before_loop
     async def before_dbr6(self):
-        await self.client.wait_until_ready()
-
-    @tasks.loop(minutes=apex_loop_time)
-    async def apex(self):
-        ape_sex_stats = apex_stats()
-        db.child("GameStats").child(f"ApexV{APEX_VERSION}").update(ape_sex_stats)
-        db.child("GameStats").child("lastUpdate").update({f"ApexV{APEX_VERSION}": int(time.time())})
-
-    @apex.before_loop
-    async def before_apex(self):
         await self.client.wait_until_ready()
 
 
