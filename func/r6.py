@@ -49,6 +49,10 @@ def _db_ready_trends(data) -> dict[str: dict[str: str | int | float]]:
     return xd
 
 
+def _get_db_weapons(w) -> list[dict[str: int | float | str]]:
+    return [vars(weapon) for weapon in (w.primary+w.secondary)]
+
+
 async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (dict, str):
     xd = {"all_data": {}, "main_data": {}, "mmr_watch": {}}
     mmr_watch_message = ""
@@ -70,6 +74,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
         await p.load_level()
         await p.load_gamemodes()
         await p.load_trends()
+        await p.load_weapons()
 
         r = ranks[p.id]
         c = casuals[p.id]
@@ -124,6 +129,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
                 xd["mmr_watch"][p.id]["message_sent"] = True
 
         all_data = {
+            "weapons": _get_db_weapons(p.weapons.all),
             "trends": _db_ready_trends(vars(p.trends.all.all)),
             "operators": operator_data,
             "weapon_types": weapon_type_data,
