@@ -54,7 +54,7 @@ def _get_db_weapons(w) -> list[dict[str: int | float | str]]:
 
 
 async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (dict, str):
-    xd = {"all_data": {}, "main_data": {}, "mmr_watch": {}}
+    xd = {"all_data": {}, "main_data": {}, "mmr_watch": {}, "seasonal_data": {}}
     mmr_watch_message = ""
     uids = _get_uids(id_username_dict)
 
@@ -72,9 +72,11 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
         await p.load_playtime()
         await p.load_general()
         await p.load_level()
+        await p.load_alpha_pack()
         await p.load_gamemodes()
         await p.load_trends()
         await p.load_weapons()
+        await p.load_weapon_types()
 
         r = ranks[p.id]
         c = casuals[p.id]
@@ -82,7 +84,8 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
         pr = p.ranked
         pc = p.casual
 
-        ops = await p.load_all_operators()
+        # Operator data
+        ops = await p.load_operators()
         operator_data = {}
         for o in ops:
             operator_data[o] = ops[o].get_dict()
@@ -94,9 +97,8 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
         }
 
         # Get Weapon type data
-        await p.load_weapon_types()
         weapon_type_data = []
-        for weapon in p.weapons:
+        for weapon in p.weapon_types:
             weapon_type_data.append(weapon.get_dict())
 
         # MMR Watch
@@ -168,7 +170,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
             "hs": round((p.headshots / p.kills) * 100, 2),
             "xp": p.total_xp,
             "level": p.level,
-            "alphapackProbability": p.lootbox_probability,
+            "alphapackProbability": p.alpha_pack,
 
             "rankedGames": pr.played,
             "rankedWins": pr.won,
@@ -224,7 +226,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
             "sDeaths": r.deaths,
             "sAbandons": r.abandons,
 
-            "alphapackProbability": p.lootbox_probability,
+            "alphapackProbability": p.alpha_pack,
 
             "operators": top_2_ops,
 
@@ -235,6 +237,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
             "hs": round((p.headshots / p.kills) * 100, 2),
         }
 
+        xd["seasonal_data"][p.id] = {r.season: r.get_dict()}
         xd["all_data"][p.id] = all_data
         xd["main_data"][p.id] = main_data
         print(f"Done!      [{p.id}]")
