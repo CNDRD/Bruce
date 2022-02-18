@@ -54,7 +54,7 @@ def _get_db_weapons(w) -> list[dict[str: int | float | str]]:
 
 
 async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (dict, str):
-    xd = {"all_data": {}, "main_data": {}, "mmr_watch": {}, "seasonal_data": {}}
+    xd = {"all_data": {}, "main_data": {}, "mmr_watch": {}}
     mmr_watch_message = ""
     uids = _get_uids(id_username_dict)
 
@@ -237,7 +237,6 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
             "hs": round((p.headshots / p.kills) * 100, 2),
         }
 
-        xd["seasonal_data"][p.id] = {r.season: r.get_dict()}
         xd["all_data"][p.id] = all_data
         xd["main_data"][p.id] = main_data
         print(f"Done!      [{p.id}]")
