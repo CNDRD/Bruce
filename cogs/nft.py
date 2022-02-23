@@ -35,11 +35,11 @@ class NFT(commands.Cog):
 
     @commands.slash_command(
         name="mint",
-        description="Mints a random NFT from a collection of over 100 million custom Diskíto NFTs for 100k shekels"
+        description="Mints a random NFT from a collection of over 100 million custom Diskíto NFTs for 10k shekels"
     )
     async def _mint(self, inter: disnake.MessageInteraction):
         buyer_money = db.child("users").child(inter.author.id).child("money").get().val()
-        if buyer_money <= 100_000:
+        if buyer_money <= 10_000:
             return await inter.response.send_message("You do not have enough shekels to mint a new NFT!", ephemeral=True)
 
         minted = db.child("NFT").child("ids").get()
@@ -48,7 +48,7 @@ class NFT(commands.Cog):
         mint_key = len(minted.val())-len(minted_wo)
         mint_id = minted_wo[0]
 
-        db.child("users").child(inter.author.id).update({"money": int(buyer_money - 100_000)})
+        db.child("users").child(inter.author.id).update({"money": int(buyer_money - 10_000)})
         db.child("NFT").child("ids").child(mint_key).remove()
         db.child("NFT").child("owned").child(inter.author.id).update({mint_id: {"boughtAt": time.time(), "id": mint_id}})
         return await inter.response.send_message("Your new NFT:", view=NFTsLink(mint_id))
