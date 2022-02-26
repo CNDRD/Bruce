@@ -244,7 +244,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
 
     if mmr_watch_message:
         mmr_watch_message = f"**Rainbow Six Siege** MMR adjustment announcement \n\n{mmr_watch_message}"
-        mmr_watch_message += f"\n\nThis happened since the last check <t:{int(last_db_update)}:R>"
+        mmr_watch_message += f"\nThis happened since the last check <t:{int(last_db_update)}:R>"
 
     await auth.close()
     return xd, mmr_watch_message
