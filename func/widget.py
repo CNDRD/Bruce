@@ -68,6 +68,7 @@ def _get_activities(activities) -> dict[str: str | list | dict[str: str]]:
             xd["spotify"] = {
                 "artist": activity.artists[0],
                 "title": activity.title,
+                "url": activity.track_url,
             }
 
         elif isinstance(activity, disnake.activity.CustomActivity):
