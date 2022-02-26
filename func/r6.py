@@ -117,7 +117,6 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
         }
 
         if p.time_played == mw_plt and r.mmr != mw_mmr:
-            print(f"MMR Adjustment detected! \n {xd['mmr_watch'][p.id]}")
             xd["mmr_watch"][p.id] = {
                 "mmr": mw_mmr,
                 "playtime": mw_plt,
@@ -125,6 +124,7 @@ async def rainbow6stats(id_username_dict, mmr_watch_data, last_db_update) -> (di
                 "adjustment_value": mw_mmr - r.mmr,
                 "message_sent": sent,
             }
+            print(f"MMR Adjustment detected! \n {xd['mmr_watch'][p.id]}")
 
             if not mmr_watch_data[p.id].get("message_sent", False):
                 mmr_watch_message += f"**{p.name}** just __*{'lost' if (mw_mmr-r.mmr) < 0 else 'gained'}*__ ***{int(mw_mmr-r.mmr)}*** MMR\n"
