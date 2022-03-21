@@ -1,5 +1,5 @@
 git+https://github.com/DisnakeDev/disnake@v2.2.2
-siegeapi==2.0.5
+git+https://github.com/CNDRD/siegeapi@v2.0.5
 
 pyrebase4==4.5.0
 
