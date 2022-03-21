@@ -18,12 +18,12 @@ dbr6_loop = config.get("dbr6_loop")
 dbr6_loop_time = config.get("dbr6_loop_time")
 r6_channel_id = config.get("r6_channel_id")
 
-R6STATS_VERSION = 10
+R6STATS_VERSION = 11
 
 
 class GameStats(commands.Cog):
     def __init__(self, client):
-        """Various Game Stat gathering loops."""
+        """Game Stat gathering loops."""
         self.client = client
         self.first_boot = True
         if dbr6_loop:
@@ -38,7 +38,7 @@ class GameStats(commands.Cog):
             else:
                 request_diff = message["data"] - self.last_siege_update_ts
                 if request_diff >= 180:
-                    print("Restarting DBR6 following a wesite request")
+                    print("Restarting DBR6 following a website request")
                     if dbr6_loop:
                         if self.dbr6.is_running():
                             self.dbr6.restart()
@@ -50,19 +50,9 @@ class GameStats(commands.Cog):
 
     @tasks.loop(minutes=dbr6_loop_time)
     async def dbr6(self):
-        users = db.child("GameStats").child("IDs").get()
-        mmr_watch_data = db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").child("mmr_watch").get().val()
-        a = {}
-        for u in users.each():
-            if (ubi_id := u.val().get("ubiID")) is not None:
-                a[ubi_id] = u.val().get("discordUsername")
-
-        data, mmr_message = asyncio.new_event_loop().run_until_complete(rainbow6stats(a, mmr_watch_data, self.last_siege_update_ts))
+        mmr_message = asyncio.new_event_loop().run_until_complete(rainbow6stats())
         if mmr_message:
             await self.client.get_channel(r6_channel_id).send(mmr_message)
-
-        db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").update(data)
-        db.child('GameStats').child("lastUpdate").update({f"R6Sv{R6STATS_VERSION}": int(time.time())})
         self.last_siege_update_ts = time.time()
 
     @dbr6.before_loop

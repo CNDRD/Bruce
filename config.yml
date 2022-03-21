@@ -44,17 +44,6 @@ rarrow_emoji: 784822110836097094 # Red arrow
 # Loops & loop times
 dbr6_loop: True
 dbr6_loop_time: 30.0 # minutes
-apex_loop: True
-apex_loop_time: 30.0 # minutes
-
-# Apex usernames lmao
-apex_usernames:
-  - '69_CNDRD_69' # cndrd
-  - 'ReformedShrimp' # kubik
-  - 'xXTikTokZoomerXx' # martamara
-  - 'iwantmymilk' # brebik
-  - 'tarwixcz' # tarwix
-  - 'zonty1' #zonty
 
 
 # Reaction Point Emotes
