@@ -55,7 +55,7 @@ def _get_sorted_list_of_operators(ops):
 
 
 async def rainbow6stats():
-    mmr_watch_data = db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").child("mmr_watch").get().val() or {}
+    mmr_watch_db = db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").child("mmr_watch").get().val() or {}
     mmr_watch = {}
     mmr_watch_message = ""
     playtimes = db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").child("playtimes").get().val() or {}
@@ -68,45 +68,47 @@ async def rainbow6stats():
 
     for p in players.values():
 
-        # MMR Check
-        await p.load_playtime()
+        # MMR Watch v2
         seasonal_ranked = await p.load_ranked()
         current_season_id = seasonal_ranked.season
+        await p.load_progress()
 
-        if mmr_watch_data.get(p.id, None) is None:
-            mmr_watch_data[p.id] = {"mmr": seasonal_ranked.mmr, "playtime": p.total_time_played}
+        if mmr_watch_db.get(p.id) is None:
+            mmr_watch[p.id] = {"mmr": seasonal_ranked.mmr, "xp": p.total_xp}
 
-        message_sent = mmr_watch_data[p.id].get("message_sent", False)
-        mw_mmr = mmr_watch_data[p.id]["mmr"]
-        mw_plt = mmr_watch_data[p.id]["playtime"]
+        message_sent_already = mmr_watch_db.get(p.id, {}).get("message_sent_already", False)
+        db_mmr = mmr_watch_db.get(p.id, {}).get("mmr", seasonal_ranked.mmr)
+        db_xp = mmr_watch_db.get(p.id, {}).get("xp", p.total_xp)
+        adjustment_value = seasonal_ranked.mmr - db_mmr
+
         mmr_watch[p.id] = {
             "mmr": seasonal_ranked.mmr,
-            "playtime": p.total_time_played,
+            "xp": p.total_xp,
+            "adjustment_value": adjustment_value,
             "adjustment": False,
-            "adjustment_value": 0,
-            "message_sent": message_sent,
+            "message_sent_already": message_sent_already,
         }
-        if p.total_time_played == mw_plt and seasonal_ranked.mmr != mw_mmr:
+
+        if db_xp == p.total_xp and adjustment_value != 0:
             mmr_watch[p.id] = {
-                "mmr": mw_mmr,
-                "playtime": mw_plt,
+                "mmr": db_mmr,
+                "xp": db_xp,
+                "adjustment_value": adjustment_value,
                 "adjustment": True,
-                "adjustment_value": mw_mmr - seasonal_ranked.mmr,
-                "message_sent": message_sent,
+                "message_sent_already": message_sent_already,
             }
-            print(f"MMR Adjustment detected! \n {mmr_watch[p.id]}")
+            print(f"MMR Adjustment detected! | {mmr_watch[p.id]}")
 
-            if not mmr_watch_data[p.id].get("message_sent", False):
-                mmr_watch_message += f"**{p.name}** just __*{'lost' if (mw_mmr-seasonal_ranked.mmr) < 0 else 'gained'}*__ ***{int(mw_mmr-seasonal_ranked.mmr)}*** MMR\n"
-                mmr_watch[p.id]["message_sent"] = True
+            if not message_sent_already:
+                mmr_watch_message += f"**{p.name}** just __*{'lost' if adjustment_value < 0 else 'gained'}*__ ***{int(adjustment_value)}*** MMR\n"
+                mmr_watch[p.id]["message_sent_already"] = True
 
-        # Check if playtime changed, so we can skip checking stats that didn't change
-        db_total_playtime = playtimes.get(p.id, 0)
-        if db_total_playtime == p.total_time_played:
+        # Check if total XP changed, so we can skip checking stats that didn't change
+        if db_xp == p.total_xp:
             continue
 
-        # XP & Level
-        await p.load_progress()
+        # Playtimes
+        await p.load_playtime()
 
         # Operators
         await p.load_operators()
