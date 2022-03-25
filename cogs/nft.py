@@ -9,7 +9,7 @@ class NFTsLink(disnake.ui.View):
     def __init__(self, uid: int):
         super().__init__()
 
-        self.add_item(disnake.ui.Button(label="Your NFT collection sir", url=f"https://diskito.eu/NFT?id={uid}"))
+        self.add_item(disnake.ui.Button(label="Your NFT collection sir", url=f"https://diskito.eu/nft?id={uid}"))
 
 
 class NFT(commands.Cog):
