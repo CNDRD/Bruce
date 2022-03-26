@@ -123,6 +123,7 @@ async def rainbow6stats():
         seasonal_ranked = seasonal_ranked.get_dict()  # Already loaded for MMR Watch
         seasonal_casual = (await p.load_casual()).get_dict()
         seasonal_events = (await p.load_events()).get_dict()
+        seasonal_deathmatch = (await p.load_deathmatch()).get_dict()
 
         # Gamemodes data
         await p.load_gamemodes()
@@ -144,6 +145,7 @@ async def rainbow6stats():
                 "ranked": seasonal_ranked,
                 "casual": seasonal_casual,
                 "events": seasonal_events,
+                "deathmatch": seasonal_deathmatch,
             },
             "progress": {
                 "xp": p.xp,
