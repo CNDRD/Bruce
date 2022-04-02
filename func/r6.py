@@ -37,19 +37,6 @@ def _get_db_weapons(w) -> list[dict[str: int | float | str]]:
     return [vars(weapon) for weapon in (w.primary+w.secondary)]
 
 
-def get_rank_image_url(rank) -> str:
-    rank_dict = {
-        "unranked": "RpPdtbU", "champion": "QHZFdUj",
-        "copper 5": "SNSfudP", "copper 4": "7PiisA2", "copper 3": "aNCvwAI", "copper 2": "fUzUApd", "copper 1": "eGuxE0k",
-        "bronze 5": "bbjMf4V", "bronze 4": "75IEQkD", "bronze 3": "GIt29R0", "bronze 2": "sTIXKlh", "bronze 1": "zKRDUdK",
-        "silver 5": "CbAbvOa", "silver 4": "2Y8Yr11", "silver 3": "zNUuJSn", "silver 2": "utTa5mq", "silver 1": "27ISr4q",
-        "gold 4": "YIWWNzf", "gold 3": "JJvq35l", "gold 2": "Fco8pIl", "gold 1": "m8FFWGi",
-        "platinum 3": "GpEpkDs", "platinum 2": "P8IO0Sn", "platinum 1": "52Y4EVg",
-        "diamond 3": "XEqbdS5", "diamond 2": "A9hsLtc", "diamond 1": "n0izxYa",
-    }
-    return f"https://i.imguseasonal_ranked.com/{rank_dict.get(rank.lower())}.png"
-
-
 def _get_sorted_list_of_operators(ops):
     return sorted([vars(op) for op in ops], key=lambda d: d["minutes_played"])
 
