@@ -45,7 +45,6 @@ async def rainbow6stats():
     mmr_watch_db = db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").child("mmr_watch").get().val() or {}
     mmr_watch = {}
     mmr_watch_message = ""
-    playtimes = db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").child("playtimes").get().val() or {}
 
     users = db.child("GameStats").child("IDs").get().val()
     uids = [user.get("ubiID") for user in users.values() if user.get("ubiID") is not None]
@@ -176,7 +175,6 @@ async def rainbow6stats():
         db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").child("main_data").child(p.id).update(main_data)
         db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").child("all_data").child(p.id).update(all_data)
         db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").child("seasonal_data").child(p.id).update({current_season_id: seasonal_ranked})
-        db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").child("playtimes").update({p.id: p.total_time_played})
 
     db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").child("mmr_watch").update(mmr_watch)
     db.child('GameStats').child("lastUpdate").update({f"R6Sv{R6STATS_VERSION}": int(time.time())})
