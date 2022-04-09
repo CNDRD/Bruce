@@ -1,14 +1,18 @@
 from func.firebase_init import db
 
 from siegeapi import Auth
+import random
 import time
+import ast
 import os
 
 from dotenv import load_dotenv
 load_dotenv()
 
-UBISOFT_EMAIL = os.getenv("UBISOFT_EMAIL")
-UBISOFT_PASSW = os.getenv("UBISOFT_PASSW")
+UBISOFT_CREDENTIALS = ast.literal_eval(os.getenv("UBISOFT_CREDENTIALS"))
+UBISOFT_PASSWORD = UBISOFT_CREDENTIALS.get("password")
+UBISOFT_EMAILS = UBISOFT_CREDENTIALS.get("emails")
+lci = random.randint(0, len(UBISOFT_EMAILS))
 
 R6STATS_VERSION = 11
 
@@ -42,6 +46,7 @@ def _get_sorted_list_of_operators(ops):
 
 
 async def rainbow6stats():
+    print("Running Rainbow Six Stats")
     mmr_watch_db = db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").child("mmr_watch").get().val() or {}
     mmr_watch = {}
     mmr_watch_message = ""
@@ -49,7 +54,13 @@ async def rainbow6stats():
     users = db.child("GameStats").child("IDs").get().val()
     uids = [user.get("ubiID") for user in users.values() if user.get("ubiID") is not None]
 
-    auth = Auth(UBISOFT_EMAIL, UBISOFT_PASSW)
+    global lci
+    lci += 1
+    if lci >= len(UBISOFT_EMAILS):
+        lci = 0
+    ubisoft_email = UBISOFT_EMAILS[lci]
+    print(f"Logging in using credentials #{lci} | {ubisoft_email}")
+    auth = Auth(ubisoft_email, UBISOFT_PASSWORD)
     players = await auth.get_player_batch(uids=uids)
 
     for p in players.values():
