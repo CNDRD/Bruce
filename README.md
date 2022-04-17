@@ -1,18 +1,25 @@
+<div align="center">
+
 # Bruce  
 
-[![Discord](https://discordapp.com/api/guilds/402356550133350411/widget.png?style=shield)](https://discord.gg/sXDbtp4)
-![GitHub deployments](https://img.shields.io/github/deployments/CNDRD/Bruce/bruce-discord?label=Deployment&logo=heroku)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fbf1a0369b054703a5a337ea37f588c3)](https://app.codacy.com/gh/CNDRD/Bruce)  
-![Python Version](https://img.shields.io/badge/python-3.10-blue.svg?logo=python)
-![GitHub repo size](https://img.shields.io/github/repo-size/CNDRD/bruce)
-![GitHub License](https://img.shields.io/github/license/CNDRD/bruce)  
+<a href="https://diskito.eu/discord">
+    <img src="https://img.shields.io/discord/402356550133350411?label=discord&style=for-the-badge&logo=discord&color=5865F2&logoColor=white" />
+</a>
+<img src="https://img.shields.io/github/deployments/CNDRD/Bruce/bruce-discord?label=Deployment&logo=heroku&style=for-the-badge&color=5865F2&logoColor=white" />
+<br />
+<img src="https://img.shields.io/badge/python-3.10-blue.svg?logo=python&style=for-the-badge&logoColor=white&color=yellow" />
+<img src="https://img.shields.io/github/repo-size/CNDRD/bruce?style=for-the-badge&logoColor=white&color=yellow" />
+<img src="https://img.shields.io/github/license/CNDRD/bruce?style=for-the-badge&logoColor=white&color=yellow" />
 
 ---  
 
 I'm willing to help answer any questions that you may have  
-You can either join my [Discord](https://discord.com/invite/sXDbtp4) or send me a DM on Discord at __CNDRD#2233__  
+You can either join my [Discord](https://diskito.eu/discord) or send me a DM on Discord at __CNDRD#2233__  
 You can also visit the website I've made for my server [Here](https://diskito.eu)
 
 ---  
 
-Made with ❤️ by CNDRD
+<img src="https://forthebadge.com/images/badges/built-by-crips.svg" />
+<img src="https://forthebadge.com/images/badges/fuck-it-ship-it.svg" />
+
+</div>
