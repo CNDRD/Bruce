@@ -5,7 +5,7 @@ class Errors(commands.Cog):
     def __init__(self, client):
         """Errors."""
         self.client = client
-"""
+
     @commands.Cog.listener()
     async def on_slash_command_error(self, inter, error):
         # All errors under "CheckFailure" (https://disnake.readthedocs.io/en/latest/ext/commands/api.html#exception-hierarchy)
@@ -39,7 +39,7 @@ class Errors(commands.Cog):
             return await inter.edit_original_message(content=message)
 
         await inter.response.send_message(message, ephemeral=True)
-"""
+
 
 def setup(client):
     client.add_cog(Errors(client))
