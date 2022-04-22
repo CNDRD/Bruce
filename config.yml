@@ -15,6 +15,7 @@ bot_mod_role_id:  553150973581721600
 r6s_role_id:      695320047022768138
 muted_role_id:    743125539929456640
 yeetard_role_id:  488342364570779650
+leds_role_id:     967169642617511986
 
 # Channel ID's
 startup_channel_id:          731042702237368400
@@ -24,6 +25,7 @@ voice_log_channel_id:        802111450021232640
 pins_channel_id:             893274760463659029
 r6_channel_id:               702828000168640562
 deleted_messages_channel_id: 965363065828823070
+leds_alert_channel_id:       967198155391250432
 
 
 # Channels that reaction roles work in
@@ -43,7 +45,7 @@ yarrow_emoji: 784822110622974014 # Yellow arrow
 rarrow_emoji: 784822110836097094 # Red arrow
 
 # Loops & loop times
-dbr6_loop: True
+dbr6_loop: False
 dbr6_loop_time: 30.0 # minutes
 
 
