@@ -1,5 +1,6 @@
 from func.r6 import rainbow6stats
 from func.firebase_init import db
+from func.pubg import pubg_stats
 
 from disnake.ext import commands, tasks
 
@@ -17,6 +18,8 @@ config = yaml.safe_load(open("config.yml"))
 dbr6_loop = config.get("dbr6_loop")
 dbr6_loop_time = config.get("dbr6_loop_time")
 r6_channel_id = config.get("r6_channel_id")
+pubg_loop = config.get("pubg_loop")
+pubg_loop_time = config.get("pubg_loop_time")
 
 R6STATS_VERSION = 11
 
@@ -26,8 +29,11 @@ class GameStats(commands.Cog):
         """Game Stat gathering loops."""
         self.client = client
         self.first_boot = True
+
         if dbr6_loop:
             self.dbr6.start()
+        if pubg_loop:
+            self.pubg.start()
 
         self.last_siege_update_ts = db.child("GameStats").child("lastUpdate").child(f"R6Sv{R6STATS_VERSION}").get().val()
 
@@ -57,6 +63,14 @@ class GameStats(commands.Cog):
 
     @dbr6.before_loop
     async def before_dbr6(self):
+        await self.client.wait_until_ready()
+
+    @tasks.loop(minutes=pubg_loop_time)
+    async def pubg(self):
+        pubg_stats()
+
+    @pubg.before_loop
+    async def before_pubg(self):
         await self.client.wait_until_ready()
 
 
