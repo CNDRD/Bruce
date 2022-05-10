@@ -34,18 +34,18 @@ class OnMessage(commands.Cog):
         uid = message.author.id
 
         # Server Totals Data
-        st = db.child('serverTotals').get().val()
-        st_levels = st.get('levels', 0)
-        st_messages = st.get('messages', 0)
-        st_xp = st.get('xp', 0)
+        st = db.child("serverTotals").get().val()
+        st_levels = st.get("levels", 0)
+        st_messages = st.get("messages", 0)
+        st_xp = st.get("xp", 0)
 
         # User Data
-        ud = db.child('users').child(uid).get().val()
-        current_lvl = ud.get('level', 0)
-        current_xp = ud.get('xp', 0)
-        last_xp_get = ud.get('last_xp_get', 0)
-        messages_count = ud.get('messages_count', 0)
-        money = ud.get('money', 0)
+        ud = db.child("users").child(uid).get().val()
+        current_lvl = ud.get("level", 0)
+        current_xp = ud.get("xp", 0)
+        last_xp_get = ud.get("last_xp_get", 0)
+        messages_count = ud.get("messages_count", 0)
+        money = ud.get("money", 0)
 
         # Get the time since the user last posted a message
         since_last_mess = now - last_xp_get
@@ -63,16 +63,16 @@ class OnMessage(commands.Cog):
 
             if new_xp >= xp_from_level(current_lvl+1):
                 data = {
-                    'level': current_lvl + 1,
-                    'last_xp_get': now,
-                    'xp': new_xp,
-                    'messages_count': messages_count + 1,
-                    'money': money + xp_to_add
+                    "level": current_lvl + 1,
+                    "last_xp_get": now,
+                    "xp": new_xp,
+                    "messages_count": messages_count + 1,
+                    "money": money + xp_to_add
                 }
                 server_totals = {
-                    'xp': st_xp + xp_to_add,
-                    'messages': st_messages + 1,
-                    'levels': st_levels + 1
+                    "xp": st_xp + xp_to_add,
+                    "messages": st_messages + 1,
+                    "levels": st_levels + 1
                 }
 
                 # Level based roles
@@ -87,25 +87,25 @@ class OnMessage(commands.Cog):
             else:
                 # No level change
                 data = {
-                    'xp': new_xp,
-                    'last_xp_get': now,
-                    'messages_count': messages_count + 1,
-                    'money': money + xp_to_add
+                    "xp": new_xp,
+                    "last_xp_get": now,
+                    "messages_count": messages_count + 1,
+                    "money": money + xp_to_add
                 }
 
                 server_totals = {
-                    'xp': st_xp + xp_to_add,
-                    'messages': st_messages + 1
+                    "xp": st_xp + xp_to_add,
+                    "messages": st_messages + 1
                 }
 
         else:
             # Too Fast (less than 60s since last message)
-            data = {'messages_count': messages_count + 1}
-            server_totals = {'messages': st_messages + 1}
+            data = {"messages_count": messages_count + 1}
+            server_totals = {"messages": st_messages + 1}
 
         # Update users individual stats & server total stats
-        db.child('users').child(uid).update(data)
-        db.child('serverTotals').update(server_totals)
+        db.child("users").child(uid).update(data)
+        db.child("serverTotals").update(server_totals)
 
 
 def setup(client):

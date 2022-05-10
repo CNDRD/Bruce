@@ -7,8 +7,8 @@ import yaml
 
 
 # Config Load
-config = yaml.safe_load(open('config.yml'))
-deleted_messages_channel_id = config.get('deleted_messages_channel_id')
+config = yaml.safe_load(open("config.yml"))
+deleted_messages_channel_id = config.get("deleted_messages_channel_id")
 
 
 class OnMessageDelete(commands.Cog):

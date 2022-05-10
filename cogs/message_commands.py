@@ -4,7 +4,7 @@ from disnake.ext import commands
 import yaml
 
 # Config Load
-pins_channel_id = yaml.safe_load(open('config.yml')).get('pins_channel_id')
+pins_channel_id = yaml.safe_load(open("config.yml")).get("pins_channel_id")
 
 
 class MessageCommands(commands.Cog):

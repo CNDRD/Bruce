@@ -18,9 +18,9 @@ class Status(commands.Cog):
             activity: Activities = Param(..., desc="The activity type"),
             what_doing: str = Param(None, desc="The text after the activity. Leave blank to clear the status.")
     ):
-        if activity == 'watching':
+        if activity == "watching":
             activity = disnake.ActivityType.watching
-        elif activity == 'listening':
+        elif activity == "listening":
             activity = disnake.ActivityType.listening
         else:
             activity = disnake.ActivityType.playing

@@ -1,7 +1,7 @@
 def rank_name(num) -> str:
     a = (num - (num%5))
     if num == 0:
-        return '[0]'
+        return "[0]"
     return f"[{a}-{a+5}]"
 # https://stackoverflow.com/a/13082705
 

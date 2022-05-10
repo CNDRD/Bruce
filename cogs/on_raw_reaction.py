@@ -7,12 +7,12 @@ import yaml
 
 
 # Config Load
-config = yaml.safe_load(open('config.yml'))
-valid_rp_channels = config.get('valid_rp_channels')
-valid_rr_channels = config.get('valid_rr_channels')
-server_id = config.get('server_id')
-good_emotes = config.get('good_emotes')
-bad_emotes = config.get('bad_emotes')
+config = yaml.safe_load(open("config.yml"))
+valid_rp_channels = config.get("valid_rp_channels")
+valid_rr_channels = config.get("valid_rr_channels")
+server_id = config.get("server_id")
+good_emotes = config.get("good_emotes")
+bad_emotes = config.get("bad_emotes")
 
 
 class RrRpEc(commands.Cog):
@@ -58,15 +58,15 @@ class RrRpEc(commands.Cog):
 
             if uid != payload.user_id:
                 # Server Totals Data
-                st_rp = db.child('serverTotals').child('reactionPoints').get().val() or 0
+                st_rp = db.child("serverTotals").child("reactionPoints").get().val() or 0
 
-                curr_points = db.child('users').child(uid).child('reacc_points').get().val() or 0
+                curr_points = db.child("users").child(uid).child("reacc_points").get().val() or 0
                 if emote in good_emotes:
-                    data = {'reacc_points': curr_points + 1}
-                    server_totals = {'reactionPoints': st_rp + 1}
+                    data = {"reacc_points": curr_points + 1}
+                    server_totals = {"reactionPoints": st_rp + 1}
                 elif emote in bad_emotes:
-                    data = {'reacc_points': curr_points - 1}
-                    server_totals = {'reactionPoints': st_rp - 1}
+                    data = {"reacc_points": curr_points - 1}
+                    server_totals = {"reactionPoints": st_rp - 1}
 
                 if emote in good_emotes or emote in bad_emotes:
                     db.child('users').child(uid).update(data)
@@ -74,33 +74,33 @@ class RrRpEc(commands.Cog):
 
         # Emoji usage counter
         if (hah := self.client.get_emoji(payload.emoji.id)) is not None:
-            # It'll spit out errors when working with non-diskíto emotes
+            # It'll spit out errors when working with non-Diskíto emotes
             if hah.guild_id != server_id:
                 return
 
             emoji_id = payload.emoji.id
             emoji_url = str(payload.emoji.url)
 
-            count = db.child('emojiCounts').child(emoji_id).child('count').get().val() or 0
+            count = db.child("emojiCounts").child(emoji_id).child("count").get().val() or 0
 
-            count_data = {'count': count+1, 'url': emoji_url}
-            db.child('emojiCounts').child(emoji_id).update(count_data)
+            count_data = {"count": count+1, "url": emoji_url}
+            db.child("emojiCounts").child(emoji_id).update(count_data)
 
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
         # Emoji usage counter
         if (hah := self.client.get_emoji(payload.emoji.id)) is not None:
-            # It'll spit out errors when working with non-diskíto emotes
+            # It'll spit out errors when working with non-Diskíto emotes
             if hah.guild_id != server_id:
                 return
 
             emoji_id = payload.emoji.id
             emoji_url = str(payload.emoji.url)
 
-            count = db.child('emojiCounts').child(emoji_id).child('count').get().val() or 0
+            count = db.child("emojiCounts").child(emoji_id).child("count").get().val() or 0
 
-            count_data = {'count': count-1, 'url': emoji_url}
-            db.child('emojiCounts').child(emoji_id).update(count_data)
+            count_data = {"count": count-1, "url": emoji_url}
+            db.child("emojiCounts").child(emoji_id).update(count_data)
 
         # Reaction Points System
         # Don't wanna count shit unless it's in the correct channels
@@ -115,19 +115,19 @@ class RrRpEc(commands.Cog):
 
         if uid != payload.user_id:
             # Server Totals Data
-            st_rp = db.child('serverTotals').child('reactionPoints').get().val() or 0
+            st_rp = db.child("serverTotals").child("reactionPoints").get().val() or 0
 
-            curr_points = db.child('users').child(uid).child('reacc_points').get().val() or 0
+            curr_points = db.child("users").child(uid).child("reacc_points").get().val() or 0
             if emote in good_emotes:
-                data = {'reacc_points': curr_points - 1}
-                server_totals = {'reactionPoints': st_rp - 1}
+                data = {"reacc_points": curr_points - 1}
+                server_totals = {"reactionPoints": st_rp - 1}
             elif emote in bad_emotes:
-                data = {'reacc_points': curr_points + 1}
-                server_totals = {'reactionPoints': st_rp + 1}
+                data = {"reacc_points": curr_points + 1}
+                server_totals = {"reactionPoints": st_rp + 1}
 
             if emote in good_emotes or emote in bad_emotes:
-                db.child('users').child(uid).update(data)
-                db.child('serverTotals').update(server_totals)
+                db.child("users").child(uid).update(data)
+                db.child("serverTotals").update(server_totals)
 
 
 def setup(client):

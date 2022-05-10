@@ -6,7 +6,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-MZCR_API_KEY = os.getenv('MZCR_API_KEY')
+MZCR_API_KEY = os.getenv("MZCR_API_KEY")
 
 
 def _get_nakazeni_reinfekce_data() -> dict[str: str | int] | dict[str: int]:

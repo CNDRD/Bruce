@@ -29,26 +29,26 @@ def _get_hypesquad_house(flags) -> str:
 
 def _get_voice(v) -> dict[str: bool]:
     xd = {
-        'deaf': False, 'mute': False,
-        'self_mute': False, 'self_deaf': False,
-        'self_stream': False, 'self_video': False,
+        "deaf": False, "mute": False,
+        "self_mute": False, "self_deaf": False,
+        "self_stream": False, "self_video": False,
     }
 
     if v is None:
         return "none"
 
     if v.deaf:
-        xd['deaf'] = True
+        xd["deaf"] = True
     if v.mute:
-        xd['mute'] = True
+        xd["mute"] = True
     if v.self_mute:
-        xd['self_mute'] = True
+        xd["self_mute"] = True
     if v.self_deaf:
-        xd['self_deaf'] = True
+        xd["self_deaf"] = True
     if v.self_stream:
-        xd['self_stream'] = True
+        xd["self_stream"] = True
     if v.self_video:
-        xd['self_video'] = True
+        xd["self_video"] = True
 
     return xd
 

@@ -7,9 +7,9 @@ import yaml
 
 
 # Config Load
-config = yaml.safe_load(open('config.yml'))
-server_id = config.get('server_id')
-bot_mod_role_id = config.get('bot_mod_role_id')
+config = yaml.safe_load(open("config.yml"))
+server_id = config.get("server_id")
+bot_mod_role_id = config.get("bot_mod_role_id")
 
 
 class Widget(commands.Cog):

@@ -7,8 +7,8 @@ def get_cicina_today(today: None | dict[dict[str: int | str]], today_date: str) 
 
     xd = []
     for u in today:
-        if today[u]['date'] == today_date:
-            today[u].pop('date')
+        if today[u]["date"] == today_date:
+            today[u].pop("date")
             xd.append(today[u])
 
     if not xd:

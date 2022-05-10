@@ -14,7 +14,7 @@ class OnUserUpdate(commands.Cog):
             "username": str(after),
             "avatar_url": str(after.display_avatar.with_size(4096))
         }
-        db.child('users').child(after.id).update(data)
+        db.child("users").child(after.id).update(data)
 
 
 def setup(client):

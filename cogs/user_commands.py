@@ -11,7 +11,7 @@ class UserCommands(commands.Cog):
 
     @commands.user_command(name="User Info")
     async def user_info(self, inter: disnake.ApplicationCommandInteraction):
-        u = db.child('users').child(inter.target.id).get().val()
+        u = db.child("users").child(inter.target.id).get().val()
 
         embed = disnake.Embed(color=inter.target.top_role.color)
         embed.set_author(name=inter.target.name)
@@ -21,15 +21,15 @@ class UserCommands(commands.Cog):
         if inter.target.bot:
             embed.add_field(name="Bot", value="This is a bot account", inline=True)
         else:
-            embed.add_field(name="Level", value=f"{u.get('level'):,}".replace(',', ' '), inline=True)
-            embed.add_field(name="Reaction Points", value=f"{u.get('reacc_points'):,}".replace(',', ' '), inline=True)
+            embed.add_field(name="Level", value=f"{u.get('level'):,}".replace(",", " "), inline=True)
+            embed.add_field(name="Reaction Points", value=f"{u.get('reacc_points'):,}".replace(",", " "), inline=True)
             embed.add_field(name="Money", value=f"{u.get('money'):,}".replace(',', ' '), inline=True)
 
-            embed.add_field(name="XP", value=f"{u.get('xp'):,}".replace(',', ' '), inline=True)
-            embed.add_field(name="Messages sent", value=f"{u.get('messages_count'):,}".replace(',', ' '), inline=True)
-            embed.add_field(name="Average Cicina", value=round(u.get('cicina_avg'), 2), inline=True)
+            embed.add_field(name="XP", value=f"{u.get('xp'):,}".replace(",", " "), inline=True)
+            embed.add_field(name="Messages sent", value=f"{u.get('messages_count'):,}".replace(",", " "), inline=True)
+            embed.add_field(name="Average Cicina", value=round(u.get("cicina_avg"), 2), inline=True)
 
-            embed.add_field(name="Hours in Voice", value=round(u.get('all_time_total_voice') / 60 / 60, 2), inline=True)
+            embed.add_field(name="Hours in Voice", value=round(u.get("all_time_total_voice") / 60 / 60, 2), inline=True)
 
         t_format = "%d %b %Y @ %H:%M:%S"
         embed.add_field(name="Joined this server:", value=inter.target.joined_at.strftime(t_format), inline=False)
