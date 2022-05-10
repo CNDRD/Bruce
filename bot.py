@@ -17,7 +17,7 @@ token = os.getenv('TOKEN')
 client = commands.Bot(
     command_prefix=prefix,
     intents=disnake.Intents.all(),
-    sync_permissions=True,
+    reload=True,
     test_guilds=slash_guilds
 )
 

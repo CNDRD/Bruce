@@ -1,4 +1,4 @@
-git+https://github.com/DisnakeDev/disnake@v2.2.2
+git+https://github.com/DisnakeDev/disnake@v2.5.1
 siegeapi==2.1.0
 
 pyrebase4==4.5.0

@@ -31,7 +31,7 @@ class Admin(commands.Cog):
         """Admin commands."""
         self.client = client
 
-    @commands.guild_permissions(server_id, role_ids={yeetard_role_id: False, leds_role_id: True})
+    @commands.has_role(leds_role_id)
     @commands.slash_command(name="leds", description="Controls the LEDs I have behind my desk")
     async def leds(
             self,
@@ -59,7 +59,8 @@ class Admin(commands.Cog):
                 f"**{inter.author.name}** set the LED's to `hsv({hue}, {saturation}, {value})` or `rgb({r}, {g}, {b})`"
             )
 
-    @commands.guild_permissions(server_id, role_ids={yeetard_role_id: False, mod_role_id: True, bot_mod_role_id: True})
+    @commands.has_role(mod_role_id)
+    @commands.has_role(bot_mod_role_id)
     @commands.slash_command(name="clear", description="Clears amount of messages. Default is 1")
     async def clear(
             self,
@@ -69,7 +70,8 @@ class Admin(commands.Cog):
         await inter.channel.purge(limit=amount)
         await inter.response.send_message(f'Successfully purged {amount} messages!', ephemeral=True)
 
-    @commands.guild_permissions(server_id, role_ids={yeetard_role_id: False, mod_role_id: True, bot_mod_role_id: True})
+    @commands.has_role(mod_role_id)
+    @commands.has_role(bot_mod_role_id)
     @commands.slash_command(name="add_reaction", description="Adds a reaction to the message above")
     async def add_reaction(
             self,
@@ -81,7 +83,8 @@ class Admin(commands.Cog):
         await inter.response.defer()
         return await inter.delete_original_message()
 
-    @commands.guild_permissions(server_id, role_ids={yeetard_role_id: False, mod_role_id: True, bot_mod_role_id: True})
+    @commands.has_role(mod_role_id)
+    @commands.has_role(bot_mod_role_id)
     @commands.slash_command(name="say", description="The bot will send what you want as himself")
     async def say(
             self,
@@ -92,7 +95,8 @@ class Admin(commands.Cog):
         await inter.response.defer()
         return await inter.delete_original_message()
 
-    @commands.guild_permissions(server_id, role_ids={yeetard_role_id: False, mod_role_id: True, bot_mod_role_id: True})
+    @commands.has_role(mod_role_id)
+    @commands.has_role(bot_mod_role_id)
     @commands.slash_command(name="edit", description="Edit the message")
     async def edit(
             self,

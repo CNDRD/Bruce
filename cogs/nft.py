@@ -21,7 +21,7 @@ class NFT(commands.Cog):
         name="nft",
         description="Creates a link to view all of your Diskíto NFT's"
     )
-    async def _nft(self, inter: disnake.MessageInteraction):
+    async def _nft(self, inter: disnake.CommandInteraction):
         user_nfts = db.child("NFT").child("owned").child(inter.author.id).get().val() or None
         if user_nfts is None:
             return await inter.response.send_message("You do not own any NFT's! Go buy some, it's great!!", ephemeral=True)
@@ -32,7 +32,7 @@ class NFT(commands.Cog):
         name="mint",
         description="Mints a random NFT from a collection of over 100 million custom Diskíto NFTs for 10k shekels"
     )
-    async def _mint(self, inter: disnake.MessageInteraction):
+    async def _mint(self, inter: disnake.CommandInteraction):
         buyer_money = db.child("users").child(inter.author.id).child("money").get().val()
         if buyer_money <= 10_000:
             return await inter.response.send_message("You do not have enough shekels to mint a new NFT!", ephemeral=True)

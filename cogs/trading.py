@@ -23,7 +23,7 @@ class Trading(commands.Cog):
     @commands.slash_command(name="trade", description="Trading bruh")
     async def _trade(
             self,
-            inter: disnake.MessageInteraction,
+            inter: disnake.CommandInteraction,
             operation: Literal["Buy", "Sell", "View"] = Param(..., desc="Are you buying, selling or just wanna view your portfolio?"),
             stock: str = Param(None, desc="Symbol for the stock you wish to trade (Required when buying or selling; optional when viewing)"),
             amount: int = Param(None, desc="How many stocks do you wish to buy/sell (Required only when buying)")
