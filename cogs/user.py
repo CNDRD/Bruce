@@ -12,22 +12,6 @@ class User(commands.Cog):
         """Collection of short user facing commands."""
         self.client = client
 
-    @commands.slash_command(name="connect", description="Connects your Discord account to the diskíto account")
-    async def connect(
-            self,
-            inter: disnake.ApplicationCommandInteraction,
-            code: str = Param(..., desc="Connects your Discord account to the diskíto account")
-    ):
-        # Check if user already connected their account
-        website_users = db.child("websiteProfiles").get().val()
-        for wu in website_users:
-            if inter.author.id == int(website_users[wu]['discordUID']):
-                return await inter.response.send_message(content="You have already connected your account!", ephemeral=True)
-
-        # Connect their account
-        db.child("discordConnection").child(inter.author.id).set(code)
-        await inter.response.send_message(content="Successfully connected!", ephemeral=True)
-
     @commands.slash_command(name="ping", description="Gets the bot's ping")
     async def ping(self, inter):
         await inter.response.send_message(f"Pong ({round(self.client.latency * 1000)}ms)")
