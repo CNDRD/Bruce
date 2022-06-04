@@ -128,10 +128,9 @@ class InNOut(commands.Cog):
 
         msg = None
 
-        bans = await member.guild.bans()
-        for banned in bans:
-            if banned.user.id == member.id:
-                msg = f"{rarrow} **{username}** has just been banned! (Reason: {banned.reason})"
+        async for ban in member.guild.bans():
+            if ban.user.id == member.id:
+                msg = f"{rarrow} **{username}** has just been banned! (Reason: {ban.reason or 'No Reason Given'})"
 
         if not msg:
             if leaves == 1:
