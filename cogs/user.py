@@ -23,7 +23,7 @@ class User(commands.Cog):
             return await inter.response.send_message(f"Successfully sent **{shekels:,}** shekel{'s' if shekels > 1 else ''} to yourself, you dumb fuck..", ephemeral=True)
         
         if user.bot:
-            return await inter.response.send_message("You can't send money to a bot..")
+            return await inter.response.send_message("You can't send money to a bot..", ephemeral=True)
         
         author_money = db.child("users").child(inter.author.id).child("money").get().val() or 0
         
