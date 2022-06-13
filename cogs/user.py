@@ -22,6 +22,9 @@ class User(commands.Cog):
         if inter.author.id == user.id:
             return await inter.response.send_message(f"Successfully sent **{shekels:,}** shekel{'s' if shekels > 1 else ''} to yourself, you dumb fuck..", ephemeral=True)
         
+        if user.bot:
+            return await inter.response.send_message("You can't send money to a bot..")
+        
         author_money = db.child("users").child(inter.author.id).child("money").get().val() or 0
         
         if shekels > author_money:
