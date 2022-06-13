@@ -20,7 +20,7 @@ class User(commands.Cog):
             shekels: int = Param(..., desc="How much shekels are you sending?")
         ):
         if inter.author.id == user.id:
-            return await inter.response.send_message(f"Successfully sent **{shekels:,}** to yourself, you dumb fuck..", ephemeral=True)
+            return await inter.response.send_message(f"Successfully sent **{shekels:,}** shekel{'s' if shekels > 1 else ''} to yourself, you dumb fuck..", ephemeral=True)
         
         author_money = db.child("users").child(inter.author.id).child("money").get().val() or 0
         
@@ -32,7 +32,7 @@ class User(commands.Cog):
         db.child("users").child(inter.author.id).update({ "money": (author_money - shekels) })
         db.child("users").child(user.id).update({ "money": (user_money + shekels) })
         
-        await inter.response.send_message(f"Successfully sent **{shekels:,}** to {user.name}.\nYou now have {(author_money - shekels):,} shekels", ephemeral=True)
+        await inter.response.send_message(f"Successfully sent **{shekels:,}** shekel{'s' if shekels > 1 else ''} to {user.name}.\nYou now have {(author_money - shekels):,} shekels", ephemeral=True)
         
     @commands.slash_command(name="ping", description="Gets the bot's ping")
     async def ping(self, inter):
