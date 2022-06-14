@@ -12,6 +12,31 @@ class User(commands.Cog):
         """Collection of short user facing commands."""
         self.client = client
 
+    @commands.slash_command(name="send", description="Send shekels to someone")
+    async def _send(
+            self,
+            inter: disnake.ApplicationCommandInteraction,
+            user: disnake.Member = Param(..., desc="Who are you sending the shekels to?"),
+            shekels: int = Param(..., desc="How much shekels are you sending?")
+        ):
+        if inter.author.id == user.id:
+            return await inter.response.send_message(f"Successfully sent **{shekels:,}** shekel{'s' if shekels > 1 else ''} to yourself, you dumb fuck..", ephemeral=True)
+        
+        if user.bot:
+            return await inter.response.send_message("You can't send money to a bot..", ephemeral=True)
+        
+        author_money = db.child("users").child(inter.author.id).child("money").get().val() or 0
+        
+        if shekels > author_money:
+            return await inter.response.send_message("Cannot send more shekels than you have..", ephemeral=True)
+        
+        user_money = db.child("users").child(user.id).child("money").get().val() or 0
+        
+        db.child("users").child(inter.author.id).update({ "money": (author_money - shekels) })
+        db.child("users").child(user.id).update({ "money": (user_money + shekels) })
+        
+        await inter.response.send_message(f"Successfully sent **{shekels:,}** shekel{'s' if shekels > 1 else ''} to {user.name}.\nYou now have {(author_money - shekels):,} shekels", ephemeral=True)
+        
     @commands.slash_command(name="ping", description="Gets the bot's ping")
     async def ping(self, inter):
         await inter.response.send_message(f"Pong ({round(self.client.latency * 1000)}ms)")

@@ -28,7 +28,7 @@ class BJ(disnake.ui.View):
             self.dealer.append(self.deck.pop(0))
 
         self.stop()
-        await self.og_inter.edit_original_message(embed=generate_game_embed(self), view=None)
+        await inter.response.edit_message(embed=generate_game_embed(self), view=None)
         return db.child("users").child(self.og_inter.author.id).update({"money": get_result_money(self)})
 
     @disnake.ui.button(label="Hit", style=disnake.ButtonStyle.success)
@@ -41,10 +41,10 @@ class BJ(disnake.ui.View):
 
         if sum(self.player) > 21 or sum(self.player) == 21:
             self.stop()
-            await self.og_inter.edit_original_message(embed=generate_game_embed(self), view=None)
+            await inter.response.edit_message(embed=generate_game_embed(self), view=None)
             return db.child("users").child(self.og_inter.author.id).update({"money": get_result_money(self)})
 
-        await self.og_inter.edit_original_message(embed=generate_game_embed(self), view=self)
+        await inter.response.edit_message(embed=generate_game_embed(self), view=self)
 
 
 class BlackJack(commands.Cog):
