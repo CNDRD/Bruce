@@ -108,7 +108,7 @@ async def rainbow6stats():
         await p.load_playtime()
 
         # Operators
-        await p.load_operators()
+        await p.load_operators(op_about=True)
         operators_attackers = _get_sorted_list_of_operators(p.operators.all.attacker)
         operators_defenders = _get_sorted_list_of_operators(p.operators.all.defender)
 
