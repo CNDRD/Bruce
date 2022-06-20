@@ -33,7 +33,7 @@ class User(commands.Cog):
             return await inter.send(f"You have successfully claimed **{claim_money:,}** shekels!".replace(",", " "))
 
         midnight_ts = int(datetime.now(timezone(local_timezone)).replace(hour=0, minute=0, second=0).timestamp() + 86400)
-        return await inter.edit_original_message(content=f"You already claimed your money today! (Next claim available ~<t:{midnight_ts}:R>)")
+        return await inter.send(content=f"You already claimed your money today! (Next claim available ~<t:{midnight_ts}:R>)")
 
     @commands.slash_command(name="send", description="Send shekels to someone")
     async def _send(
