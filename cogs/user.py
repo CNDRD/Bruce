@@ -4,7 +4,14 @@ import disnake
 from disnake.ext.commands import Param
 from disnake.ext import commands
 
+from datetime import datetime
+from pytz import timezone
 import random
+import yaml
+
+
+# Config Load
+local_timezone = yaml.safe_load(open("config.yml")).get("local_timezone")
 
 
 class User(commands.Cog):
@@ -12,13 +19,29 @@ class User(commands.Cog):
         """Collection of short user facing commands."""
         self.client = client
 
+    @commands.slash_command(name="claim", description="Claim your daily shekel bonus")
+    async def _claim(self, inter: disnake.ApplicationCommandInteraction):
+        today = datetime.now(timezone(local_timezone)).strftime("%Y-%m-%d")
+        usr = db.child("users").child(inter.author.id).get().val()
+        last_claim = usr.get("last_money_claim", "0000-00-00")
+        monies = usr.get("money")
+        lvl = usr.get("level")
+        claim_money = lvl * 1_000
+
+        if last_claim != today:
+            db.child("users").child(inter.author.id).update({"money": monies+claim_money, "last_money_claim": today})
+            return await inter.send(f"You have successfully claimed **{claim_money:,}** shekels!".replace(",", " "))
+
+        midnight_ts = int(datetime.now(timezone(local_timezone)).replace(hour=0, minute=0, second=0).timestamp() + 86400)
+        return await inter.edit_original_message(content=f"You already claimed your money today! (Next claim available ~<t:{midnight_ts}:R>)")
+
     @commands.slash_command(name="send", description="Send shekels to someone")
     async def _send(
             self,
             inter: disnake.ApplicationCommandInteraction,
             user: disnake.Member = Param(..., desc="Who are you sending the shekels to?"),
             shekels: int = Param(..., desc="How much shekels are you sending?")
-        ):
+    ):
         if inter.author.id == user.id:
             return await inter.response.send_message(f"Successfully sent **{shekels:,}** shekel{'s' if shekels > 1 else ''} to yourself, you dumb fuck..", ephemeral=True)
         
@@ -62,7 +85,6 @@ class User(commands.Cog):
     async def money(self, inter: disnake.ApplicationCommandInteraction):
         monies = db.child("users").child(inter.author.id).child("money").get().val()
         await inter.response.send_message(f"You have {monies:,} shekels", ephemeral=True)
-
 
 def setup(client):
     client.add_cog(User(client))
