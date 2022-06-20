@@ -22,7 +22,7 @@ class Slots(commands.Cog):
 
         user_money = db.child("users").child(inter.author.id).child("money").get().val()
         if bet > user_money:
-            return await inter.send("You cannot bet more shekels than you have breh..")
+            return await inter.send("You cannot bet more shekels than you have breh..", ephemeral=True)
 
         user_money -= bet
 
