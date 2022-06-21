@@ -32,7 +32,7 @@ class Slots(commands.Cog):
 
         db.child("users").child(inter.author.id).update({"money": int(user_money + winnings)})
 
-        await inter.send(f"{sa} {sb} {sc}\nYou win **{winnings}** shekels!")
+        await inter.send(f"{sa} {sb} {sc}\nYou win **{winnings:,}** shekels!".replace(",", " "))
 
 
 def setup(client):
