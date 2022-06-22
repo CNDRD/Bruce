@@ -47,7 +47,7 @@ def _get_embed_footer(game) -> str:
         res_mon = result_money - game.user_money
         money_outcome = res_mon+game.bet if game.result == 1 or game.result == 2 else res_mon
         return f"Bet: {game.bet:,} monies | Result: {money_outcome:,} | Monies remaining: {result_money:,}".replace(',', ' ')
-    return f"Bet: {game.bet}"
+    return f"Bet: {game.bet:,}".replace(',', ' ')
 
 
 def get_result_money(game) -> int:
