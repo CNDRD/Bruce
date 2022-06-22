@@ -36,8 +36,8 @@ def generate_game_embed(game) -> disnake.Embed():
     embed = disnake.Embed(color=_get_embed_color(game))
     embed.set_author(name=mess)
     embed.set_footer(text=_get_embed_footer(game))
-    embed.add_field(name="Dealer", value=sum(game.dealer), inline=True)
-    embed.add_field(name="You", value=sum(game.player), inline=True)
+    embed.add_field(name="Dealer", value=f"{sum(game.dealer)}\n*{game.dealer}*", inline=True)
+    embed.add_field(name="You", value=f"{sum(game.player)}\n*{game.player}*", inline=True)
     return embed
 
 
