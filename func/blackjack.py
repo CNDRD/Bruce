@@ -61,6 +61,16 @@ def get_result_money(game) -> int:
         return int(game.user_money + (game.bet * 1.5))
 
 
+def get_winnings_only(game) -> int:
+    match game.result:
+        case None | 0 | -1:
+            return 0
+        case 1:
+            return game.bet
+        case 2:
+            return int(game.bet * 1.5)
+
+
 def _get_embed_color(game) -> disnake.Color:
     if game.result is None:
         return disnake.Color.blurple()
