@@ -32,6 +32,13 @@ class Slots(commands.Cog):
 
         db.child("users").child(inter.author.id).update({"money": int(user_money + winnings)})
 
+        # Money Total Math
+        money_totals = db.child("moneyTotals").get().val()
+        db.child("moneyTotals").update({
+            "slots_winnings": str(int(money_totals.get("slots_winnings", 0)) + winnings),
+            "slots_bet": str(int(money_totals.get("slots_bet", 0)) + bet)
+        })
+
         await inter.send(f"{sa} {sb} {sc}\nYou win **{winnings:,}** shekels!".replace(",", " "))
 
 

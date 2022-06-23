@@ -29,6 +29,13 @@ class BJ(disnake.ui.View):
 
         self.stop()
         await inter.response.edit_message(embed=generate_game_embed(self), view=None)
+
+        # Money Total Math
+        money_totals = db.child("moneyTotals").get().val()
+        db.child("moneyTotals").update({
+            "blackjack_winnings": str(int(money_totals.get("blackjack_winnings", 0)) + get_winnings_only(self)),
+            "blackjack_bet": str(int(money_totals.get("blackjack_bet", 0)) + self.bet)
+        })
         return db.child("users").child(self.og_inter.author.id).update({"money": get_result_money(self)})
 
     @disnake.ui.button(label="Hit", style=disnake.ButtonStyle.success)
@@ -42,6 +49,13 @@ class BJ(disnake.ui.View):
         if sum(self.player) > 21 or sum(self.player) == 21:
             self.stop()
             await inter.response.edit_message(embed=generate_game_embed(self), view=None)
+
+            # Money Total Math
+            money_totals = db.child("moneyTotals").get().val()
+            db.child("moneyTotals").update({
+                "blackjack_winnings": str(int(money_totals.get("blackjack_winnings", 0)) + get_winnings_only(self)),
+                "blackjack_bet": str(int(money_totals.get("blackjack_bet", 0)) + self.bet)
+            })
             return db.child("users").child(self.og_inter.author.id).update({"money": get_result_money(self)})
 
         await inter.response.edit_message(embed=generate_game_embed(self), view=self)
@@ -77,6 +91,13 @@ class BlackJack(commands.Cog):
 
         if game.action is not None:
             await inter.response.send_message(embed=generate_game_embed(game))
+
+            # Money Total Math
+            money_totals = db.child("moneyTotals").get().val()
+            db.child("moneyTotals").update({
+                "blackjack_winnings": str(int(money_totals.get("blackjack_winnings", 0)) + get_winnings_only(game)),
+                "blackjack_bet": str(int(money_totals.get("blackjack_bet", 0)) + bet)
+            })
             return db.child("users").child(inter.author.id).update({"money": get_result_money(game)})
 
         game.action = 69
