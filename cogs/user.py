@@ -29,7 +29,11 @@ class User(commands.Cog):
         claim_money = lvl * 1_000
 
         if last_claim != today:
-            db.child("users").child(inter.author.id).update({"money": monies+claim_money, "last_money_claim": today})
+
+            total_claimed = int(db.child("moneyTotals").child("claim").get().val() or 0)
+            db.child("moneyTotals").child("claim").set(str(total_claimed + claim_money))
+
+            db.child("users").child(inter.author.id).update({"money": monies + claim_money, "last_money_claim": today})
             return await inter.send(f"You have successfully claimed **{claim_money:,}** shekels!".replace(",", " "))
 
         midnight_ts = int(datetime.now(timezone(local_timezone)).replace(hour=0, minute=0, second=0).timestamp() + 86400)
