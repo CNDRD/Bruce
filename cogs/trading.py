@@ -1,11 +1,17 @@
 from func.firebase_init import db
-from func.trading import get_current_price, get_multiple_prices, get_trading_buy_db
+from func.trading import get_current_price, get_multiple_prices, get_trading_buy_db, get_list_of_all_symbols
 
 from disnake.ext.commands import Param
 from disnake.ext import commands
 import disnake
 
 from typing import Literal
+
+list_of_all_symbols = get_list_of_all_symbols()
+
+
+async def autocomplete_symbols(inter, string: str) -> list[str]:
+    return [symbol for symbol in list_of_all_symbols if string.lower() in symbol.lower()][:24]
 
 
 class AvailableTokens(disnake.ui.View):
@@ -24,9 +30,18 @@ class Trading(commands.Cog):
     async def _trade(
             self,
             inter: disnake.CommandInteraction,
-            operation: Literal["Buy", "Sell", "View"] = Param(..., desc="Are you buying, selling or just wanna view your portfolio?"),
-            stock: str = Param(None, desc="Symbol for the stock you wish to trade (Required when buying or selling; optional when viewing)"),
-            amount: int = Param(None, desc="How many stocks do you wish to buy/sell (Required only when buying)")
+            operation: Literal["Buy", "Sell", "View"] = Param(
+                ...,
+                desc="Are you buying, selling or just wanna view your portfolio?"
+            ),
+            stock: str = Param(
+                None,
+                desc="Symbol for the stock you wish to trade (Required when buying or selling; optional when viewing)",
+                autocomplete=autocomplete_symbols
+            ),
+            amount: int = Param(
+                None, desc="How many stocks do you wish to buy/sell (Required only when buying)"
+            )
     ):
         await inter.response.defer()
 

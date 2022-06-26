@@ -31,3 +31,14 @@ def get_trading_buy_db(stock: str, amount: int, bought_at: float) -> dict[dict[s
         }
     }
     return data
+
+
+def get_list_of_all_symbols() -> list[str] | None:
+    request_url = "https://api.redstone.finance/prices"
+    params = {"provider": "redstone"}
+    response = requests.request("GET", request_url, params=params)
+
+    if not response.json() or response.json() is None:
+        return None
+
+    return response.json().keys()
