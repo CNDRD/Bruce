@@ -5,6 +5,7 @@ from disnake.ext.commands import Param
 from disnake.ext import commands
 import disnake
 
+from tabulate import tabulate
 from typing import Literal
 
 list_of_all_symbols = get_list_of_all_symbols()
@@ -135,6 +136,7 @@ class Trading(commands.Cog):
                 currently_owns_prices = get_multiple_prices(currently_owns)
                 total_profit = 0
 
+                stonks_list = []
                 for stonk in currently_owns:
                     current_price = currently_owns_prices[stonk]
                     bought_price = currently_owns[stonk]['boughtAt']
@@ -148,12 +150,10 @@ class Trading(commands.Cog):
                     if bought_price >= .01:
                         bought_price = round(bought_price, 2)
 
-                    msg += f"**{stonk}** - Current Price: **{current_price:,}** | " \
-                           f"Bought at: **{bought_price:,}** | " \
-                           f"Profit: **{round(profit, 2):,}**\n"
+                    stonks_list.append([stonk, f"{current_price:,}", f"{bought_price:,}", f"{round(profit, 2):,}"])
 
+                msg += f"```py\n {tabulate(stonks_list, headers=['Symbol', 'Current Price', 'Bought at', 'Profit'])} ```"
                 msg += f"\n*Your total profit is **{int(total_profit):,}** shekels*"
-
                 return await inter.edit_original_message(content=msg.replace(',', ' '))
 
 
