@@ -32,12 +32,12 @@ class OnVoiceStateUpdate(commands.Cog):
 
         # Basic-ass variables
         now = int(time.time())                                                          # NOW INT
-        now_r = datetime.datetime.now(timezone(local_timezone)).strftime("%H:%M:%S")     # NOW READABLE STRING
+        now_r = datetime.datetime.now(timezone(local_timezone)).strftime("%H:%M:%S")    # NOW READABLE STRING
         uid = member.id                                                                 # DISCORD USER ID
         username = str(member)                                                          # DISCORD USER NAME
         today = get_today_tz()                                                          # TODAY'S DATE STRING
         yesterday = get_yesterday_tz()                                                  # YESTERDAY'S DATE STRING
-        curr_year = get_curr_year_tz()                                                   # CURRENT YEAR
+        curr_year = get_curr_year_tz()                                                  # CURRENT YEAR
         ch = self.client.get_channel(voice_log_channel_id)                              # VOICE LOGGING CHANNEL
 
         # voice-log channel logging

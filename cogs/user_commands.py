@@ -10,7 +10,10 @@ class UserCommands(commands.Cog):
         self.client = client
 
     @commands.user_command(name="User Info")
-    async def user_info(self, inter: disnake.ApplicationCommandInteraction):
+    async def user_info(
+            self,
+            inter: disnake.ApplicationCommandInteraction
+    ):
         u = db.child("users").child(inter.target.id).get().val()
 
         embed = disnake.Embed(color=inter.target.top_role.color)

@@ -19,7 +19,11 @@ class BJ(disnake.ui.View):
         self.player, self.dealer = deal_first_hand(self.deck)
 
     @disnake.ui.button(label="Stand", style=disnake.ButtonStyle.gray)
-    async def stand(self, button: disnake.ui.Button, inter: disnake.CommandInteraction):
+    async def stand(
+            self,
+            button: disnake.ui.Button,
+            inter: disnake.CommandInteraction
+    ):
         if self.og_inter.author.id != inter.author.id:
             return await inter.response.send_message("You are NOT allowed to do this..", ephemeral=True)
 
@@ -39,7 +43,11 @@ class BJ(disnake.ui.View):
         return db.child("users").child(self.og_inter.author.id).update({"money": get_result_money(self)})
 
     @disnake.ui.button(label="Hit", style=disnake.ButtonStyle.success)
-    async def hit(self, button: disnake.ui.Button, inter: disnake.CommandInteraction):
+    async def hit(
+            self,
+            button: disnake.ui.Button,
+            inter: disnake.CommandInteraction
+    ):
         if self.og_inter.author.id != inter.author.id:
             return await inter.response.send_message("You are NOT allowed to do this..", ephemeral=True)
 
@@ -67,7 +75,11 @@ class BlackJack(commands.Cog):
         self.client = client
 
     @commands.slash_command(name="blackjack", description="Game of Black Jack")
-    async def _blackjack(self, inter: disnake.CommandInteraction, bet: int = Param(..., desc="Place your bet!")):
+    async def _blackjack(
+            self,
+            inter: disnake.CommandInteraction,
+            bet: int = Param(..., desc="Place your bet!")
+    ):
 
         user_money = db.child("users").child(inter.author.id).child("money").get().val()
         # user_money = 10

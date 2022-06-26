@@ -11,6 +11,6 @@ def xp_from_level(level) -> int:
 
 
 def level_from_xp(xp) -> int:
-    for i in range(0,100):
+    for i in range(0, 100):
         if xp_from_level(i) <= xp < xp_from_level(i + 1):
             return i

@@ -13,7 +13,10 @@ class MessageCommands(commands.Cog):
         self.client = client
 
     @commands.message_command(name="Pin this message")
-    async def pin(self, inter: disnake.ApplicationCommandInteraction):
+    async def pin(
+            self,
+            inter: disnake.ApplicationCommandInteraction
+    ):
         # No repins under my watch
         if inter.channel_id == pins_channel_id:
             return await inter.response.send_message("Pinning a message in the pins channel. You must be a very special snowflake..", ephemeral=True)
