@@ -37,10 +37,10 @@ class User(commands.Cog):
             db.child("moneyTotals").child("claim").set(str(total_claimed + claim_money))
 
             db.child("users").child(inter.author.id).update({"money": monies + claim_money, "last_money_claim": today})
-            return await inter.send(f"You have successfully claimed **{claim_money:,}** shekels!".replace(",", " "))
+            return await inter.send(f"You have successfully claimed ₪**{claim_money:,}**!".replace(",", " "))
 
         midnight_ts = int(datetime.now(timezone(local_timezone)).replace(hour=0, minute=0, second=0).timestamp() + 86400)
-        return await inter.send(content=f"You already claimed your money today! (Next claim available ~<t:{midnight_ts}:R>)")
+        return await inter.send(content=f"You already claimed your shekels today! (Next claim available ~<t:{midnight_ts}:R>)")
 
     @commands.slash_command(name="send", description="Send shekels to someone")
     async def _send(
@@ -51,12 +51,12 @@ class User(commands.Cog):
     ):
         if inter.author.id == user.id:
             return await inter.response.send_message(
-                f"Successfully sent **{shekels:,}** shekel{'s' if shekels > 1 else ''} to yourself, you dumb fuck..",
+                f"Successfully sent ₪**{shekels:,}** shekel{'s' if shekels > 1 else ''} to yourself, you dumb fuck..",
                 ephemeral=True
             )
         
         if user.bot:
-            return await inter.response.send_message("You can't send money to a bot..", ephemeral=True)
+            return await inter.response.send_message("You can't send shekels to a bot..", ephemeral=True)
         
         author_money = db.child("users").child(inter.author.id).child("money").get().val() or 0
         
@@ -69,8 +69,8 @@ class User(commands.Cog):
         db.child("users").child(user.id).update({"money": (user_money + shekels)})
         
         await inter.response.send_message(
-            f"Successfully sent **{shekels:,}** shekel{'s' if shekels > 1 else ''} to {user.name}.\n"
-            f"You now have {(author_money - shekels):,} shekels",
+            f"Successfully sent ₪**{shekels:,}** shekel{'s' if shekels > 1 else ''} to {user.name}.\n"
+            f"You now have ₪{(author_money - shekels):,}",
             ephemeral=True
         )
         
@@ -104,7 +104,7 @@ class User(commands.Cog):
     @commands.slash_command(name="money", description="Shows your balance")
     async def money(self, inter: disnake.ApplicationCommandInteraction):
         monies = db.child("users").child(inter.author.id).child("money").get().val()
-        await inter.response.send_message(f"You have {monies:,} shekels", ephemeral=True)
+        await inter.response.send_message(f"You have ₪{monies:,}", ephemeral=True)
 
 def setup(client):
     client.add_cog(User(client))
