@@ -26,7 +26,7 @@ class UserCommands(commands.Cog):
         else:
             embed.add_field(name="Level", value=f"{u.get('level'):,}".replace(",", " "), inline=True)
             embed.add_field(name="Reaction Points", value=f"{u.get('reacc_points'):,}".replace(",", " "), inline=True)
-            embed.add_field(name="Money", value=f"{u.get('money'):,}".replace(',', ' '), inline=True)
+            embed.add_field(name="Shekels", value=f"{u.get('money'):,}".replace(',', ' '), inline=True)
 
             embed.add_field(name="XP", value=f"{u.get('xp'):,}".replace(",", " "), inline=True)
             embed.add_field(name="Messages sent", value=f"{u.get('messages_count'):,}".replace(",", " "), inline=True)
