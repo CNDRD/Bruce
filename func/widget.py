@@ -2,7 +2,7 @@ import disnake
 from datetime import datetime
 
 
-def gimme_them_stats(mem) -> dict[str: str | bool | int | float | list | dict[str: bool] | dict[str: str | dict[str: str]]]:
+def gimme_them_stats(mem: disnake.Member | disnake.User) -> dict[str: str | bool | int | float | list | dict[str: bool] | dict[str: str | dict[str: str]]]:
     x = {
         "uid": mem.id,
         "username": mem.name,
@@ -12,9 +12,17 @@ def gimme_them_stats(mem) -> dict[str: str | bool | int | float | list | dict[st
         "status": _get_status(mem.raw_status),
         "is_on_mobile": mem.is_on_mobile(),
         "activities": _get_activities(mem.activities),
-        "early_supporter": mem.public_flags.early_supporter
+        "early_supporter": mem.public_flags.early_supporter,
+        "streaming": _get_streaming(mem.activities)
     }
     return x
+
+
+def _get_streaming(activities) -> bool | dict[str: str]:
+    for activity in activities:
+        if isinstance(activity, disnake.activity.Streaming):
+            return {"platform": activity.platform, "url": activity.url}
+    return False
 
 
 def _get_hypesquad_house(flags) -> str:
