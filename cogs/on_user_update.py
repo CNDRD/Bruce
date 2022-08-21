@@ -10,11 +10,15 @@ class OnUserUpdate(commands.Cog):
 
     @commands.Cog.listener()
     async def on_user_update(self, before, after):
-        data = {
+        db.child("users").child(after.id).update({
             "username": str(after),
-            "avatar_url": str(after.display_avatar.with_size(4096))
-        }
-        db.child("users").child(after.id).update(data)
+        })
+
+    @commands.Cog.listener()
+    async def on_member_update(self, before, after):
+        db.child("users").child(after.id).update({
+            "avatar_url": str(after.display_avatar.with_size(4096)),
+        })
 
 
 def setup(client):
