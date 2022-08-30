@@ -28,7 +28,7 @@ def get_yearly_lvs(stayed, current_lvs) -> int:
     return current_lvs
 
 
-def get_day_time(curr_year, today, yesterday, stayed, left) -> (int,int):
+def get_day_time(curr_year, today, yesterday, stayed, left) -> (int, int):
     cdt = db.child("voice").child(curr_year).child("day").child(today).get().val() or 0
     ydt = db.child("voice").child(curr_year).child("day").child(yesterday).get().val() or 0
     since_mid = get_seconds_since_midnight_from_timestamp(left)

@@ -1,5 +1,8 @@
 from func.firebase_init import db
 
+from siegeapi.operators import OperatorsGameMode
+from siegeapi.weapons import Weapons
+
 from siegeapi import Auth
 import random
 import time
@@ -14,7 +17,15 @@ UBISOFT_PASSWORD = UBISOFT_CREDENTIALS.get("password")
 UBISOFT_EMAILS = UBISOFT_CREDENTIALS.get("emails")
 lci = random.randint(0, len(UBISOFT_EMAILS))
 
-R6STATS_VERSION = 11
+R6STATS_VERSION = 12
+
+
+def merge_dicts(dict_1, dict_2) -> dict:
+    dict_3 = {**dict_1, **dict_2}
+    for key, value in dict_3.items():
+        if key in dict_1 and key in dict_2:
+            dict_3[key] = (value + dict_1[key]) if isinstance(value, (int, float)) else value
+    return dict_3
 
 
 def _db_ready_trends(data) -> dict[str: dict[str: str | int | float]]:
@@ -37,11 +48,16 @@ def _db_ready_trends(data) -> dict[str: dict[str: str | int | float]]:
     return xd
 
 
-def _get_db_weapons(w) -> list[dict[str: int | float | str]]:
-    return [vars(weapon) for weapon in (w.primary+w.secondary)]
+def _get_db_weapons(w: Weapons) -> list[dict[str: int | float | str]]:
+    atk_ = [vars(weapon) for weapon in (w.attacker.primary + w.attacker.secondary)]
+    atk_ = {item['name']: item for item in atk_}
+    def_ = [vars(weapon) for weapon in (w.defender.primary + w.defender.secondary)]
+    def_ = {item['name']: item for item in def_}
+    all_ = merge_dicts(atk_, def_)
+    return list(all_.values())
 
 
-def _get_sorted_list_of_operators(ops):
+def _get_sorted_list_of_operators(ops: OperatorsGameMode) -> list[dict]:
     return sorted([vars(op) for op in ops], key=lambda d: d["minutes_played"])
 
 
@@ -49,7 +65,6 @@ async def rainbow6stats():
     print("Running Rainbow Six Stats")
     mmr_watch_db = db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").child("mmr_watch").get().val() or {}
     mmr_watch = {}
-    mmr_watch_message = ""
 
     users = db.child("GameStats").child("IDs").get().val()
     uids = [user.get("ubiID") for user in users.values() if user.get("ubiID") is not None]
@@ -65,25 +80,26 @@ async def rainbow6stats():
 
     for p in players.values():
 
-        # MMR Watch v2
         seasonal_ranked = await p.load_ranked()
         current_season_id = seasonal_ranked.season
         await p.load_progress()
 
+        # MMR Watch v3
         if mmr_watch_db.get(p.id) is None:
             mmr_watch[p.id] = {"mmr": seasonal_ranked.mmr, "xp": p.total_xp}
 
-        message_sent_already = mmr_watch_db.get(p.id, {}).get("message_sent_already", False)
         db_mmr = mmr_watch_db.get(p.id, {}).get("mmr", seasonal_ranked.mmr)
-        db_xp = mmr_watch_db.get(p.id, {}).get("xp", p.total_xp)
+        db_xp = mmr_watch_db.get(p.id, {}).get("xp")
+        new_db_xp = False
+        if not db_xp:
+            db_xp = p.total_xp
+            new_db_xp = True
         adjustment_value = seasonal_ranked.mmr - db_mmr
 
         mmr_watch[p.id] = {
             "mmr": seasonal_ranked.mmr,
             "xp": p.total_xp,
             "adjustment_value": adjustment_value,
-            "adjustment": False,
-            "message_sent_already": message_sent_already,
         }
 
         if db_xp == p.total_xp and adjustment_value != 0:
@@ -91,17 +107,10 @@ async def rainbow6stats():
                 "mmr": db_mmr,
                 "xp": db_xp,
                 "adjustment_value": adjustment_value,
-                "adjustment": True,
-                "message_sent_already": message_sent_already,
             }
-            print(f"MMR Adjustment detected! | {mmr_watch[p.id]}")
-
-            if not message_sent_already:
-                mmr_watch_message += f"**{p.name}** just __*{'lost' if adjustment_value < 0 else 'gained'}*__ ***{int(adjustment_value)}*** MMR\n"
-                mmr_watch[p.id]["message_sent_already"] = True
 
         # Check if total XP changed, so we can skip checking stats that didn't change
-        if db_xp == p.total_xp:
+        if db_xp == p.total_xp and not new_db_xp:
             continue
 
         # Playtimes
@@ -121,14 +130,6 @@ async def rainbow6stats():
         seasonal_casual = (await p.load_casual()).get_dict()
         seasonal_events = (await p.load_events()).get_dict()
         seasonal_deathmatch = (await p.load_deathmatch()).get_dict()
-
-        # Gamemodes data
-        await p.load_gamemodes()
-        gamemode_all = vars(p.gamemodes.all)
-        gamemode_casual = vars(p.gamemodes.casual)
-        gamemode_ranked = vars(p.gamemodes.ranked)
-        gamemode_unranked = vars(p.gamemodes.unranked)
-        gamemode_newcomer = vars(p.gamemodes.newcomer)
 
         # Weapons
         await p.load_weapons()
@@ -160,13 +161,6 @@ async def rainbow6stats():
                 "atk": operators_attackers,
                 "def": operators_defenders
             },
-            "gamemodes": {
-                "all": gamemode_all,
-                "casual": gamemode_casual,
-                "ranked": gamemode_ranked,
-                "unranked": gamemode_unranked,
-                "newcomer": gamemode_newcomer,
-            },
             "weapons": weapons,
             "trends": trends,
         }
@@ -189,4 +183,3 @@ async def rainbow6stats():
 
     db.child("GameStats").child(f"R6Sv{R6STATS_VERSION}").child("mmr_watch").update(mmr_watch)
     db.child('GameStats').child("lastUpdate").update({f"R6Sv{R6STATS_VERSION}": int(time.time())})
-    return mmr_watch_message
