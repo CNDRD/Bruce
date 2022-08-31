@@ -24,9 +24,9 @@ class User(commands.Cog):
             self,
             inter: disnake.ApplicationCommandInteraction
     ):
-        today = datetime.now(timezone(local_timezone)).strftime("%Y-%m-%d")
+        today = datetime.now(timezone(local_timezone)).strftime("%Y-%m-%d-%H")
         usr = db.child("users").child(inter.author.id).get().val()
-        last_claim = usr.get("last_money_claim", "0000-00-00")
+        last_claim = usr.get("last_money_claim", "0000-00-00-00")
         monies = usr.get("money")
         lvl = usr.get("level")
         claim_money = lvl * 1_000
@@ -105,6 +105,7 @@ class User(commands.Cog):
     async def money(self, inter: disnake.ApplicationCommandInteraction):
         monies = db.child("users").child(inter.author.id).child("money").get().val()
         await inter.response.send_message(f"You have ₪{monies:,}", ephemeral=True)
+
 
 def setup(client):
     client.add_cog(User(client))
