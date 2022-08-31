@@ -28,26 +28,6 @@ def merge_dicts(dict_1, dict_2) -> dict:
     return dict_3
 
 
-def _db_ready_trends(data) -> dict[str: dict[str: str | int | float]]:
-    xd = {}
-    for i, date in enumerate(data.get("stats_period")):
-        xd[date] = {
-            "kill_death_ratio": data["kill_death_ratio"][i],
-            "win_loss_ratio": data["win_loss_ratio"][i],
-            "headshot_accuracy": data["headshot_accuracy"][i],
-            "minutes_played": data["minutes_played"][i],
-            "matches_played": data["matches_played"][i],
-            "rounds_played": data["rounds_played"][i],
-            "rounds_with_ace": data["rounds_with_ace"][i],
-            "revives": data["revives"][i],
-            "assists": data["assists"][i],
-            "team_kills": data["team_kills"][i],
-            "trades": data["trades"][i],
-            "rounds_with_kost": data["rounds_with_kost"][i],
-        }
-    return xd
-
-
 def _get_db_weapons(w: Weapons) -> list[dict[str: int | float | str]]:
     atk_ = [vars(weapon) for weapon in (w.attacker.primary + w.attacker.secondary)]
     atk_ = {item['name']: item for item in atk_}
@@ -123,7 +103,7 @@ async def rainbow6stats():
 
         # Trends
         await p.load_trends()
-        trends = _db_ready_trends((vars(p.trends.all.all)))
+        trends = ast.literal_eval(str(vars(p.trends.all.all)))
 
         # Current seasonal data
         seasonal_ranked = seasonal_ranked.get_dict()  # Already loaded for MMR Watch
