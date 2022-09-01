@@ -19,7 +19,7 @@ class User(commands.Cog):
         """Collection of short user facing commands."""
         self.client = client
 
-    @commands.slash_command(name="claim", description="Claim your daily shekel bonus")
+    @commands.slash_command(name="claim", description="Claim your hourly shekel bonus")
     async def _claim(
             self,
             inter: disnake.ApplicationCommandInteraction
