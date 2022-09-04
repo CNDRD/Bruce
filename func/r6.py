@@ -70,10 +70,8 @@ async def rainbow6stats():
 
         db_mmr = mmr_watch_db.get(p.id, {}).get("mmr", seasonal_ranked.mmr)
         db_xp = mmr_watch_db.get(p.id, {}).get("xp")
-        new_db_xp = False
         if not db_xp:
             db_xp = p.total_xp
-            new_db_xp = True
         adjustment_value = seasonal_ranked.mmr - db_mmr
 
         mmr_watch[p.id] = {
@@ -90,7 +88,7 @@ async def rainbow6stats():
             }
 
         # Check if total XP changed, so we can skip checking stats that didn't change
-        if db_xp == p.total_xp and not new_db_xp:
+        if db_xp == p.total_xp:
             continue
 
         # Playtimes
