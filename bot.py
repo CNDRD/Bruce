@@ -2,7 +2,6 @@ import disnake
 from disnake.ext import commands
 import yaml
 import os
-import time
 from dotenv import load_dotenv
 load_dotenv()
 
