@@ -6,6 +6,7 @@ from disnake.ext import commands
 
 from datetime import datetime
 from pytz import timezone
+import pytimeparse
 import random
 import yaml
 
@@ -18,6 +19,19 @@ class User(commands.Cog):
     def __init__(self, client):
         """Collection of short user facing commands."""
         self.client = client
+
+    @commands.slash_command(name="timer", description="Set a timer for a certain amount of time.")
+    async def _timer(
+            self,
+            inter: disnake.ApplicationCommandInteraction,
+            time: str = Param(..., desc="Amount of time to set the timer for. Format: 1h 30m 15s"),
+            message: str = Param('Timer will end', desc="Message that will be shown next to the timer. Defaults to 'Timer will end'"),
+            relative: bool = Param(True, desc="Whether the timer should be relative to the current time or not."),
+            public: bool = Param(True, desc="Whether or not to make the timer public. Defaults to True.")
+    ):
+        """Set a timer for a certain amount of time."""
+        timestamp = int(pytimeparse.parse(time) + datetime.now().timestamp())
+        await inter.response.send_message(f"{message} <t:{timestamp}:{'R' if relative else 'T'}>", ephemeral=not public)
 
     @commands.slash_command(name="claim", description="Claim your hourly shekel bonus")
     async def _claim(
