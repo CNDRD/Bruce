@@ -1,6 +1,7 @@
-from func.firebase_init import db
+from func.supabase import supabase
 
 from disnake.ext import commands
+from disnake import Member
 
 
 class OnUserUpdate(commands.Cog):
@@ -9,16 +10,15 @@ class OnUserUpdate(commands.Cog):
         self.client = client
 
     @commands.Cog.listener()
-    async def on_user_update(self, before, after):
-        db.child("users").child(after.id).update({
-            "username": str(after),
-        })
+    async def on_user_update(self, before: Member, after: Member):
+        supabase.from_('users').update({'username': str(after)}).eq('id', after.id).execute()
 
     @commands.Cog.listener()
-    async def on_member_update(self, before, after):
-        db.child("users").child(after.id).update({
-            "avatar_url": str(after.display_avatar.with_size(4096)),
-        })
+    async def on_member_update(self, before: Member, after: Member):
+        roles = [role.id for role in after.roles]
+        avatar = str(after.display_avatar.with_size(4096))
+
+        supabase.from_('users').update({'roles': roles, 'avatar': avatar}).eq('id', after.id).execute()
 
 
 def setup(client):

@@ -1,4 +1,4 @@
-from func.firebase_init import db
+from func.supabase import supabase
 from func.levels import rank_name
 from func.stuff import ordinal
 
@@ -8,140 +8,109 @@ from disnake.ext import commands
 
 from humanfriendly import format_timespan
 from datetime import datetime
-import yaml
 
-# Config Load
-config = yaml.safe_load(open("config.yml"))
-in_n_out_channel_id = config.get("in_n_out_channel_id")
-test_account_uid = config.get("test_account_uid")
-garrow_emoji = config.get("garrow_emoji")
-yarrow_emoji = config.get("yarrow_emoji")
-rarrow_emoji = config.get("rarrow_emoji")
+
+testing = True
 
 
 class InNOut(commands.Cog):
     def __init__(self, client):
         """Not so simple 'in & out' events."""
         self.client = client
+        self.test_account_id = 552570700171313187 if not testing else 0
+        self.ino_channel = self.client.get_channel(731024736456409159 if not testing else 694165272155783248)
+        self.green_arrow = self.client.get_emoji(784822110723112974)
+        self.yellow_arrow = self.client.get_emoji(784822110622974014)
+        self.red_arrow = self.client.get_emoji(784822110836097094)
 
     @commands.Cog.listener()
-    async def on_member_join(self, member):
+    async def on_member_join(self, member: disnake.Member):
         # Do not harass the in-n-out channel with test account
-        if member.id == test_account_uid:
+        if member.id == self.test_account_id:
             return
 
         # No welcome messages for bots
-        # and autorole for them too, so they have color
+        # But autorole for them, so they all have the same color
         if member.bot:
             return await member.add_roles(get(member.guild.roles, name="Hosts"))
 
-        users_count = db.child("serverTotals").child("users").get().val()
-        db.child("serverTotals").child("users").set(users_count + 1)
+        member_data = supabase.from_('users').select('level, leaves, roles').eq('id', member.id).execute()
 
-        # Basic-ass variables
-        ino = self.client.get_channel(in_n_out_channel_id)
-        leaves = db.child("users").child(member.id).child("leaves_count").get().val() or 0
-
-        # Get arrows emoji
-        garrow = self.client.get_emoji(garrow_emoji)
-        yarrow = self.client.get_emoji(yarrow_emoji)
-
-        if leaves > 0:
+        if member_data.data:
             # The user has joined the server before at least once
-            msg = f"{yarrow} **{member.mention}** has just ***joined*** for the {ordinal(leaves+1)} time!"
+            msg = f"{self.yellow_arrow} **{member.mention}** has just ***joined*** for the {ordinal(member_data.data[0]['leaves']+1)} time!"
 
-            # Give the user his XP role & main user role
-            lvl = db.child("users").child(member.id).child("level").get().val()
-            rank = rank_name(lvl)
-            role = get(member.guild.roles, name=rank)
-            await member.add_roles(role)
-            jeetard = get(member.guild.roles, name="Jeetard")
-            await member.add_roles(jeetard)
+            if member_data.data[0]['roles']:
+                for role_id in member_data.data[0]['roles']:
+                    if role_id in [402356550133350411]:
+                        continue
+                    role = get(member.guild.roles, id=role_id)
+                    await member.add_roles(role)
+            else:
+                await member.add_roles(get(member.guild.roles, name=member_data.data[0]['level']))
+                await member.add_roles(get(member.guild.roles, name="Jeetard"))
 
-            # Update users individual stats
-            data = {"in_server": True}
-            db.child("users").child(member.id).update(data)
+            supabase.from_('users').update({'in_server': True}).eq('id', member.id).execute()
 
         else:
             # First join ever
-            msg = f"{garrow} **{member.mention}** has just ***joined!***"
+            msg = f"{self.green_arrow} **{member.mention}** has just ***joined!***"
 
             # Give the user the 0-level role
-            role = get(member.guild.roles, name=rank_name(0))
-            await member.add_roles(role)
+            await member.add_roles(get(member.guild.roles, name=rank_name(0)))
 
-            # Get timestamps to when the user joined Discord and the server, and a link to their avatar
-            joined_server = int(member.joined_at.timestamp())
-            joined_discord = int(member.created_at.timestamp())
-            avatar_url = str(member.display_avatar.with_size(4096))
-
-            # Create users individual stats
-            d = {
-                "reacc_points": 0,
+            data = {
+                "id": member.id,
                 "username": str(member),
-                "xp": 0,
-                "level": 0,
-                "last_xp_get": joined_server,
-                "messages_count": 0,
-                "joined_server": joined_server,
-                "joined_discord": joined_discord,
-                "avatar_url": avatar_url,
-                "in_server": True,
-                "money": 0,
+                "avatar": str(member.display_avatar.with_size(4096)),
+                "cicina": {
+                    "average": 0,
+                    "count": 0,
+                    "last": "2020-1-1",
+                    "longest": 0,
+                },
+                "roles": [role.id for role in member.roles],
             }
-            db.child("users").child(member.id).set(d)
+            supabase.from_('users').insert(data).execute()
 
-        await ino.send(msg)
+        await self.ino_channel.send(msg)
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-        # Do not harass the in-n-out channel with test account
-        if member.id == test_account_uid:
+        # Do not harass the in-n-out channel with test account or bots
+        if member.id == self.test_account_id or member.bot:
             return
 
-        # No welcome messages for bots
-        if member.bot:
-            return
-
-        users_count = db.child("serverTotals").child("users").get().val()
-        db.child("serverTotals").child("users").set(users_count - 1)
-
-        # Get arrow emoji
-        rarrow = self.client.get_emoji(rarrow_emoji)
-
-        leaves = db.child("users").child(member.id).child("leaves_count").get().val() or 0
-        leaves += 1
+        member_data = supabase.from_('users').select('username, level, leaves').eq('id', member.id).execute()
+        username = member_data.data[0]['username']
+        leaves = member_data.data[0]['leaves'] + 1
 
         # Update users individual stats
-        data = {"leaves_count": leaves, "in_server": False}
-        db.child("users").child(member.id).update(data)
+        supabase.from_('users').update({"leaves": leaves, "in_server": False}).eq('id', member.id).execute()
 
         # Basic-ass variables
-        ino = self.client.get_channel(in_n_out_channel_id)
         joined = member.joined_at.replace(tzinfo=None)
         left = datetime.utcnow()
 
         diff = (left - joined)
         stayed = format_timespan(int(diff.total_seconds()))
 
-        username = db.child("users").child(member.id).child("username").get().val()
-
         msg = None
 
         async for ban in member.guild.bans():
             if ban.user.id == member.id:
-                msg = f"{rarrow} **{username}** has just been banned! (Reason: {ban.reason or 'No Reason Given'})"
+                msg = f"{self.red_arrow} **{username}** has just been banned! (Reason: {ban.reason or 'No Reason Given'})"
 
         if not msg:
             if leaves == 1:
-                msg = f"{rarrow} **{username}** has just ***left*** us! Was here for *{stayed}*."
+                msg = f"{self.red_arrow} **{username}** has just ***left*** us! Was here for *{stayed}*."
             else:
-                msg = f"{rarrow} **{username}** has just ***left*** us for the {ordinal(leaves)} time! Was here for *{stayed}*."
+                msg = f"{self.red_arrow} **{username}** has just ***left*** us for the {ordinal(leaves)} time! Was here for *{stayed}*."
 
         view = disnake.ui.View()
         view.add_item(disnake.ui.Button(label=str(username), url=f"discord://-/users/{member.id}"))
 
-        clown = await ino.send(msg, view=view)
+        clown = await self.ino_channel.send(msg, view=view)
 
         # Automatically adds 🤡 emoji to every leave message
         # if they left within 15 minutes of joining it also adds another clown emoji

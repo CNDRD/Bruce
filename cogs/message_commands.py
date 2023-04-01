@@ -1,16 +1,12 @@
 import disnake
 from disnake.ext import commands
 
-import yaml
-
-# Config Load
-pins_channel_id = yaml.safe_load(open("config.yml")).get("pins_channel_id")
-
 
 class MessageCommands(commands.Cog):
     def __init__(self, client):
         """Message commands."""
         self.client = client
+        self.pins_channel_id = 893274760463659029
 
     @commands.message_command(name="Pin this message")
     async def pin(
@@ -18,7 +14,7 @@ class MessageCommands(commands.Cog):
             inter: disnake.ApplicationCommandInteraction
     ):
         # No repins under my watch
-        if inter.channel_id == pins_channel_id:
+        if inter.channel_id == self.pins_channel_id:
             return await inter.response.send_message("Pinning a message in the pins channel. You must be a very special snowflake..", ephemeral=True)
 
         # Message doesn't have to have attachments
@@ -33,7 +29,7 @@ class MessageCommands(commands.Cog):
         # Create the message by appending all the links together
         msg = '\n'.join([attachment.url for attachment in inter.target.attachments])
 
-        await self.client.get_channel(pins_channel_id).send(msg, view=view)
+        await self.client.get_channel(self.pins_channel_id).send(msg, view=view)
         await inter.response.send_message("Successfully pinned that message!", ephemeral=True)
 
 

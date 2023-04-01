@@ -5,7 +5,7 @@
 <a href="https://diskito.eu/discord">
     <img src="https://img.shields.io/discord/402356550133350411?label=discord&style=for-the-badge&logo=discord&color=5865F2&logoColor=white" />
 </a>
-<img src="https://img.shields.io/github/deployments/CNDRD/Bruce/bruce-discord?label=Deployment&logo=heroku&style=for-the-badge&color=5865F2&logoColor=white" />
+<img src="https://img.shields.io/static/v1?style=for-the-badge&message=Supabase&color=3ECF8E&logo=Supabase&logoColor=3ECF8E&label=Powered%20By" />
 <br />
 <img src="https://img.shields.io/badge/python-3.10-blue.svg?logo=python&style=for-the-badge&logoColor=white&color=yellow" />
 <img src="https://img.shields.io/github/repo-size/CNDRD/bruce?style=for-the-badge&logoColor=white&color=yellow" />

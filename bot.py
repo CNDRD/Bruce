@@ -1,32 +1,32 @@
-import disnake
 from disnake.ext import commands
-import yaml
-import os
 from dotenv import load_dotenv
+import disnake
+import os
+
 load_dotenv()
+client = commands.Bot(intents=disnake.Intents.all(), reload=True)
 
+cogs = [
+    'in_n_out',
+    'on_message',
+    'on_raw_reaction',
+    'on_user_update',
+    'on_voice_state_update',
+    'message_commands',
+    'quote',
+    'status',
+    'cicina',
+    'user',
+    'admin',
+]
 
-config = yaml.safe_load(open('config.yml'))
-prefix = str(config.get('prefix'))
-slash_guilds = config.get('slash_guilds')
-token = os.getenv('TOKEN')
-
-
-client = commands.Bot(
-    intents=disnake.Intents.all(),
-    reload=True,
-    # command_prefix=prefix,
-    # test_guilds=slash_guilds
-)
-
-
-for filename in os.listdir('./cogs'):
-    if filename.endswith('.py'):
-        client.load_extension(f'cogs.{filename[:-3]}')
+for filename in cogs:
+    client.load_extension(f'cogs.{filename}')
 
 
 @client.event
 async def on_ready():
     print(f"\nHere comes {client.user.name}!")
 
-client.run(token)
+
+client.run(os.getenv('TOKEN'))

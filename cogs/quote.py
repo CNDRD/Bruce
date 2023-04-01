@@ -1,16 +1,11 @@
-from func.firebase_init import db
+from func.supabase import supabase
 
 import disnake
 from disnake.ext.commands import Param
 from disnake.ext import commands
 
-import yaml
 import datetime
-import time
 from pytz import timezone
-
-# Config Load
-local_timezone = yaml.safe_load(open("config.yml")).get("local_timezone")
 
 
 class Quote(commands.Cog):
@@ -24,22 +19,13 @@ class Quote(commands.Cog):
             inter: disnake.ApplicationCommandInteraction,
             quote: str = Param(..., desc="The quote itself"),
             author: str = Param(..., desc="Who said it"),
-            when: str = Param(..., desc="When did they (\"now\" for today)")
+            when: str = Param('now', desc="When did they (\"now\" for today)")
     ):
-        quote_id = db.generate_key()
-
         if when.lower() == "now":
-            when = datetime.datetime.now(timezone(local_timezone)).strftime("%d.%m.%Y")
+            when = datetime.datetime.now(timezone('Europe/Prague')).strftime("%d.%m.%Y")
 
-        data = {
-            "quote": quote,
-            "by": author,
-            "when": when,
-            "timestamp": int(time.time())
-        }
-
-        db.child('quotes').child(quote_id).update(data)
-        await inter.response.send_message(f"Successfully set-up the quote with an id `{quote_id}`", ephemeral=True)
+        lmao = supabase.from_('quotes').insert({"quote": quote, "by": author, "when": when}).execute()
+        await inter.response.send_message(f"Successfully set-up the quote with an id `{lmao.data[0]['id']}`", ephemeral=True)
 
 
 def setup(client):
