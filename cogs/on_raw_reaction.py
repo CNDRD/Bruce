@@ -37,7 +37,7 @@ class RrRpEc(commands.Cog):
 
                 await rr_msg.remove_reaction(payload.emoji, member)
 
-            roles = [role.id for role in member.roles]
+            roles = [str(role.id) for role in member.roles]
             supabase.from_('users').update({'roles': roles}).eq('id', member.id).execute()
 
 

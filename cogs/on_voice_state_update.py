@@ -126,7 +126,8 @@ class OnVoiceStateUpdate(commands.Cog):
                     del_rank = get(member.guild.roles, name=rank_to_del)
                     await member.remove_roles(del_rank)
 
-                user_data = {"total_voice": new_user_total, "level": new_level, "xp": new_xp}
+                roles = [str(role.id) for role in member.roles]
+                user_data = {"total_voice": new_user_total, "level": new_level, "xp": new_xp, "roles": roles}
 
             else:
                 user_data = {"total_voice": new_user_total, "xp": new_xp}

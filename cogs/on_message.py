@@ -56,8 +56,6 @@ class OnMessage(commands.Cog):
                 new_xp += 100
 
             if new_xp >= xp_from_level(current_lvl+1):
-                data = {"level": current_lvl + 1, "last_xp": str(now), "xp": new_xp, "messages": messages_count + 1}
-
                 # Level based roles
                 # Removes the old role and gives a new one, is applicable
                 add_r = rank_name(current_lvl+1)
@@ -67,6 +65,10 @@ class OnMessage(commands.Cog):
                     await message.author.add_roles(new_r)
                     old_r = get(message.author.guild.roles, name=del_r)
                     await message.author.remove_roles(old_r)
+
+                roles = [str(role.id) for role in message.author.roles]
+                data = {"level": current_lvl + 1, "last_xp": str(now), "xp": new_xp, "messages": messages_count + 1, "roles": roles}
+
             else:
                 # No level change
                 data = {"xp": new_xp, "last_xp": str(now), "messages": messages_count + 1}

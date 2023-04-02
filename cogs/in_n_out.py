@@ -69,7 +69,7 @@ class InNOut(commands.Cog):
                     "last": "2020-1-1",
                     "longest": 0,
                 },
-                "roles": [role.id for role in member.roles],
+                "roles": [str(role.id) for role in member.roles],
             }
             supabase.from_('users').insert(data).execute()
 

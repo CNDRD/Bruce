@@ -15,7 +15,7 @@ class OnUserUpdate(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_update(self, before: Member, after: Member):
-        roles = [role.id for role in after.roles]
+        roles = [str(role.id) for role in after.roles]
         avatar = str(after.display_avatar.with_size(4096))
 
         supabase.from_('users').update({'roles': roles, 'avatar': avatar}).eq('id', after.id).execute()
