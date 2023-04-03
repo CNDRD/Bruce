@@ -37,7 +37,7 @@ class OnMessage(commands.Cog):
         user_data = supabase.from_('users').select('level, xp, last_xp, messages').eq('id', message.author.id).execute()
         current_lvl = user_data.data[0]['level']
         current_xp = user_data.data[0]['xp']
-        last_xp_get = datetime.fromisoformat(user_data.data[0]['last_xp'])
+        last_xp_get = datetime.strptime(user_data.data[0]['last_xp'], '%Y-%m-%dT%H:%M:%S.%f%z')
         messages_count = user_data.data[0]['messages']
 
         # Get the time since the user last posted a message
