@@ -34,26 +34,31 @@ class OnMessage(commands.Cog):
         now = datetime.now(timezone('UTC'))
 
         # User Data
-        user_data = supabase.from_('users').select('level, xp, last_xp, messages').eq('id', message.author.id).execute()
+        user_data = supabase.from_('users').select('level, xp, last_xp, messages, money').eq('id', message.author.id).execute()
         current_lvl = user_data.data[0]['level']
         current_xp = user_data.data[0]['xp']
         last_xp_get = datetime.strptime(user_data.data[0]['last_xp'], '%Y-%m-%dT%H:%M:%S.%f%z')
         messages_count = user_data.data[0]['messages']
+        money = user_data.data[0]['money'] + 1
 
         # Get the time since the user last posted a message
         # since_last_mess = now - last_xp_get
         since_last_mess = (now - last_xp_get).total_seconds()
+
+        data = {}
 
         if since_last_mess > 60:
 
             # Calculate new XP
             seed(int(since_last_mess))
             xp_to_add = randint(15, 25)
-            new_xp = xp_to_add + current_xp
+            new_xp: int = xp_to_add + current_xp
+            new_money: int = money + (xp_to_add * 10)
 
             # +100 extra XP for a message in a new day
             if since_last_mess > 86400:
                 new_xp += 100
+                new_money += 10000
 
             if new_xp >= xp_from_level(current_lvl+1):
                 # Level based roles
@@ -66,16 +71,19 @@ class OnMessage(commands.Cog):
                     old_r = get(message.author.guild.roles, name=del_r)
                     await message.author.remove_roles(old_r)
 
-                roles = [str(role.id) for role in message.author.roles]
-                data = {"level": current_lvl + 1, "last_xp": str(now), "xp": new_xp, "messages": messages_count + 1, "roles": roles}
+                data['xp'] = new_xp
+                data['last_xp'] = str(now)
+                data['level'] = current_lvl + 1
+                data['roles'] = [str(role.id) for role in message.author.roles]
+                data['money'] = new_money
 
             else:
                 # No level change
-                data = {"xp": new_xp, "last_xp": str(now), "messages": messages_count + 1}
+                data['xp'] = new_xp
+                data['last_xp'] = str(now)
+                data['money'] = new_money
 
-        else:
-            # Too Fast (less than 60s since last message)
-            data = {"messages": messages_count + 1}
+        data['messages'] = messages_count + 1
 
         # Update users individual stats & server total stats
         supabase.from_('users').update(data).eq('id', message.author.id).execute()

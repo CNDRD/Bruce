@@ -72,10 +72,11 @@ class OnVoiceStateUpdate(commands.Cog):
         # Left voice
 
         elif after.channel is None:
-            member_data = supabase.from_('users').select('level, xp, total_voice').eq('id', member.id).execute()
+            member_data = supabase.from_('users').select('level, xp, total_voice, money').eq('id', member.id).execute()
             current_level = member_data.data[0]['level']
             current_xp = member_data.data[0]['xp']
             current_attt = member_data.data[0]['total_voice']
+            current_money = member_data.data[0]['money']
 
             # Yearly User Data
             yearly_voice_data = supabase.from_('yearly_voice').select('total, longest').eq('id', member.id).eq('year', curr_year).execute()
@@ -96,6 +97,12 @@ class OnVoiceStateUpdate(commands.Cog):
             xp_to_add = int(stayed/7)
             new_xp = current_xp + xp_to_add
 
+            user_data: dict = {
+                'total_voice': new_user_total,
+                'xp': new_xp,
+                'money': current_money + (xp_to_add * 10)
+            }
+
             if new_xp >= xp_from_level(current_level + 1):
                 new_level = level_from_xp(new_xp)
 
@@ -107,11 +114,9 @@ class OnVoiceStateUpdate(commands.Cog):
                     del_rank = get(member.guild.roles, name=rank_to_del)
                     await member.remove_roles(del_rank)
 
-                roles = [str(role.id) for role in member.roles]
-                user_data = {"total_voice": new_user_total, "level": new_level, "xp": new_xp, "roles": roles}
-
-            else:
-                user_data = {"total_voice": new_user_total, "xp": new_xp}
+                user_data['level'] = new_level
+                user_data['roles'] = [str(role.id) for role in member.roles]
+                user_data['money'] = current_money + xp_to_add + (user_data['level']*1000)
 
             # Update all the gathered data in the database
             supabase.from_('yearly_voice').upsert({'id': member.id, 'year': curr_year, 'total': new_yearly_user_total, 'longest': new_yearly_lvs}).execute()
