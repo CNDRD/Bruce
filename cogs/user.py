@@ -1,3 +1,5 @@
+from func.supabase import supabase
+
 import disnake
 from disnake.ext.commands import Param
 from disnake.ext import commands
@@ -51,6 +53,11 @@ class User(commands.Cog):
         outcomes = (heads, tails)
         msg = outcomes[random.SystemRandom().randint(0, 1)]
         await inter.response.send_message(f"**{msg}**", ephemeral=True)
+
+    @commands.slash_command(name="money", description="Shows your balance")
+    async def money(self, inter: disnake.ApplicationCommandInteraction):
+        monies = supabase.from_('users').select('money').eq('id', inter.author.id).execute().data[0].get('money', 0)
+        await inter.response.send_message(f"You have ₪{monies:,}", ephemeral=True)
 
 
 def setup(client):
