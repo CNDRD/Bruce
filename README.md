@@ -14,7 +14,7 @@
 ---  
 
 I'm willing to help answer any questions that you may have  
-You can either join my [Discord](https://diskito.eu/discord) or send me a DM on Discord at __CNDRD#2233__  
+You can either join my [Discord](https://diskito.eu/discord) or send me a DM on Discord at __cndrd__  
 You can also visit the website I've made for my server [Here](https://diskito.eu)
 
 ---  
