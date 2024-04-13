@@ -4,7 +4,7 @@ import disnake
 import os
 
 load_dotenv()
-client = commands.Bot(intents=disnake.Intents.all(), reload=True)
+client = commands.InteractionBot(intents=disnake.Intents.all(), reload=True)
 
 cogs = [
     'in_n_out',
@@ -18,6 +18,7 @@ cogs = [
     'cicina',
     'user',
     'admin',
+    # 'sync',
 ]
 
 for filename in cogs:

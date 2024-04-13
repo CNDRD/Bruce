@@ -1,7 +1,6 @@
 from func.supabase import supabase
 from func.levels import xp_from_level, level_from_xp, rank_name
-from func.voice import (get_today_tz, get_yesterday_tz, get_curr_year_tz,
-                        get_yearly_total, get_yearly_lvs, get_user_total, get_day_time)
+from func.voice import (get_today_tz, get_yesterday_tz, get_curr_year_tz, get_yearly_total, get_yearly_lvs, get_user_total, get_day_time)
 
 from disnake.ext import commands
 from disnake.utils import get
@@ -12,8 +11,10 @@ import datetime
 from pytz import timezone
 
 
+
 voice_log_channel_id = 802111450021232640
 local_timezone = 'Europe/Prague'
+
 
 
 class OnVoiceStateUpdate(commands.Cog):
@@ -80,8 +81,9 @@ class OnVoiceStateUpdate(commands.Cog):
 
             # Yearly User Data
             yearly_voice_data = supabase.from_('yearly_voice').select('total, longest').eq('id', member.id).eq('year', curr_year).execute()
-            year_voice = yearly_voice_data.data[0]['total']
-            year_lvs = yearly_voice_data.data[0]['longest']
+            yearly_voice_data = yearly_voice_data.data if yearly_voice_data.data else [{'total': 0, 'longest': 0}]
+            year_voice = yearly_voice_data[0]['total']
+            year_lvs = yearly_voice_data[0]['longest']
 
             current_voice_data = supabase.from_('current_voice').select('since, channel').eq('id', member.id).execute()
             supabase.from_('current_voice').delete().eq('id', member.id).execute()

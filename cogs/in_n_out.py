@@ -10,14 +10,24 @@ from humanfriendly import format_timespan
 from datetime import datetime
 
 
-testing = True
+testing = False
 
 
 class InNOut(commands.Cog):
     def __init__(self, client):
         """Not so simple 'in & out' events."""
         self.client = client
+
         self.test_account_id = 552570700171313187 if not testing else 0
+        self.diskito: disnake.Guild | None = None
+        self.ino_channel: disnake.TextChannel | None = None
+        self.green_arrow: disnake.Emoji | None = None
+        self.yellow_arrow: disnake.Emoji | None = None
+        self.red_arrow: disnake.Emoji | None = None
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        self.diskito = self.client.get_guild(402356550133350411)
         self.ino_channel = self.client.get_channel(731024736456409159 if not testing else 694165272155783248)
         self.green_arrow = self.client.get_emoji(784822110723112974)
         self.yellow_arrow = self.client.get_emoji(784822110622974014)
@@ -44,8 +54,9 @@ class InNOut(commands.Cog):
                 for role_id in member_data.data[0]['roles']:
                     if role_id in [402356550133350411]:
                         continue
-                    role = get(member.guild.roles, id=role_id)
-                    await member.add_roles(role)
+
+                    if role := get(member.guild.roles, id=role_id):
+                        await member.add_roles(role)
             else:
                 await member.add_roles(get(member.guild.roles, name=member_data.data[0]['level']))
                 await member.add_roles(get(member.guild.roles, name="Jeetard"))
