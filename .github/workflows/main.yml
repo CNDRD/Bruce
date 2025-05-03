@@ -11,3 +11,6 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
+
+      - name: Hehehe
+        run: echo please help im under the wota
