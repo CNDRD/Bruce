@@ -15,6 +15,6 @@ jobs:
       #  run: 
 
       - name: Launch Bruce
-        shell: /usr/bin/bash {0}
-        run: |
-          /home/pi/Desktop/run_bruce.sh
+        timeout-minutes: 1
+        continue-on-error: true
+        run: /home/pi/Desktop/run_bruce.sh
