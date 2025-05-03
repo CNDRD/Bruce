@@ -15,4 +15,4 @@ jobs:
       #  run: 
 
       - name: Launch Bruce
-        run: /home/pi/bruce.sh
+        run: /home/pi/.config/autostart/Bruce.desktop
