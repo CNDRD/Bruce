@@ -11,8 +11,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      #- name: Kill the old Bruce
-      #  run: 
-
-      #- name: Launch Bruce
-      #  run: /home/pi/Desktop/run_bruce.sh
+      - name: Copy Stuff
+        run: /home/pi/Desktop/run_bruce.sh
