@@ -15,4 +15,6 @@ jobs:
       #  run: 
 
       - name: Launch Bruce
-        run: /home/pi/Desktop/run_bruce.sh & exit 0
+        run: |
+          /home/pi/Desktop/run_bruce.sh
+          echo ::set-output name=status::success
