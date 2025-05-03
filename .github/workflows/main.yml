@@ -14,5 +14,5 @@ jobs:
       #- name: Kill the old Bruce
       #  run: 
 
-      - name: Launch Bruce
-        run: /home/pi/Desktop/run_bruce.sh
+      #- name: Launch Bruce
+      #  run: /home/pi/Desktop/run_bruce.sh
