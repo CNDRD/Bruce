@@ -57,7 +57,7 @@ class User(commands.Cog):
     @commands.slash_command(name="money", description="Shows your balance")
     async def money(self, inter: disnake.ApplicationCommandInteraction):
         monies = supabase.from_('users').select('money').eq('id', inter.author.id).execute().data[0].get('money', 0)
-        await inter.response.send_message(f"You have ₪{monies:,}", ephemeral=True)
+        await inter.response.send_message(f"You have ★{monies:,}", ephemeral=True)
 
 
 def setup(client):
