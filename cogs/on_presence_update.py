@@ -7,7 +7,6 @@ from disnake import Member, Spotify, ActivityType
 class OnPresenceUpdate(commands.Cog):
     def __init__(self, client):
         """User updates their username or avatar, we update that in the database."""
-        print("\n---\nOnPresenceUpdate Cog Loaded\n---\n")
         self.client = client
 
     @commands.Cog.listener()
