@@ -12,6 +12,7 @@ cogs = [
     'on_raw_reaction',
     'on_user_update',
     'on_voice_state_update',
+    'on_presence_update',
     'message_commands',
     'quote',
     'status',
