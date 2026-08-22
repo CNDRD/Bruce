@@ -29,10 +29,15 @@ class Admin(commands.Cog):
     async def add_reaction(
             self,
             inter: disnake.ApplicationCommandInteraction,
-            reaction: disnake.Emoji = Param(..., desc="Reaction to add", )
+            reaction: str = Param(..., desc="Reaction to add (custom or unicode emoji)")
     ):
+        try:
+            normalized_reaction = disnake.PartialEmoji.from_str(reaction)
+        except (TypeError, ValueError):
+            normalized_reaction = reaction
+
         messages = await inter.channel.history(limit=1).flatten()
-        await messages[0].add_reaction(reaction)
+        await messages[0].add_reaction(normalized_reaction)
         await inter.response.defer()
         return await inter.delete_original_message()
 
