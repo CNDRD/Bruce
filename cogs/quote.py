@@ -22,7 +22,13 @@ class Quote(commands.Cog):
             when: str = Param('now', desc="When did they (\"now\" for today)")
     ):
         if when.lower() == "now":
-            when = datetime.datetime.now(timezone('Europe/Prague')).strftime("%d.%m.%Y")
+            when = datetime.datetime.now(timezone('Europe/Prague')).strftime("%Y-%m-%d")
+        else:
+            try:
+                when = datetime.datetime.strptime(when, "%Y-%m-%d").strftime("%Y-%m-%d")
+            except ValueError:
+                await inter.response.send_message("Invalid date format. Please use YYYY-MM-DD.", ephemeral=True)
+                return
 
         lmao = supabase.from_('quotes').insert({"quote": quote, "by": author, "when": when}).execute()
         await inter.response.send_message(f"Successfully set-up the quote with an id `{lmao.data[0]['id']}`", ephemeral=True)
