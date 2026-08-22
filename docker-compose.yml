@@ -1,0 +1,11 @@
+services:
+  bruce-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bruce-bot
+    restart: unless-stopped
+    environment:
+      TOKEN: ${TOKEN}
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_KEY: ${SUPABASE_KEY}
